@@ -1,0 +1,31 @@
+{
+  "users": [
+    {
+      "id": "1212weqweqweqwe",
+      "name": "Name",
+      "surname": "Surname",
+      "age": 25,
+      "city": "London",
+      "email": "example@gmail.com",
+      "phone": "+7 777 777 77 77",
+      "imageUrl": "example.png",
+      "isAdmin": false,
+      "status": 0
+    },
+    {
+      "id": "1212weqweqweqwe",
+      "name": "Name",
+      "surname": "Surname",
+      "age": 25,
+      "city": "London",
+      "email": "example@gmail.com",
+      "phone": "+7 777 777 77 77",
+      "imageUrl": null,
+      "isAdmin": false,
+      "status": 1
+    }
+  ]
+
+
+
+}

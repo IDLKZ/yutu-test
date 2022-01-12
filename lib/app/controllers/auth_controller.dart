@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:findout/app/controllers/user_controller.dart';
 import 'package:findout/app/helpers/kcolors.dart';
 import 'package:findout/app/routes/app_pages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -44,10 +45,15 @@ class AuthController extends GetxController {
           password: password
       );
       users.doc(userCredential.user!.uid).set({
+        "id":userCredential.user!.uid,
+        "email":email,
         "name": name,
         "surname": surname,
+        "phone":"",
         "age": age,
-        "city": city
+        "city": city,
+        "isAdmin":true,
+        "status":0,
       });
       Get.toNamed(Routes.HOME);
       // await userCredential.user!.sendEmailVerification();

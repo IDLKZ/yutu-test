@@ -5,11 +5,16 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:connectivity/connectivity.dart';
 
+import '../routes/app_pages.dart';
+
 class ConnectionController extends GetxController {
 
   Rx<bool> isConnected = false.obs;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+   Rx<ConnectivityResult> connectResult = Rx<ConnectivityResult>(ConnectivityResult.none);
+
+
 
   @override
   void onInit() {
@@ -18,12 +23,16 @@ class ConnectionController extends GetxController {
     initConnectivity();
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    //connectResult.bindStream(_connectivity.onConnectivityChanged);
+    //ever(connectResult,_printconnect);
   }
 
-  @override
-  void onClose(){
-    _connectivitySubscription.cancel();
+
+  _printconnect(ConnectivityResult result){
+    print("printconnect");
+    print(result);
   }
+
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initConnectivity() async {
@@ -41,7 +50,7 @@ class ConnectionController extends GetxController {
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
     if(result == ConnectivityResult.wifi || result == ConnectivityResult.mobile){
       isConnected.value = true;
-      //Get.offAllNamed(AppPages.INITIAL);
+      Get.back();
 
     } else {
       isConnected.value = false;

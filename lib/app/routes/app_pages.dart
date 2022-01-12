@@ -1,3 +1,5 @@
+import 'package:findout/app/routes/middlewares/auth_middleware.dart';
+import 'package:findout/app/routes/middlewares/guest_middleware.dart';
 import 'package:get/get.dart';
 
 import '../modules/home/bindings/home_binding.dart';
@@ -19,16 +21,21 @@ class AppPages {
       name: _Paths.HOME,
       page: () => HomeView(),
       binding: HomeBinding(),
+      middlewares: [AuthMiddleware()]
     ),
     GetPage(
       name: _Paths.LOGIN,
       page: () => LoginView(),
       binding: LoginBinding(),
+      middlewares: [GuestMiddleware()]
+
     ),
     GetPage(
       name: _Paths.REGISTER,
       page: () => RegisterView(),
       binding: RegisterBinding(),
+      middlewares: [GuestMiddleware()]
+
     ),
   ];
 }
