@@ -23,13 +23,8 @@ class UserController extends GetxController {
   }
 
   _setUser(User? _user)async{
-      print(_userRef.doc().get());
-
-
-
       Users? userDoc = await UsersProvider().getUsers(_user?.uid);
       user = userDoc;
-
   }
 
   @override
@@ -50,6 +45,14 @@ class UserController extends GetxController {
     _userModel.value = value;
     if(value == null){
       Get.find<AuthController>().logout();
+    }
+    else{
+      if(value.isAdmin == true){
+
+      }
+      else{
+
+      }
     }
   }
 
