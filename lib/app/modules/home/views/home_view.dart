@@ -212,7 +212,7 @@ class HomeView extends GetView<HomeController> {
           GetX<UserController>(
             builder: (controller) {
               return _header('assets/images/ava.jpg',
-                  "Привет, ${controller.user?.name ?? ""}");
+                  "Привет, ${controller.user.name ?? ""}");
             },
           ),
           Expanded(

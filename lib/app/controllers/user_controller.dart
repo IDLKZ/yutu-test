@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 
 class UserController extends GetxController {
   //TODO: Implement UserController
-  final Rx<Users?> _userModel = Rxn<Users>();
+  final Rx<Users> _userModel = Rx<Users>(Users());
   FirebaseAuth auth = FirebaseAuth.instance;
   final CollectionReference _userRef = FirebaseFirestore.instance.collection("users");
 
@@ -24,7 +24,14 @@ class UserController extends GetxController {
 
   _setUser(User? _user)async{
       Users? userDoc = await UsersProvider().getUsers(_user?.uid);
-      user = userDoc;
+      if(userDoc != null){
+        user = userDoc;
+      }
+      else{
+        user = Users();
+        Get.find<AuthController>().logout();
+      }
+
   }
 
   @override
@@ -37,23 +44,12 @@ class UserController extends GetxController {
 
 
 
-  Users? get user{
+  Users get user{
     return _userModel.value;
   }
 
-  set user(Users? value){
+  set user(Users value){
     _userModel.value = value;
-    if(value == null){
-      Get.find<AuthController>().logout();
-    }
-    else{
-      if(value.isAdmin == true){
-
-      }
-      else{
-
-      }
-    }
   }
 
 
