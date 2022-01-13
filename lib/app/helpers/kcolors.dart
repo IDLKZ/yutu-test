@@ -12,4 +12,6 @@ class KColors{
   static const Color kSuccess = Color(0xff23e26f);
   static const Color kError = Color(0xffef424b);
   static const Color kWarning = Color(0xfffcbd00);
+
+  static const Color kAdminBgColor = Color(0xFF1e1f27);
 }

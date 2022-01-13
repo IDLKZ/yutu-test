@@ -19,7 +19,12 @@ class AuthController extends GetxController {
           password: password
       );
       // if(userCredential.user!.emailVerified){
-      Get.offNamed(Routes.HOME);
+      if(userCredential.user?.uid == 'uK2jaVl6HUNE8uYRajjrWB0bF9k2'){
+        Get.offNamed(Routes.DASHBOARD);
+      } else {
+        Get.offNamed(Routes.HOME);
+      }
+
       // } else {
       //   Get.defaultDialog(
       //     title: 'Подтвердите почту',

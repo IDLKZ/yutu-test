@@ -13,7 +13,7 @@ class InitialBinding extends Bindings {
     );
     Get.put<UserController>(
       UserController(),
-
+      permanent: true
     );
     Get.put<ConnectionController>(
           ConnectionController(),
