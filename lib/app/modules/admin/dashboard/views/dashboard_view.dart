@@ -1,4 +1,5 @@
 import 'package:findout/app/controllers/auth_controller.dart';
+import 'package:findout/app/helpers/kcolors.dart';
 import 'package:findout/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 
@@ -11,9 +12,9 @@ class DashboardView extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF1e1f27),
+      backgroundColor: KColors.kAdminBgColor,
       appBar: AppBar(
-        backgroundColor: Color(0xFF1e1f27),
+        backgroundColor: KColors.kAdminBgColor,
         title: Text('Админ-Панель'),
         actions: [
           IconButton(
@@ -46,37 +47,43 @@ class DashboardView extends GetView<DashboardController> {
               ),
             ),
             SizedBox(height: 10,),
-            Card(
-              color: Color(0xFF2a2c35),
-              elevation: 4,
-              shadowColor: Colors.black,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.transparent, width: 1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: 15),
-                width: MediaQuery.of(context).size.width,
-                height: 70,
-                child: Text('Посты', style: TextStyle(fontSize: 20, color: Colors.white),),
+            GestureDetector(
+              onTap: ()=>Get.toNamed(Routes.POSTS),
+              child: Card(
+                color: Color(0xFF2a2c35),
+                elevation: 4,
+                shadowColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.transparent, width: 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(left: 15),
+                  width: MediaQuery.of(context).size.width,
+                  height: 70,
+                  child: Text('Посты', style: TextStyle(fontSize: 20, color: Colors.white),),
+                ),
               ),
             ),
             SizedBox(height: 10,),
-            Card(
-              color: Color(0xFF2a2c35),
-              elevation: 4,
-              shadowColor: Colors.black,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.transparent, width: 1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: 15),
-                width: MediaQuery.of(context).size.width,
-                height: 70,
-                child: Text('Пользователи', style: TextStyle(fontSize: 20, color: Colors.white),),
+            GestureDetector(
+              onTap: () => Get.toNamed(Routes.USERS),
+              child: Card(
+                color: Color(0xFF2a2c35),
+                elevation: 4,
+                shadowColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.transparent, width: 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(left: 15),
+                  width: MediaQuery.of(context).size.width,
+                  height: 70,
+                  child: Text('Пользователи', style: TextStyle(fontSize: 20, color: Colors.white),),
+                ),
               ),
             ),
           ],

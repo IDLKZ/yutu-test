@@ -1,4 +1,3 @@
-import 'package:findout/app/modules/post_create/views/post_create_view.dart';
 import 'package:get/get.dart';
 
 import '../controllers/user_controller.dart';
@@ -6,11 +5,16 @@ import '../modules/admin/categories/bindings/categories_binding.dart';
 import '../modules/admin/categories/views/categories_view.dart';
 import '../modules/admin/dashboard/bindings/dashboard_binding.dart';
 import '../modules/admin/dashboard/views/dashboard_view.dart';
+import '../modules/admin/posts/bindings/posts_binding.dart';
+import '../modules/admin/posts/views/posts_view.dart';
+import '../modules/admin/users/bindings/users_binding.dart';
+import '../modules/admin/users/views/users_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/post_create/bindings/post_create_binding.dart';
+import '../modules/post_create/views/post_create_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import 'middlewares/admin_middleware.dart';
@@ -53,6 +57,16 @@ class AppPages {
       name: _Paths.POST_CREATE,
       page: () => PostCreateView(),
       binding: PostCreateBinding(),
+    ),
+    GetPage(
+      name: _Paths.POSTS,
+      page: () => PostsView(),
+      binding: PostsBinding(),
+    ),
+    GetPage(
+      name: _Paths.USERS,
+      page: () => UsersView(),
+      binding: UsersBinding(),
     ),
   ];
 }
