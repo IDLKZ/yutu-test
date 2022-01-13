@@ -12,7 +12,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class ImageController extends GetxController{
-
+  Rx<bool>imageUploaded = Rx<bool>(false);
   //Path of File
   Rx<String> selectedImagePath = Rx<String>("");
   //Size of File
@@ -24,34 +24,33 @@ class ImageController extends GetxController{
   //Initialize storage
   FirebaseStorage storage = FirebaseStorage.instance;
 
-  Future <bool> pickImage(ImageSource source)async {
+  Future <void> pickImage(ImageSource source)async {
     try {
-      final selectedFile = await picker.pickImage(source: source);
-      if (selectedFile!.path != null) {
+      final selectedFile = await picker.pickImage(source: source,imageQuality: 60);
+      imageUploaded.value = true;
+      if (selectedFile != null) {
         selectedImagePath.value = selectedFile.path;
-        bool isModerate = await moderateImage(selectedFile,isCheck: true);
+        bool isModerate = true;
         bool result = isModerate ? await uploadImage(File(selectedFile.path), basename(selectedFile.path)) : false;
         if (result) {
           Get.snackbar('Отлично', 'Фото готово', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kSuccess, colorText: Colors.white);
-          return true;
         }
         else {
           selectedImageUrl.value = "";
-          return false;
         }
       }
-      return true;
     }
     catch (e) {
       print(e);
-      return false;
     }
+    imageUploaded.value = false;
+    Get.back();
   }
 
 
   Future <bool> uploadImage(File imageFile,String fileName)async{
     try {
-      selectedImageUrl.value.isNotEmpty ? deleteFile(selectedImageUrl.value) : null;
+      selectedImageUrl.value.isNotEmpty ? await deleteFile(selectedImageUrl.value) : null;
       TaskSnapshot taskSnapshot =  await FirebaseStorage.instance.ref('uploads/$fileName').putFile(imageFile);
       selectedImageUrl.value = await taskSnapshot.ref.getDownloadURL();
       Get.snackbar('Отлично', 'Фото загружено', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kSuccess, colorText: Colors.white);
@@ -91,7 +90,7 @@ class ImageController extends GetxController{
         }
         else{
           Get.snackbar('Упс', 'Фото не соответсвует правилам приложения!', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kWarning, colorText: Colors.white);
-
+          print("oopsie");
           return false;
         }
       }

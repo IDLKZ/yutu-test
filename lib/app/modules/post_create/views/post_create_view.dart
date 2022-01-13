@@ -20,8 +20,8 @@ class PostCreateView extends GetView<PostCreateController> {
           children: [
             GestureDetector(
               onTap: ()async{
-                await _imageController.pickImage(ImageSource.camera);
                 Get.back();
+                await _imageController.pickImage(ImageSource.camera);
               },
               child: Card(
                 child: ListTile(
@@ -32,8 +32,8 @@ class PostCreateView extends GetView<PostCreateController> {
             ),
             GestureDetector(
               onTap: ()async{
-                await _imageController.pickImage(ImageSource.gallery);
                 Get.back();
+                await _imageController.pickImage(ImageSource.gallery);
               },
               child: Card(
                 child: ListTile(
@@ -53,27 +53,31 @@ class PostCreateView extends GetView<PostCreateController> {
     );
   }
 
-  Widget _imageContainer(BuildContext context,{String? imageUrl}){
+  Widget _imageContainer(BuildContext context,ImageController _imageController){
     return GestureDetector(
-      onTap: (){
-        showDialog(
-            context: context,
-            builder: (c)=>_showDialog(context)
-        );
-      },
-      child: Container(
-        height: MediaQuery.of(context).size.height*0.425,
-        decoration:  BoxDecoration(
-            borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(40.0),
-                bottomRight: Radius.circular(40.0)),
-            image: DecorationImage(
-                image: NetworkImage(imageUrl??'https://enviragallery.com/wp-content/uploads/2016/06/How-to-Optimize-Your-Images-for-the-Web-Step-by-Step.png'),
-                fit: BoxFit.cover
+          onTap: (){
+            !_imageController.imageUploaded.value ? showDialog(
+                context: context,
+                builder: (c)=>_showDialog(context)
             )
-        ),
-      ),
-    );
+            :null;
+          },
+          child: Container(
+            height: MediaQuery.of(context).size.height*0.55,
+            decoration:  BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(40.0),
+                    bottomRight: Radius.circular(40.0)),
+                 image: DecorationImage(
+                    image: _imageController.imageUploaded.value == false ?
+                    NetworkImage(_imageController.selectedImageUrl.value.isNotEmpty? _imageController.selectedImageUrl.value :'https://enviragallery.com/wp-content/uploads/2016/06/How-to-Optimize-Your-Images-for-the-Web-Step-by-Step.png')
+                     :NetworkImage("https://i.stack.imgur.com/PLbzc.gif")
+                     ,
+                    fit: BoxFit.cover
+                )
+            ),
+          ),
+        );
   }
 
 
@@ -83,37 +87,25 @@ class PostCreateView extends GetView<PostCreateController> {
       children: [
         SizedBox(
           height: MediaQuery.of(context).size.height*0.45,
-          child: Stack(
-            children: [
-              GetX<ImageController>(
-                init: Get.put<ImageController>(ImageController()),
-                builder: (ImageController imageController){
-                  if(_imageController.selectedImageUrl.value.isNotEmpty){
-                    return _imageContainer(context, imageUrl:_imageController.selectedImageUrl.value);
-                  }
-                  else{
-                    return _imageContainer(context);
-                  }
-                },
-              ),
-
-              Positioned(
-                top: 50,
-                left: 30,
-                child: Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                      color: KColors.kLightGray,
-                      borderRadius: BorderRadius.circular(8)
-                  ),
-                  child: const Icon(FontAwesomeIcons.chevronLeft),
-                ),
-              ),
-              GetX<ImageController>(
-                  init: Get.put(ImageController()),
-                  builder:(ImageController _imageController){
-                    return _imageController.selectedImageUrl.value.isNotEmpty
-                        ? Positioned(
+          child: GetX<ImageController>(
+              builder: (_imageController){
+               return Stack(
+                  children: [
+                    _imageContainer(context,_imageController),
+                    Positioned(
+                      top: 50,
+                      left: 30,
+                      child: Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: KColors.kLightGray,
+                            borderRadius: BorderRadius.circular(8)
+                        ),
+                        child: const Icon(FontAwesomeIcons.chevronLeft),
+                      ),
+                    ),
+                    _imageController.selectedImageUrl.value.isNotEmpty
+                     ? Positioned(
                       top: 50,
                       right: 30,
                       child: GestureDetector(
@@ -130,75 +122,33 @@ class PostCreateView extends GetView<PostCreateController> {
                         ),
                       ),
                     )
-                        : const SizedBox();
-                  }
-              ),
-              Positioned(
-                right: 20,
-                bottom: 0,
-                child: GestureDetector(
-                  onTap: (){
-                    showDialog(
-                        context: context,
-                        builder: (c)=>_showDialog(context)
-                    );
-                  },
-                  child: const CircleAvatar(
-                    backgroundColor: KColors.kDarkenGray,
-                    radius: 25,
-                    child: Icon(FontAwesomeIcons.image, color: Colors.lightBlueAccent,),
-                  ),
-                ),
-              )
-            ],
-          ),
+                    :SizedBox(),
+                    !_imageController.imageUploaded.value ?
+                    Positioned(
+                      right: 20,
+                      bottom: 0,
+                      child: GestureDetector(
+                        onTap: (){
+                          showDialog(
+                              context: context,
+                              builder: (c)=>_showDialog(context)
+                          );
+                        },
+                        child: const CircleAvatar(
+                          backgroundColor: KColors.kDarkenGray,
+                          radius: 25,
+                          child: Icon(FontAwesomeIcons.image, color: Colors.lightBlueAccent,),
+                        ),
+                      ),
+                    )
+                        :SizedBox()
+                  ],
+                );
+             })
         ),
         const SizedBox(height: 10,),
 
       ],
-    );
-  }
-
-  Widget _getxController(BuildContext context){
-    return Container(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GetX<ImageController>(
-                init: Get.put<ImageController>(ImageController()),
-                builder: (ImageController imageController){
-                  if(imageController != null){
-                    if(!imageController.selectedImagePath.isEmpty){
-                      return Container(
-                        height: 240,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image:FileImage(new File(imageController.selectedImagePath.value))
-                            )
-                        ),
-                      );
-                    }
-                    else{
-                      return const Text("Upload Image");
-                    }
-                  }
-                  else{
-                    return const Text("Upload Image");
-                  }
-                }
-            ),
-            ElevatedButton(
-                onPressed: (){
-                  showDialog(
-                      context: context,
-                      builder: (c)=>_showDialog(context)
-                  );
-                },
-                child: Text("Upload image")),
-          ],
-        ),
-      ),
     );
   }
 
@@ -207,6 +157,7 @@ class PostCreateView extends GetView<PostCreateController> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: _columnShow(context)
+
     );
   }
 }
