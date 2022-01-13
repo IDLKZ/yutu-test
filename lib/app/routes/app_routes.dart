@@ -8,6 +8,7 @@ abstract class Routes {
   static const REGISTER = _Paths.REGISTER;
   static const DASHBOARD = _Paths.DASHBOARD;
   static const CATEGORIES = _Paths.CATEGORIES;
+  static const POST_CREATE = _Paths.POST_CREATE;
 }
 
 abstract class _Paths {
@@ -17,4 +18,5 @@ abstract class _Paths {
   static const REGISTER = '/register';
   static const DASHBOARD = '/dashboard';
   static const CATEGORIES = '/categories';
+  static const POST_CREATE = '/post_create';
 }
