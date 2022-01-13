@@ -21,6 +21,7 @@ class PostCreateView extends GetView<PostCreateController> {
             GestureDetector(
               onTap: ()async{
                 await _imageController.pickImage(ImageSource.camera);
+                Get.back();
               },
               child: Card(
                 child: ListTile(
@@ -32,6 +33,7 @@ class PostCreateView extends GetView<PostCreateController> {
             GestureDetector(
               onTap: ()async{
                 await _imageController.pickImage(ImageSource.gallery);
+                Get.back();
               },
               child: Card(
                 child: ListTile(
