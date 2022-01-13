@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findout/app/controllers/user_controller.dart';
+import 'package:findout/app/helpers/global_mixin.dart';
 import 'package:findout/app/helpers/kcolors.dart';
 import 'package:findout/app/routes/app_pages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,9 +35,9 @@ class AuthController extends GetxController {
 
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        Get.snackbar('Упс...', 'Такого пользователя не существует', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kWarning, colorText: Colors.white);
+        GlobalMixin.warningSnackBar('Упс...', 'Такого пользователя не существует');
       } else if (e.code == 'wrong-password') {
-        Get.snackbar('Упс...', 'Неверный пароль!', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kWarning, colorText: Colors.white);
+        GlobalMixin.warningSnackBar('Упс...', 'Неверный пароль!');
       }
     } catch(e) {
       Get.snackbar('Упс...', 'Что-то пошло не так', snackPosition: SnackPosition.BOTTOM);
@@ -73,9 +74,9 @@ class AuthController extends GetxController {
       // );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        Get.snackbar('Упс...', 'Пароль слишком слаб', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kWarning, colorText: Colors.white);
+        GlobalMixin.warningSnackBar('Упс...', 'Пароль слишком слаб');
       } else if (e.code == 'email-already-in-use') {
-        Get.snackbar('Упс...', 'Такая почта уже используется', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kWarning, colorText: Colors.white);
+        GlobalMixin.warningSnackBar('Упс...', 'Такая почта уже используется');
       }
     } catch (e) {
       print(e);
