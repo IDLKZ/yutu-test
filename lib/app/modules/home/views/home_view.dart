@@ -82,7 +82,9 @@ class HomeView extends GetView<HomeController> {
                           backgroundColor: KColors.kDarkenGray,
                           radius: 20,
                           child: GestureDetector(
-                            onTap: (){},
+                            onTap: (){
+                              Get.toNamed(Routes.POST_CREATE);
+                            },
                             child: Icon(
                               Icons.add,
                               size: 36,
