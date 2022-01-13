@@ -18,7 +18,6 @@ class UsersView extends GetView<UsersController> {
         title: GetBuilder<UsersController>(
             builder: (_) => controller.customSearchBar
         ),
-        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             onPressed: controller.change,
