@@ -84,12 +84,12 @@ class AddCategoryView extends GetView {
             children: [
               _input(Icon(Icons.book), 'Наименование на русском', controller.titleRu, false, (val) {
                 return ValidatorMixin().validateText(
-                    val, true);
+                    val, true,maxLength: 255);
               }),
               SizedBox(height: 10,),
               _input(Icon(Icons.book), 'Наименование на eng', controller.titleEn, false, (val) {
                 return ValidatorMixin().validateText(
-                    val, true);
+                    val, true,maxLength: 255);
               }),
               SizedBox(height: 10,),
               Padding(
@@ -121,7 +121,7 @@ class AddCategoryView extends GetView {
           )
         ],
       ),
-      body: _form('Добавить', () => null),
+      body: _form('Добавить', () => controller.createCategory()),
     );
   }
 }

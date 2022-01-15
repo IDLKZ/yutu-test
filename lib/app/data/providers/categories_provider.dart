@@ -1,8 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
+import '../../helpers/global_mixin.dart';
 import '../models/categories_model.dart';
 
 class CategoriesProvider extends GetConnect {
+  final CollectionReference _categoryRef = FirebaseFirestore.instance.collection("categories");
+
+
   @override
   void onInit() {
     httpClient.defaultDecoder = (map) {
@@ -22,4 +27,21 @@ class CategoriesProvider extends GetConnect {
       await post('categories', categories);
   Future<Response> deleteCategories(int id) async =>
       await delete('categories/$id');
+
+
+  Future<bool> createCategory(Map<String,dynamic> categories)async{
+    try{
+      await _categoryRef.add({'titleRu': categories["titleRu"],'titleEn': categories["titleEn"], 'status': int.parse(categories["status"]),});
+      GlobalMixin.successSnackBar("Отлично", "Категория успешно добавлена!");
+      return true;
+    }
+    catch(e){
+      print(e);
+      GlobalMixin.errorSnackBar("Упс", "Что-то пошло не так");
+      return false;
+
+    }
+
+
+  }
 }
