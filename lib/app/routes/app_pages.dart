@@ -40,7 +40,8 @@ class AppPages {
         name: _Paths.LOGIN,
         page: () => LoginView(),
         binding: LoginBinding(),
-        middlewares: [GuestMiddleware()]),
+        middlewares: [GuestMiddleware()]
+    ),
     GetPage(
         name: _Paths.REGISTER,
         page: () => RegisterView(),

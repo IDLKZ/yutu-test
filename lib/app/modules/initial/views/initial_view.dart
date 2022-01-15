@@ -10,6 +10,8 @@ import '../controllers/initial_controller.dart';
 
 class InitialView extends GetView<InitialController> {
 
+  UserController _userController = Get.find<UserController>();
+
   Widget _welcome(BuildContext context) {
     return Stack(
       children: [
@@ -45,7 +47,7 @@ class InitialView extends GetView<InitialController> {
       body: Column(
         children: [
            _welcome(context),
-          Center(child: CircularProgressIndicator(),)
+            Center(child: CircularProgressIndicator(),)
         ],
       ),
     );

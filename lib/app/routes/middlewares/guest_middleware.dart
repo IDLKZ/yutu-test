@@ -13,12 +13,7 @@ class GuestMiddleware extends GetMiddleware{
   @override
   RouteSettings? redirect(String? route) {
     if(FirebaseAuth.instance.currentUser != null){
-      if(Get.find<UserController>().user?.isAdmin == true) {
-        return const RouteSettings(name: Routes.DASHBOARD);
-      }
-      else{
-        return const RouteSettings(name: Routes.HOME);
-      }
+      return const RouteSettings(name: Routes.INITIALPAGE);
     }
   }
 

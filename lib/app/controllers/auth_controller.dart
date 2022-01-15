@@ -21,7 +21,6 @@ class AuthController extends GetxController {
       );
       // if(userCredential.user!.emailVerified){
       GlobalMixin.successSnackBar('FindOut!', 'С возвращением');
-
       // } else {
       //   Get.defaultDialog(
       //     title: 'Подтвердите почту',
@@ -83,6 +82,6 @@ class AuthController extends GetxController {
 
   logout() async {
     await FirebaseAuth.instance.signOut();
-    Get.offNamed(Routes.LOGIN);
+    Get.offAllNamed(Routes.LOGIN);
   }
 }

@@ -7,14 +7,15 @@ class InitialBinding extends Bindings {
   @override
   void dependencies() {
     // TODO: implement dependencies
+    Get.put<UserController>(
+        UserController(),
+        permanent: true
+    );
     Get.lazyPut<AuthController>(
           () => AuthController(),
       fenix: true
     );
-    Get.lazyPut<UserController>(
-        ()=> UserController(),
-      fenix: true
-    );
+
     Get.put<ConnectionController>(
           ConnectionController(),
       permanent: true

@@ -19,6 +19,8 @@ class UserController extends GetxController {
     super.onInit();
     final firebaseUser = Rx<User?>(auth.currentUser);
     firebaseUser.bindStream(auth.userChanges());
+    firebaseUser.bindStream(auth.idTokenChanges());
+    firebaseUser.bindStream(auth.authStateChanges());
     ever(firebaseUser,_setUser);
     _userModel.bindStream(UsersProvider().currentUser());
     ever(_userModel, _setUserModel);
@@ -29,7 +31,12 @@ class UserController extends GetxController {
       user = userDoc;
   }
   _setUserModel(Users? _user)async{
-    user = _user;
+    if(_userModel.value?.isAdmin != _user?.isAdmin){
+      user = _user;
+    }
+    else{
+      _userModel.value = _user;
+    }
   }
 
   @override
@@ -40,8 +47,6 @@ class UserController extends GetxController {
   @override
   void onClose() {}
 
-
-
   Users? get user{
     return _userModel.value;
   }
@@ -50,6 +55,7 @@ class UserController extends GetxController {
     _userModel.value = value;
     if(value != null){
       if(value.isAdmin == true){
+        Get.offAllNamed(Routes.DASHBOARD);
       }
       else{
         Get.offAllNamed(Routes.HOME);

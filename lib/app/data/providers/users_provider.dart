@@ -27,12 +27,13 @@ class UsersProvider extends GetConnect {
 
   Stream<Users?> currentUser(){
       return _userRef.doc(FirebaseAuth.instance.currentUser?.uid).snapshots().map((event){
-        print(event.data());
-        return Users.fromJson(event.data() as Map<String,dynamic>);
+        if(event.data() != null){
+          return Users.fromJson(event.data() as Map<String,dynamic>);
+        }
       });
   }
 
   Future<Response<Users>> postUsers(Users users) async =>
-      await post('users', users);
-  Future<Response> deleteUsers(int id) async => await delete('users/$id');
+    await post('users', users);
+    Future<Response> deleteUsers(int id) async => await delete('users/$id');
 }
