@@ -31,12 +31,7 @@ class UserController extends GetxController {
       user = userDoc;
   }
   _setUserModel(Users? _user)async{
-    if(_userModel.value?.isAdmin != _user?.isAdmin){
       user = _user;
-    }
-    else{
-      _userModel.value = _user;
-    }
   }
 
   @override
