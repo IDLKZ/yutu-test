@@ -5,7 +5,7 @@ import 'package:findout/app/modules/admin/categories/views/edit_view.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-
+import 'package:paginate_firestore/paginate_firestore.dart';
 import '../controllers/categories_controller.dart';
 class CategoriesView extends GetView<CategoriesController> {
 
