@@ -11,6 +11,8 @@ import '../modules/admin/users/bindings/users_binding.dart';
 import '../modules/admin/users/views/users_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/initial/bindings/initial_binding.dart';
+import '../modules/initial/views/initial_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/post_create/bindings/post_create_binding.dart';
@@ -26,14 +28,14 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.HOME;
+  static const INITIAL = Routes.INITIALPAGE;
 
   static final routes = [
     GetPage(
         name: _Paths.HOME,
         page: () => HomeView(),
         binding: HomeBinding(),
-        middlewares: [AuthMiddleware(), AdminMiddleware()]),
+        middlewares: [AuthMiddleware()]),
     GetPage(
         name: _Paths.LOGIN,
         page: () => LoginView(),
@@ -47,26 +49,33 @@ class AppPages {
     GetPage(
         name: _Paths.DASHBOARD,
         page: () => DashboardView(),
-        binding: DashboardBinding()),
+        binding: DashboardBinding(),
+        middlewares: [AdminMiddleware()]),
     GetPage(
-      name: _Paths.CATEGORIES,
-      page: () => CategoriesView(),
-      binding: CategoriesBinding(),
-    ),
+        name: _Paths.CATEGORIES,
+        page: () => CategoriesView(),
+        binding: CategoriesBinding(),
+        middlewares: [AdminMiddleware()]),
     GetPage(
       name: _Paths.POST_CREATE,
       page: () => PostCreateView(),
       binding: PostCreateBinding(),
     ),
     GetPage(
-      name: _Paths.POSTS,
-      page: () => PostsView(),
-      binding: PostsBinding(),
-    ),
+        name: _Paths.POSTS,
+        page: () => PostsView(),
+        binding: PostsBinding(),
+        middlewares: [AdminMiddleware()]),
     GetPage(
-      name: _Paths.USERS,
-      page: () => UsersView(),
-      binding: UsersBinding(),
+        name: _Paths.USERS,
+        page: () => UsersView(),
+        binding: UsersBinding(),
+        middlewares: [AdminMiddleware()]),
+    GetPage(
+      name: _Paths.INITIALPAGE,
+      page: () => InitialView(),
+      binding: InitialBinding(),
+      middlewares: [AuthMiddleware()],
     ),
   ];
 }

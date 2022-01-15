@@ -20,11 +20,7 @@ class AuthController extends GetxController {
           password: password
       );
       // if(userCredential.user!.emailVerified){
-      if(userCredential.user?.uid == 'uK2jaVl6HUNE8uYRajjrWB0bF9k2'){
-        Get.offNamed(Routes.DASHBOARD);
-      } else {
-        Get.offNamed(Routes.HOME);
-      }
+      GlobalMixin.successSnackBar('FindOut!', 'С возвращением');
 
       // } else {
       //   Get.defaultDialog(
@@ -58,10 +54,11 @@ class AuthController extends GetxController {
         "phone":"",
         "age": age,
         "city": city,
-        "isAdmin":true,
+        "isAdmin":false,
         "status":0,
       });
-      Get.toNamed(Routes.HOME);
+      GlobalMixin.successSnackBar('FindOut!', 'Добро пожаловать');
+      //Get.offAllNamed(AppPages.INITIAL);
       // await userCredential.user!.sendEmailVerification();
       // Get.defaultDialog(
       //     title: 'Подтвердите почту',

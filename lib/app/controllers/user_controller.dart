@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 
 class UserController extends GetxController {
   //TODO: Implement UserController
-  final Rx<Users> _userModel = Rx<Users>(Users());
+  final Rx<Users?> _userModel = Rxn<Users?>();
   FirebaseAuth auth = FirebaseAuth.instance;
   final CollectionReference _userRef = FirebaseFirestore.instance.collection("users");
 
@@ -20,18 +20,16 @@ class UserController extends GetxController {
     final firebaseUser = Rx<User?>(auth.currentUser);
     firebaseUser.bindStream(auth.userChanges());
     ever(firebaseUser,_setUser);
+    _userModel.bindStream(UsersProvider().currentUser());
+    ever(_userModel, _setUserModel);
   }
 
   _setUser(User? _user)async{
       Users? userDoc = await UsersProvider().getUsers(_user?.uid);
-      if(userDoc != null){
-        user = userDoc;
-      }
-      else{
-        user = Users();
-        Get.find<AuthController>().logout();
-      }
-
+      user = userDoc;
+  }
+  _setUserModel(Users? _user)async{
+    user = _user;
   }
 
   @override
@@ -44,12 +42,22 @@ class UserController extends GetxController {
 
 
 
-  Users get user{
+  Users? get user{
     return _userModel.value;
   }
 
-  set user(Users value){
+  set user(Users? value){
     _userModel.value = value;
+    if(value != null){
+      if(value.isAdmin == true){
+      }
+      else{
+        Get.offAllNamed(Routes.HOME);
+      }
+    }
+    else{
+      Get.find<AuthController>().logout();
+    }
   }
 
 

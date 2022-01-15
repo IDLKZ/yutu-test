@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import '../models/users_model.dart';
@@ -22,7 +23,13 @@ class UsersProvider extends GetConnect {
     if(userDoc.exists){
       return Users.fromJson(userDoc.data() as Map<String,dynamic>);
     }
+  }
 
+  Stream<Users?> currentUser(){
+      return _userRef.doc(FirebaseAuth.instance.currentUser?.uid).snapshots().map((event){
+        print(event.data());
+        return Users.fromJson(event.data() as Map<String,dynamic>);
+      });
   }
 
   Future<Response<Users>> postUsers(Users users) async =>

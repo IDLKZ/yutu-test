@@ -101,7 +101,7 @@ class PostCreateView extends GetView<PostCreateController> {
                             color: KColors.kLightGray,
                             borderRadius: BorderRadius.circular(8)
                         ),
-                        child: const Icon(FontAwesomeIcons.chevronLeft),
+                        child: GestureDetector(child: Icon(FontAwesomeIcons.chevronLeft),onTap: (){Get.back();},),
                       ),
                     ),
                     _imageController.selectedImageUrl.value.isNotEmpty

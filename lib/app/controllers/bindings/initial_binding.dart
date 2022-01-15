@@ -11,9 +11,9 @@ class InitialBinding extends Bindings {
           () => AuthController(),
       fenix: true
     );
-    Get.put<UserController>(
-      UserController(),
-      permanent: true
+    Get.lazyPut<UserController>(
+        ()=> UserController(),
+      fenix: true
     );
     Get.put<ConnectionController>(
           ConnectionController(),
