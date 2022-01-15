@@ -20,7 +20,7 @@ class HomeView extends GetView<HomeController> {
     Widget _header(String imageUrl, String name) {
       return Container(
         padding: const EdgeInsets.only(top: 30),
-        height: MediaQuery.of(context).size.height * 0.25,
+        height: MediaQuery.of(context).size.height * 0.35,
         decoration: const BoxDecoration(
           color: KColors.kRGBABlue,
           borderRadius: BorderRadius.only(
