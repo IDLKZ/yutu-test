@@ -9,6 +9,8 @@ import '../modules/admin/posts/bindings/posts_binding.dart';
 import '../modules/admin/posts/views/posts_view.dart';
 import '../modules/admin/users/bindings/users_binding.dart';
 import '../modules/admin/users/views/users_view.dart';
+import '../modules/change_profile/bindings/change_profile_binding.dart';
+import '../modules/change_profile/views/change_profile_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/initial/bindings/initial_binding.dart';
@@ -17,6 +19,8 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/post_create/bindings/post_create_binding.dart';
 import '../modules/post_create/views/post_create_view.dart';
+import '../modules/profile/bindings/profile_binding.dart';
+import '../modules/profile/views/profile_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import 'middlewares/admin_middleware.dart';
@@ -40,8 +44,7 @@ class AppPages {
         name: _Paths.LOGIN,
         page: () => LoginView(),
         binding: LoginBinding(),
-        middlewares: [GuestMiddleware()]
-    ),
+        middlewares: [GuestMiddleware()]),
     GetPage(
         name: _Paths.REGISTER,
         page: () => RegisterView(),
@@ -77,6 +80,16 @@ class AppPages {
       page: () => InitialView(),
       binding: InitialBinding(),
       middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () => ProfileView(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHANGE_PROFILE,
+      page: () => ChangeProfileView(),
+      binding: ChangeProfileBinding(),
     ),
   ];
 }

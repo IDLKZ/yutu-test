@@ -42,9 +42,7 @@ class HomeView extends GetView<HomeController> {
               Row(
                 children: [
                   GestureDetector(
-                    onTap: () async {
-                      Get.find<AuthController>().logout();
-                    },
+                    onTap: () => Get.toNamed(Routes.PROFILE),
                     child: CircleAvatar(
                       radius: 30,
                       backgroundImage: AssetImage(imageUrl),

@@ -12,6 +12,8 @@ abstract class Routes {
   static const POSTS = _Paths.POSTS;
   static const USERS = _Paths.USERS;
   static const INITIALPAGE = _Paths.INITIALPAGE;
+  static const PROFILE = _Paths.PROFILE;
+  static const CHANGE_PROFILE = _Paths.CHANGE_PROFILE;
 }
 
 abstract class _Paths {
@@ -25,4 +27,6 @@ abstract class _Paths {
   static const POSTS = '/posts';
   static const USERS = '/users';
   static const INITIALPAGE = '/initial';
+  static const PROFILE = '/profile';
+  static const CHANGE_PROFILE = '/change-profile';
 }
