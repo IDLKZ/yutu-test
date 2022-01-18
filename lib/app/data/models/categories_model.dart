@@ -1,15 +1,30 @@
-class Categories {
-  List<CategoriesList>? categoriesList;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  Categories({this.categoriesList});
+class CategoriesList {
+  List<Category>? categoriesList;
 
-  Categories.fromJson(Map<String, dynamic> json) {
+  CategoriesList({this.categoriesList});
+
+  CategoriesList.fromJson(Map<String, dynamic> json) {
     if (json['categoriesList'] != null) {
-      categoriesList = <CategoriesList>[];
+      categoriesList = <Category>[];
       json['categoriesList'].forEach((v) {
-        categoriesList?.add(CategoriesList.fromJson(v));
+        categoriesList?.add(Category.fromJson(v));
       });
     }
+  }
+
+  factory CategoriesList.fromFirebase(QuerySnapshot querySnapshot){
+    List<Category>? _categoriesList = [];
+    querySnapshot.docs.forEach((element) {
+      if(element!= null){
+        if(element.data() != null){
+          _categoriesList.add(Category.fromJson(element.data() as Map<String,dynamic>,uid:element.id));
+        }
+      }
+    });
+    return CategoriesList(categoriesList: _categoriesList);
+
   }
 
   Map<String, dynamic> toJson() {
@@ -21,16 +36,16 @@ class Categories {
   }
 }
 
-class CategoriesList {
+class Category {
   String? id;
   String? titleRu;
   String? titleEn;
   int? status;
 
-  CategoriesList({this.id, this.titleRu, this.titleEn, this.status});
+  Category({this.id, this.titleRu, this.titleEn, this.status});
 
-  CategoriesList.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+  Category.fromJson(Map<String, dynamic> json,{String? uid}) {
+    id = uid;
     titleRu = json['titleRu'];
     titleEn = json['titleEn'];
     status = json['status'];

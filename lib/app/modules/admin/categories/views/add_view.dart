@@ -6,9 +6,8 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-class AddCategoryView extends GetView {
+class AddCategoryView extends GetView<CategoriesController> {
 
-  final controller = Get.put(CategoriesController());
 
   @override
   Widget build(BuildContext context) {

@@ -6,9 +6,8 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-class EditCategoryView extends GetView {
+class EditCategoryView extends GetView<CategoriesController> {
 
-  final controller = Get.put(CategoriesController());
 
   @override
   Widget build(BuildContext context) {
@@ -82,14 +81,14 @@ class EditCategoryView extends GetView {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              _input(Icon(Icons.book), 'Наименование на русском', controller.titleRu, false, (val) {
+              _input(Icon(Icons.book), 'Наименование на русском', controller.titleRuEdit, false, (val) {
                 return ValidatorMixin().validateText(
-                    val, true);
+                    val, true,maxLength: 255);
               }),
               SizedBox(height: 10,),
-              _input(Icon(Icons.book), 'Наименование на eng', controller.titleEn, false, (val) {
+              _input(Icon(Icons.book), 'Наименование на eng', controller.titleEnEdit, false, (val) {
                 return ValidatorMixin().validateText(
-                    val, true);
+                    val, true,maxLength: 255);
               }),
               SizedBox(height: 10,),
               Padding(
@@ -121,7 +120,7 @@ class EditCategoryView extends GetView {
           )
         ],
       ),
-      body: _form('Обновить', () => null),
+      body: _form('Обновить', () => controller.updateCategory()),
     );
   }
 }

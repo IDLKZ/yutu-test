@@ -44,7 +44,6 @@ class ImageController extends GetxController{
       print(e);
     }
     imageUploaded.value = false;
-    Get.back();
   }
 
 
