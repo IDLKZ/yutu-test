@@ -33,6 +33,10 @@ class Users {
   bool? isAdmin = false;
   int? status = 0;
 
+  String fullname(){
+    return  (this.name??"") +" "+ (this.surname??"");
+  }
+
   Users(
       {this.id,
       this.name,

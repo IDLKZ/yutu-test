@@ -68,7 +68,7 @@ class Posts {
 
   String? getTime(){
     if(this.date != null){
-      return DateFormat("dd.MM.yyyy HH:mm").format(this.date ?? DateTime.now());
+      return DateFormat("dd MMMM yyyy HH:mm").format(this.date ?? DateTime.now());
     }
   }
 

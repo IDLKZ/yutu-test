@@ -12,6 +12,8 @@ abstract class Routes {
   static const POSTS = _Paths.POSTS;
   static const USERS = _Paths.USERS;
   static const INITIALPAGE = _Paths.INITIALPAGE;
+  static const POST_VIEW = _Paths.POST_VIEW;
+  static const POST_EDIT =  _Paths.POST_EDIT;
   static const PROFILE = _Paths.PROFILE;
   static const CHANGE_PROFILE = _Paths.CHANGE_PROFILE;
 }
@@ -27,6 +29,8 @@ abstract class _Paths {
   static const POSTS = '/posts';
   static const USERS = '/users';
   static const INITIALPAGE = '/initial';
+  static const POST_VIEW = '/post-view';
+  static const POST_EDIT = '/post-edit';
   static const PROFILE = '/profile';
   static const CHANGE_PROFILE = '/change-profile';
 }

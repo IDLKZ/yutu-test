@@ -19,6 +19,10 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/post_create/bindings/post_create_binding.dart';
 import '../modules/post_create/views/post_create_view.dart';
+import '../modules/post_edit/bindings/post_edit_binding.dart';
+import '../modules/post_edit/views/post_edit_view.dart';
+import '../modules/post_view/bindings/post_view_binding.dart';
+import '../modules/post_view/views/post_view_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/register/bindings/register_binding.dart';
@@ -70,6 +74,16 @@ class AppPages {
         page: () => PostsView(),
         binding: PostsBinding(),
         middlewares: [AdminMiddleware()]),
+    GetPage(
+      name: _Paths.POST_EDIT,
+      page: () => PostEditView(),
+      binding: PostEditBinding(),
+    ),
+    GetPage(
+      name: _Paths.POST_VIEW,
+      page: () => PostViewView(),
+      binding: PostViewBinding(),
+    ),
     GetPage(
         name: _Paths.USERS,
         page: () => UsersView(),

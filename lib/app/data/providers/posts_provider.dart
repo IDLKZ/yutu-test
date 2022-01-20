@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:findout/app/controllers/image_controller.dart';
 import 'package:get/get.dart';
 
 import '../../helpers/global_mixin.dart';
@@ -16,9 +17,17 @@ class PostsProvider extends GetConnect {
     httpClient.baseUrl = 'YOUR-API-URL';
   }
 
-  Future<Posts?> getPosts(int id) async {
-    final response = await get('posts/$id');
-    return response.body;
+  Future<Posts?> getPost(String? uid) async {
+    DocumentSnapshot _post = await _postRef.doc(uid).get();
+    if(_post.exists){
+      return Posts.fromJson(_post.data() as Map<String,dynamic>);
+    }
+  }
+
+  Stream<Posts?> getPostStream(String? uid) {
+    return _postRef.doc(uid).snapshots().map((DocumentSnapshot documentSnapshot){
+       PostsList.fromJson(documentSnapshot.data() as Map<String,dynamic>);
+  });
   }
 
   Future<bool> createPost(Map<String,dynamic> data)async{
@@ -34,19 +43,56 @@ class PostsProvider extends GetConnect {
     }
   }
 
+  Future<bool> updatePost(Map<String,dynamic> data,String? uid)async{
+    try{
+      DocumentSnapshot _post = await _postRef.doc(uid).get();
+      if(_post.exists){
+        await _postRef.doc(uid).update(data);
+        GlobalMixin.successSnackBar("Отлично", "Пост успешно изменен!");
+        return true;
+      }
+      else{
+        GlobalMixin.warningSnackBar("Упс", "Поста не существует");
+        return false;
+      }
+    }
+    catch(e){
+      print(e);
+      GlobalMixin.warningSnackBar("Упс", "Что-то пошло не так!");
+      return false;
+    }
+  }
+
   Query getPostsByCategory(String? category){
     return _postRef.where("category",isEqualTo: category).orderBy("date",descending: true);
   }
 
 
-  Future<Response> deletePosts(int id) async => await delete('posts/$id');
+  Future<bool?> deletePosts(String? uid) async{
+    try{
+      DocumentSnapshot _post = await _postRef.doc(uid).get();
+      if(_post.exists){
+        await _postRef.doc(uid).delete();
+        GlobalMixin.successSnackBar("Отлично", "Пост успешно удален!");
+        return true;
+      }
+      else{
+        GlobalMixin.warningSnackBar("Упс", "Поста не существует");
+        return false;
+      }
+    }
+    catch(e){
+      print(e);
+      GlobalMixin.warningSnackBar("Упс", "Что-то пошло не так!");
+      return false;
+    }
+  }
 
 
   Stream<PostsList?> getPostsStream(){
     return _postRef.where('status',isEqualTo: 1).snapshots().map((QuerySnapshot querySnapshot){
       return PostsList.fromFirebase(querySnapshot);
     });
-
   }
 
 }

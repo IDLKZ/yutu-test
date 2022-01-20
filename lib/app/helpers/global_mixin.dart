@@ -33,4 +33,8 @@ class GlobalMixin {
       print(e);
     }
   }
+
+  static convertData(DateTime time){
+    DateFormat("d");
+  }
 }
