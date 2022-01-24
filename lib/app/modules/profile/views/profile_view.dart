@@ -52,7 +52,7 @@ class ProfileView extends GetView<ProfileController> {
             right: 30,
             bottom: MediaQuery.of(context).size.height*0.07,
             child: GestureDetector(
-              onTap: () => Get.to(ChangeProfileView()),
+              onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
               child: Image.asset('assets/images/settings_img.png')
             ),
           )

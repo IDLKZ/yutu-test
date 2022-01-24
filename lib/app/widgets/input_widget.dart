@@ -8,17 +8,22 @@ class InputWidget extends StatelessWidget {
   late bool obscure;
   late String hint;
   late Icon icon;
+  TextInputType ?keyboard;
+  bool readOnly = false;
 
-  InputWidget({required Icon icon, required String hint, required TextEditingController controller, required bool obscure, required String? Function(String?) func});
+  InputWidget(this.icon, this.hint, this.controller, this.obscure, this.keyboard, this.func, this.readOnly);
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: TextFormField(
+        enabled: readOnly,
         validator: func,
         controller: controller,
         obscureText: obscure,
+        keyboardType: keyboard,
         style: const TextStyle(fontSize: 20, color: Colors.black),
         decoration: InputDecoration(
             border: InputBorder.none,
@@ -30,6 +35,11 @@ class InputWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20)
             ),
             enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                    color: Colors.transparent, width: 1),
+                borderRadius: BorderRadius.circular(20)
+            ),
+            disabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
                     color: Colors.transparent, width: 1),
                 borderRadius: BorderRadius.circular(20)
