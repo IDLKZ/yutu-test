@@ -3,6 +3,8 @@ import 'package:findout/app/controllers/image_controller.dart';
 import 'package:findout/app/helpers/global_mixin.dart';
 import 'package:findout/app/helpers/validator_mixins.dart';
 import 'package:findout/app/routes/app_pages.dart';
+import 'package:findout/app/widgets/advanced_input.dart';
+import 'package:findout/app/widgets/select_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -12,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:select_form_field/select_form_field.dart';
 
 import '../../../helpers/kcolors.dart';
+import '../../../widgets/datepicker_widget.dart';
 import '../controllers/post_create_controller.dart';
 import 'dart:io';
 
@@ -165,141 +168,17 @@ class PostCreateView extends GetView<PostCreateController> {
     );
   }
 
-  Widget _input(Icon icon, String hint, TextEditingController controller,
-      bool obscure, TextInputType keyboard, String? Function(String?) func,
-      {int maxLines = 1, int? maxLength}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: TextFormField(
-        validator: func,
-        controller: controller,
-        keyboardType: keyboard,
-        obscureText: obscure,
-        maxLines: maxLines,
-        maxLength: maxLength,
-        style: const TextStyle(fontSize: 20, color: Colors.black),
-        decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle: const TextStyle(fontSize: 20, color: Colors.black),
-            hintText: hint,
-            focusedBorder: OutlineInputBorder(
-                borderSide:
-                    const BorderSide(color: Colors.transparent, width: 3),
-                borderRadius: BorderRadius.circular(20)),
-            enabledBorder: OutlineInputBorder(
-                borderSide:
-                    const BorderSide(color: Colors.transparent, width: 1),
-                borderRadius: BorderRadius.circular(20)),
-            errorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.red, width: 1),
-                borderRadius: BorderRadius.circular(20)),
-            filled: true,
-            fillColor: KColors.kLightGray,
-            prefixIcon: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: IconTheme(
-                data: const IconThemeData(color: KColors.kMiddleBlue),
-                child: icon,
-              ),
-            )),
-      ),
-    );
-  }
-
   Widget _select() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: SelectFormField(
-        decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle: const TextStyle(fontSize: 20, color: Colors.black),
-            hintText: "Выберите категорию",
-            focusedBorder: OutlineInputBorder(
-                borderSide:
-                    const BorderSide(color: Colors.transparent, width: 3),
-                borderRadius: BorderRadius.circular(20)),
-            enabledBorder: OutlineInputBorder(
-                borderSide:
-                    const BorderSide(color: Colors.transparent, width: 1),
-                borderRadius: BorderRadius.circular(20)),
-            errorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.red, width: 1),
-                borderRadius: BorderRadius.circular(20)),
-            filled: true,
-            fillColor: KColors.kLightGray,
-            prefixIcon: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: IconTheme(
-                data: const IconThemeData(color: KColors.kMiddleBlue),
-                child: Icon(FontAwesomeIcons.boxes),
-              ),
-            )),
-        controller: controller.categoryController,
-        validator: (val) => ValidatorMixin().validateText(val, true),
-        icon: Icon(Icons.format_shapes),
-        labelText: 'Категория',
-        style: TextStyle(fontSize: 18),
-        items: controller.items.value,
-        onChanged: (val) => null,
-        onSaved: (val) => null,
-      ),
-    );
+    return SelectPicker(icon: Icon(FontAwesomeIcons.sourcetree), controller: controller.categoryController, func: (val)=>ValidatorMixin().validateText(val,true), labelText: "Категория", hintText: 'Выберите категорию', listItem: controller.items.value);
   }
 
   Widget _datepicker() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: DateTimeField(
-        format: DateFormat("dd.MM.yyyy HH:mm"),
-        decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle: const TextStyle(fontSize: 20, color: Colors.black),
-            hintText: "Выберите время",
-            focusedBorder: OutlineInputBorder(
-                borderSide:
-                    const BorderSide(color: Colors.transparent, width: 3),
-                borderRadius: BorderRadius.circular(20)),
-            enabledBorder: OutlineInputBorder(
-                borderSide:
-                    const BorderSide(color: Colors.transparent, width: 1),
-                borderRadius: BorderRadius.circular(20)),
-            errorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.red, width: 1),
-                borderRadius: BorderRadius.circular(20)),
-            filled: true,
-            fillColor: KColors.kLightGray,
-            prefixIcon: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: IconTheme(
-                data: const IconThemeData(color: KColors.kMiddleBlue),
-                child: Icon(FontAwesomeIcons.calendarCheck),
-              ),
-            )),
+      return DatePickerWidget(
         controller: controller.dateController,
-        validator: (val) => ValidatorMixin().validateDate(val, true),
-        onShowPicker: (context, currentValue) async {
-          final date = await showDatePicker(
-              context: context,
-              firstDate: DateTime.now(),
-              initialDate: DateTime.now(),
-              lastDate: DateTime.now().add(Duration(days: 30)));
-          if (date != null) {
-            final time = await showTimePicker(
-                context: context,
-                initialTime: TimeOfDay.now(),
-                builder: (context, childWidget) {
-                  return MediaQuery(
-                      data: MediaQuery.of(context)
-                          .copyWith(alwaysUse24HourFormat: true),
-                      child: childWidget!);
-                });
-            return DateTimeField.combine(date, time);
-          } else {
-            return currentValue;
-          }
-        },
-      ),
-    );
+        func: (val)=>ValidatorMixin().validateDate(val, true),
+        hint: "Выберите время",
+        icon:Icon(FontAwesomeIcons.clock),
+      );
   }
 
   Widget _button(String text, Function() func) {
@@ -344,40 +223,40 @@ class PostCreateView extends GetView<PostCreateController> {
                 SizedBox(
                   height: 20,
                 ),
-                _input(
-                  Icon(Icons.title),
-                  "Наименование",
-                  controller.titleController,
-                  false,
-                  TextInputType.text,
-                  (val) =>
+                AdvancedInput(
+                  icon:Icon(Icons.title),
+                  hint:"Наименование",
+                  controller:controller.titleController,
+                  obscure:false,
+                  func:(val) =>
                       ValidatorMixin().validateText(val, true, maxLength: 100),
+                  keyboard:TextInputType.text,
                   maxLength: 100,
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                _input(
-                    Icon(Icons.message),
-                    "Описание",
-                    controller.descriptionController,
-                    false,
-                    TextInputType.text,
-                    (val) => ValidatorMixin()
+                AdvancedInput(
+                    icon:Icon(Icons.message),
+                    hint:"Описание",
+                    controller:controller.descriptionController,
+                    obscure:false,
+                    func:(val) => ValidatorMixin()
                         .validateText(val, true, maxLength: 1000),
+                    keyboard:TextInputType.text,
                     maxLines: 4,
                   maxLength: 1000
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                _input(
-                  Icon(Icons.location_on),
-                  "Локация",
-                  controller.placeController,
-                  false,
-                  TextInputType.text,
-                  (val) =>
+                AdvancedInput(
+                  icon:Icon(Icons.location_on),
+                  hint:"Локация",
+                  controller:controller.placeController,
+                  obscure:false,
+                  keyboard:TextInputType.text,
+                  func:(val) =>
                       ValidatorMixin().validateText(val, true, maxLength: 255),
                 ),
                 SizedBox(
@@ -387,13 +266,13 @@ class PostCreateView extends GetView<PostCreateController> {
                 SizedBox(
                   height: 20,
                 ),
-                _input(
-                    Icon(FontAwesomeIcons.users),
-                    "Кол-во людей",
-                    controller.personController,
-                    false,
-                    TextInputType.number,
-                    (val) => ValidatorMixin().validateText(val, true,
+                AdvancedInput(
+                    icon:Icon(FontAwesomeIcons.users),
+                    hint:"Кол-во людей",
+                    controller:controller.personController,
+                    obscure:false,
+                    keyboard:TextInputType.number,
+                    func:(val) => ValidatorMixin().validateText(val, true,
                         maxLength: 255, isInt: true, minInt: 1, maxInt: 10)),
                 SizedBox(
                   height: 20,

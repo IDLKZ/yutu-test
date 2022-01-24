@@ -1,6 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:findout/app/controllers/auth_controller.dart';
 import 'package:findout/app/routes/app_pages.dart';
+import 'package:findout/app/widgets/advanced_input.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutterfire_ui/firestore.dart';
@@ -11,58 +13,13 @@ import '../../../data/models/posts_model.dart';
 import '../../../data/models/users_model.dart';
 import '../../../helpers/global_mixin.dart';
 import '../../../helpers/kcolors.dart';
+import '../../../helpers/validator_mixins.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetWidget<HomeController> {
-  UserController _userController = Get.find<UserController>();
 
-
-
-  
-  
   @override
   Widget build(BuildContext context) {
-
-    Widget _input(Icon icon, String hint, TextEditingController controller,
-        bool obscure, TextInputType keyboard, String? Function(String?) func,
-        {int maxLines = 1, int? maxLength}) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: TextFormField(
-          validator: func,
-          controller: controller,
-          keyboardType: keyboard,
-          obscureText: obscure,
-          maxLines: maxLines,
-          maxLength: maxLength,
-          style: const TextStyle(fontSize: 20, color: Colors.black),
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintStyle: const TextStyle(fontSize: 20, color: Colors.black),
-              hintText: hint,
-              focusedBorder: OutlineInputBorder(
-                  borderSide:
-                  const BorderSide(color: Colors.transparent, width: 3),
-                  borderRadius: BorderRadius.circular(20)),
-              enabledBorder: OutlineInputBorder(
-                  borderSide:
-                  const BorderSide(color: Colors.transparent, width: 1),
-                  borderRadius: BorderRadius.circular(20)),
-              errorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.red, width: 1),
-                  borderRadius: BorderRadius.circular(20)),
-              filled: true,
-              fillColor: KColors.kLightGray,
-              prefixIcon: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: IconTheme(
-                  data: const IconThemeData(color: KColors.kMiddleBlue),
-                  child: icon,
-                ),
-              )),
-        ),
-      );
-    }
 
 
     Widget _searchForm(){
@@ -70,19 +27,57 @@ class HomeView extends GetWidget<HomeController> {
         padding: const EdgeInsets.all(15.0),
         child: Center(
           child: Container(
-            width: Get.width * 0.8,
-            height: Get.height * 0.8,
-            color: Colors.white,
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                color: Colors.white,
+              borderRadius: BorderRadius.circular(20)
+            ),
             child: SingleChildScrollView(
               child:Form(
                 child: Column(
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: (){Get.back();},
+                          child: Icon(
+                              Icons.close_rounded
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text("Поиск по постам",style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: KColors.kDarkViolet)),
                     SizedBox(height: 20,),
+                    AdvancedInput(
+                      icon:Icon(Icons.title),
+                      hint: "Наименование",
+                      controller:controller.title,
+                      obscure:false,
+                      func: (val){
+                        return ValidatorMixin().validateText(val, true);
+                      },
+                      maxLength: 100,
+                      ),
+                    SizedBox(height: 15,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        ElevatedButton(onPressed: (){}, child: Text("Поиск!")),
-                        ElevatedButton(onPressed: (){Get.back();}, child: Text("Отмена"))
+                        ElevatedButton(
+                          onPressed: (){controller.searchPosts();Get.back();},
+                          child: Text("Поиск",style: TextStyle(color: Colors.white),),
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(KColors.kMiddleBlue)
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: (){Get.back();},
+                          child: Text("Отмена",style: TextStyle(color: Colors.white),),
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(KColors.kError)
+                          ),
+
+                        ),
                       ],
                     )
                   ],
@@ -146,7 +141,7 @@ class HomeView extends GetWidget<HomeController> {
                         child: GestureDetector(
                           onTap: (){
                             Get.dialog(
-                              _searchForm()
+                              Material(child: _searchForm(),color: Colors.transparent,)
                             );
                           },
                           child: CircleAvatar(
@@ -176,6 +171,23 @@ class HomeView extends GetWidget<HomeController> {
                           ),
                         ),
                       ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: CircleAvatar(
+                          backgroundColor: KColors.kDarkenGray,
+                          radius: 20,
+                          child: GestureDetector(
+                            onTap: () {
+                              FirebaseAuth.instance.signOut();
+                            },
+                            child: Icon(
+                              Icons.power_settings_new,
+                              size: 36,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   )
                 ],
@@ -193,12 +205,10 @@ class HomeView extends GetWidget<HomeController> {
           height: 50,
           child: Center(
             child: ListView.builder(
-              shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemCount: controller.categoriesList.value.length,
               itemBuilder: (context,index){
                 return GetX<HomeController>(
-                    init: Get.put<HomeController>(HomeController()),
                     builder:(controller){
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5.0),
@@ -292,8 +302,9 @@ class HomeView extends GetWidget<HomeController> {
                     height: 220,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: NetworkImage(
-                                post?.image ?? 'assets/images/card-img-1.png'),
+                            image: CachedNetworkImageProvider(
+                                post?.image??"http://via.placeholder.com/350x150",
+                                ),
                             fit: BoxFit.contain)),
                   ),
                   SizedBox(
@@ -354,7 +365,6 @@ class HomeView extends GetWidget<HomeController> {
           return Container(
             child: FirestoreQueryBuilder(
               query: controller.getQuery(),
-              // FirebaseFirestore.instance.collection("posts").where("category",isEqualTo: controller.activeCategory.value).where("date",isGreaterThan: DateTime.now().millisecondsSinceEpoch).orderBy("date",descending: true),
               pageSize: 2,
               builder: (BuildContext context, FirestoreQueryBuilderSnapshot<Map<String, dynamic>> snapshot, Widget? child) {
                 if (snapshot.isFetching) {
@@ -397,7 +407,7 @@ class HomeView extends GetWidget<HomeController> {
             },
           ),
           _categoryList(),
-           Expanded(child: _cardList())
+           Expanded(child: _cardList()),
         ],
       ),
     );

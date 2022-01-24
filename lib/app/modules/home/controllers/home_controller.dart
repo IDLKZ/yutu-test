@@ -5,12 +5,14 @@ import 'package:get/get.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 
 import '../../../data/models/categories_model.dart';
+import '../../../helpers/global_mixin.dart';
 
 class HomeController extends GetxController {
   Rx<CategoriesList?> categoryStream = Rxn<CategoriesList>();
   Rx<String?> activeCategory = Rxn<String?>("");
   Rx<List<Category>> categoriesList = Rx<List<Category>>([Category(id: "",titleRu:"Все",titleEn: "All")]);
   Rx<Query> postsQuery = Rx<Query>(FirebaseFirestore.instance.collection("posts").orderBy("date",descending: true));
+  final TextEditingController title = TextEditingController();
 
   @override
   void onInit() {
@@ -18,9 +20,12 @@ class HomeController extends GetxController {
     categoryStream.bindStream(CategoriesProvider().getCategoriesStream());
     ever(activeCategory, setActiveCategory);
     ever(categoryStream,addCategoriesList);
+
+
   }
 
   setActiveCategory(String? active){
+
     if(active.toString().isNotEmpty && active.toString() != "null"){
       postsQuery.value = FirebaseFirestore.instance.collection("posts").where("category",isEqualTo: active).orderBy("date",descending: true);
     }
@@ -29,6 +34,21 @@ class HomeController extends GetxController {
     }
     getQuery();
     update();
+  }
+  
+  searchPosts(){
+    Query query = FirebaseFirestore.instance.collection("posts");
+    if(title.text.isNotEmpty){
+      print(title.text);
+      query =
+        query.where("title",isGreaterThanOrEqualTo: title.text.trim())
+        .where("title",isLessThan: title.text.trim() + 'z');
+      postsQuery.value = query;
+      update();
+    }
+    //query
+
+
   }
 
   addCategoriesList(CategoriesList? _categoriesList){
@@ -44,7 +64,6 @@ class HomeController extends GetxController {
 
 
    getQuery<Query>(){
-    //return  FirebaseFirestore.instance.collection("posts").where('title',isGreaterThanOrEqualTo: "Рест").where('title', isLessThanOrEqualTo:"Рест"+ '\uf8ff');
     return postsQuery.value;
   }
 

@@ -16,6 +16,7 @@ abstract class Routes {
   static const POST_EDIT =  _Paths.POST_EDIT;
   static const PROFILE = _Paths.PROFILE;
   static const CHANGE_PROFILE = _Paths.CHANGE_PROFILE;
+  static const POSTS_SINGLE = _Paths.POSTS_SINGLE;
 }
 
 abstract class _Paths {
@@ -33,4 +34,5 @@ abstract class _Paths {
   static const POST_EDIT = '/post-edit';
   static const PROFILE = '/profile';
   static const CHANGE_PROFILE = '/change-profile';
+  static const POSTS_SINGLE = '/post-single';
 }

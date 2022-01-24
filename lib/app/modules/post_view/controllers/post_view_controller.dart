@@ -10,7 +10,7 @@ import '../../../helpers/global_mixin.dart';
 class PostViewController extends GetxController {
   //TODO: Implement PostViewController
   String? uid = Get.arguments;
-  Rx<Posts?> post = Rx<Posts?>(Posts());
+  Rx<Posts?> post = Rx<Posts?>(null);
 
   ImageController _imageController = Get.put(ImageController());
   @override
@@ -26,8 +26,6 @@ class PostViewController extends GetxController {
     if(result == true){
       Get.offAllNamed(Routes.HOME);
     }
-
-
   }
 
   @override
