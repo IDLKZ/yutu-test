@@ -1,16 +1,17 @@
-import 'package:findout/app/controllers/image_controller.dart';
-import 'package:findout/app/data/models/categories_model.dart';
-import 'package:findout/app/data/providers/categories_provider.dart';
 import 'package:findout/app/data/providers/posts_provider.dart';
+import 'package:findout/app/routes/app_pages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../controllers/image_controller.dart';
+import '../../../data/models/categories_model.dart';
+import '../../../data/models/posts_model.dart';
+import '../../../data/providers/categories_provider.dart';
 import '../../../helpers/global_mixin.dart';
 
-class PostCreateController extends GetxController {
+class PostEditController extends GetxController {
   //TODO: Implement PostCreateController
   Rx<CategoriesList?>categoriesList = Rxn<CategoriesList>();
   //Form
@@ -24,12 +25,22 @@ class PostCreateController extends GetxController {
   ImageController _imageController = Get.find<ImageController>();
 
   Rx<List<Map<String, dynamic>>> items = Rx<List<Map<String,dynamic>>>([]);
-
-
-
+  String? postUid = Get.arguments;
+  Rx<Posts?> post = Rxn<Posts?>();
   @override
-  void onInit() {
+  void onInit()async {
     super.onInit();
+    post.value = await PostsProvider().getPost(postUid);
+    if(post == null){
+      Get.back();
+    }
+    _imageController.selectedImageUrl.value = post.value?.image??"";
+    categoryController.text = post.value?.category??"";
+    titleController.text = post.value?.title??"";
+    descriptionController.text = post.value?.description??"";
+    placeController.text = post.value?.place??"";
+    personController.text = post.value?.persons.toString()??"";
+    dateController.text = DateFormat("dd.MM.yyyy HH:mm").format(post.value?.date??DateTime.now());
     categoriesList.bindStream(CategoriesProvider().getCategoriesStream());
     ever(categoriesList,_setCategoryList);
   }
@@ -39,24 +50,24 @@ class PostCreateController extends GetxController {
       if(categoriesList.categoriesList != null){
         categoriesList.categoriesList?.forEach((category){
           items.value.add(
-            {
-              "value":category.id,
-              "label":category.titleRu,
-            }
+              {
+                "value":category.id,
+                "label":category.titleRu,
+              }
           );
         });
       }
     }
   }
 
-
-  Future<void> onSave()async{
+  Future<void> onUpdate()async{
     if(formKey.currentState != null){
       if(formKey.currentState!.validate() && dateController.text.isNotEmpty && _imageController.selectedImageUrl.value.isNotEmpty){
-        await PostsProvider().createPost(prepareData());
+        await PostsProvider().updatePost(prepareData(isUpdated:true),postUid);
         formKey.currentState?.reset();
         dateController.text = "";
         _imageController.selectedImageUrl.value = "";
+        Get.offAllNamed(Routes.HOME);
       }
       else{
         GlobalMixin.warningSnackBar("Упс", "Заполните все поля");
@@ -65,22 +76,10 @@ class PostCreateController extends GetxController {
   }
 
 
-
   @override
   void onReady() {
     super.onReady();
   }
-
-  @override
-  void onClose() {
-    titleController.dispose();
-    categoryController.dispose();
-    descriptionController.dispose();
-    placeController.dispose();
-    dateController.dispose();
-    personController.dispose();
-  }
-
 
   Map<String,dynamic> prepareData({bool isUpdated = false}){
     Map <String,dynamic> data = {};
@@ -99,4 +98,15 @@ class PostCreateController extends GetxController {
     return data;
 
   }
+
+  @override
+  void onClose() {
+    titleController.dispose();
+    categoryController.dispose();
+    descriptionController.dispose();
+    placeController.dispose();
+    dateController.dispose();
+    personController.dispose();
+  }
+
 }

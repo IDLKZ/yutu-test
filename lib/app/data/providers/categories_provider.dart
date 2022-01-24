@@ -74,8 +74,10 @@ class CategoriesProvider extends GetConnect {
     return _categoryRef.where('status',isEqualTo: 1).snapshots().map((QuerySnapshot querySnapshot){
       return CategoriesList.fromFirebase(querySnapshot);
     });
-
   }
-
+  Future<CategoriesList?> getCategoriesAll()async{
+    QuerySnapshot categories = await _categoryRef.where('status',isEqualTo: 1).get();
+    return CategoriesList.fromFirebase(categories);
+  }
 
 }
