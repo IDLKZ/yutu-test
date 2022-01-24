@@ -3,7 +3,10 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:get/get_navigation/src/snackbar/snackbar_controller.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 import 'kcolors.dart';
@@ -34,7 +37,30 @@ class GlobalMixin {
     }
   }
 
-  static convertData(DateTime time){
-    DateFormat("d");
+  String? getLocale() {
+    String locale = Get.locale!.languageCode;
+    return locale.capitalizeFirst;
+  }
+
+  static Future<String> getCurrentLocale() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? locale = prefs.getString("langLocale") ?? "ru";
+    return locale;
+  }
+
+  static setShared(String key, dynamic value ) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(value.runtimeType == String){
+      prefs.setString(key, value);
+    }
+    if(value.runtimeType == bool){
+      prefs.setBool(key, value);
+    }
+    if(value.runtimeType == int){
+      prefs.setInt(key, value);
+    }
+    if(value.runtimeType == double){
+      prefs.setDouble(key, value);
+    }
   }
 }
