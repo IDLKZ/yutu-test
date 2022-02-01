@@ -1,3 +1,4 @@
+import 'package:findout/app/routes/middlewares/initial_middleware.dart';
 import 'package:get/get.dart';
 
 import '../controllers/user_controller.dart';
@@ -7,10 +8,17 @@ import '../modules/admin/dashboard/bindings/dashboard_binding.dart';
 import '../modules/admin/dashboard/views/dashboard_view.dart';
 import '../modules/admin/posts/bindings/posts_binding.dart';
 import '../modules/admin/posts/views/posts_view.dart';
+import '../modules/admin/posts_single/bindings/posts_single_binding.dart';
+import '../modules/admin/posts_single/controllers/posts_single_controller.dart';
+import '../modules/admin/posts_single/views/posts_single_view.dart';
 import '../modules/admin/users/bindings/users_binding.dart';
 import '../modules/admin/users/views/users_view.dart';
 import '../modules/change_profile/bindings/change_profile_binding.dart';
 import '../modules/change_profile/views/change_profile_view.dart';
+import '../modules/chat_page/bindings/chat_page_binding.dart';
+import '../modules/chat_page/views/chat_page_view.dart';
+import '../modules/chatroom_view/bindings/chatroom_view_binding.dart';
+import '../modules/chatroom_view/views/chatroom_view_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/initial/bindings/initial_binding.dart';
@@ -93,7 +101,7 @@ class AppPages {
       name: _Paths.INITIALPAGE,
       page: () => InitialView(),
       binding: InitialBinding(),
-      middlewares: [AuthMiddleware()],
+      middlewares: [InitialMiddleware()],
     ),
     GetPage(
       name: _Paths.PROFILE,
@@ -104,6 +112,21 @@ class AppPages {
       name: _Paths.CHANGE_PROFILE,
       page: () => ChangeProfileView(),
       binding: ChangeProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.POSTS_SINGLE,
+      page: () => PostsSingleView(),
+      binding: PostsSingleBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHAT_PAGE,
+      page: () => ChatPageView(),
+      binding: ChatPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHATROOM_VIEW,
+      page: () => ChatroomViewView(),
+      binding: ChatroomViewBinding(),
     ),
   ];
 }

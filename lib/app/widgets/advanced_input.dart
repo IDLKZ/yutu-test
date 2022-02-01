@@ -1,15 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../helpers/kcolors.dart';
 
 class AdvancedInput extends StatelessWidget {
 
-  late Icon icon;
+  late Widget icon;
   late String? hint;
   late TextEditingController? controller;
-  late bool obscure = false;
   late String? Function(String?)? func;
+  bool obscure;
   TextInputType? keyboard;
   int? maxLines;
   int? maxLength;
@@ -17,20 +19,35 @@ class AdvancedInput extends StatelessWidget {
   bool? isEnabled;
   String? initialVal;
   TextStyle? textStyle;
+  TextStyle? hintStyle;
+  Widget suffixIcon;
+  FocusNode? focusNode;
+  List<TextInputFormatter>? inputFormatter;
+  bool phone;
+
+  var phoneInput = <TextInputFormatter>[new MaskTextInputFormatter(
+  mask: '+###########',
+  filter: {"#": RegExp(r"^\+?77([0124567][0-8]\d{7})$")},
+  type: MaskAutoCompletionType.lazy)];
 
   AdvancedInput({
     required this.icon,
     required this.hint,
     required this.controller,
-    required this.obscure,
     required this.func,
+    this.obscure = false,
     this.keyboard,
-    this.maxLines,
+    this.maxLines = 1,
     this.maxLength,
     this.onChanged,
     this.isEnabled,
     this.initialVal,
-    this.textStyle
+    this.textStyle,
+    this.hintStyle = const TextStyle(fontSize: 20, color: Colors.black),
+    this.suffixIcon = const SizedBox(),
+    this.focusNode,
+    this.inputFormatter,
+    this.phone = false
   });
 
   @override
@@ -42,12 +59,15 @@ class AdvancedInput extends StatelessWidget {
         controller: controller,
         keyboardType: keyboard,
         obscureText: obscure,
-        maxLines: maxLines,
+        maxLines: obscure ? 1 : maxLines,
         maxLength: maxLength,
         style: textStyle,
+        autocorrect: false,
+        focusNode: focusNode,
+        inputFormatters: phone ? phoneInput : null,
         decoration: InputDecoration(
             border: InputBorder.none,
-            hintStyle: const TextStyle(fontSize: 20, color: Colors.black),
+            hintStyle: hintStyle,
             hintText: hint,
             focusedBorder: OutlineInputBorder(
                 borderSide:
@@ -71,7 +91,16 @@ class AdvancedInput extends StatelessWidget {
                 data: const IconThemeData(color: KColors.kMiddleBlue),
                 child: icon,
               ),
-            )),
+            ),
+          suffixIcon: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: IconTheme(
+              data: const IconThemeData(color: KColors.kMiddleBlue),
+              child: suffixIcon,
+            ),
+          ),
+
+        ),
       ),
     );
   }

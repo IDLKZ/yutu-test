@@ -39,7 +39,7 @@ class AuthController extends GetxController {
     }
   }
 
-  void register(String email, String password, String name, String surname, int age, String city) async {
+  void register(String email, String password, String name, String surname, String age, int city) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
@@ -82,6 +82,5 @@ class AuthController extends GetxController {
 
   logout() async {
     await FirebaseAuth.instance.signOut();
-    Get.offAllNamed(Routes.LOGIN);
   }
 }

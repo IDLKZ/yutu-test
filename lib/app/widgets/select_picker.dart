@@ -54,7 +54,7 @@ class SelectPicker extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: IconTheme(
                 data: const IconThemeData(color: KColors.kMiddleBlue),
-                child: Icon(FontAwesomeIcons.boxes),
+                child: icon,
               ),
             )),
         controller: controller,

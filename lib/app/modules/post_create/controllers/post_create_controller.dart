@@ -17,6 +17,7 @@ class PostCreateController extends GetxController {
   final TextEditingController categoryController = TextEditingController();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
   final TextEditingController placeController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController personController = TextEditingController();
@@ -76,9 +77,11 @@ class PostCreateController extends GetxController {
     titleController.dispose();
     categoryController.dispose();
     descriptionController.dispose();
+    cityController.dispose();
     placeController.dispose();
     dateController.dispose();
     personController.dispose();
+    _imageController.selectedImageUrl.value = "";
   }
 
 
@@ -89,6 +92,7 @@ class PostCreateController extends GetxController {
     data["category"] = categoryController.text.trim();
     data["title"] = titleController.text.trim();
     data["description"] = descriptionController.text.trim();
+    data["city"] = int.parse(cityController.text.trim());
     data["place"] = placeController.text.trim();
     data["persons"] = int.parse(personController.text.trim());
     data["date"] = GlobalMixin.convertToDateFormatController(dateController)?.millisecondsSinceEpoch;

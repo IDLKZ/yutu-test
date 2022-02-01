@@ -3,77 +3,154 @@ import 'package:findout/app/helpers/kcolors.dart';
 import 'package:findout/app/helpers/validator_mixins.dart';
 import 'package:findout/app/widgets/input_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
+import '../../../controllers/image_controller.dart';
+import '../../../widgets/datepicker_widget.dart';
+import '../../../widgets/select_picker.dart';
 import '../controllers/change_profile_controller.dart';
 
 class ChangeProfileView extends GetView<ChangeProfileController> {
+  ImageController _imageController = Get.put<ImageController>(ImageController());
 
-  const ChangeProfileView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
-    Widget _header(String imageUrl) {
-      return Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Container(
-            alignment: Alignment.bottomCenter,
-            height: MediaQuery.of(context).size.height*0.4,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/images/profile_bg.png'),
-                    fit: BoxFit.cover
-                )
-            ),
-            child: Container(
-                height: MediaQuery.of(context).size.height*0.15,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(40.0),
-                      topLeft: Radius.circular(40.0)
+    Widget _showDialog(BuildContext context) {
+      return AlertDialog(
+        title: Text("Загрузите изображение"),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  _imageController.pickImage(ImageSource.camera,delete: false);
+                  Get.back();
+                },
+                child: Card(
+                  child: ListTile(
+                    leading: Icon(Icons.camera_alt_rounded),
+                    title: Text("Сделать фото"),
                   ),
-                  color: Colors.white,
-                )
-            ),
-          ),
-          CircleAvatar(
-            radius: 100,
-            backgroundImage: AssetImage(imageUrl),
-            backgroundColor: Colors.transparent,
-          ),
-          Positioned(
-            right: 30,
-            bottom: MediaQuery.of(context).size.height*0.07,
-            child: GestureDetector(
-                onTap: (){},
-                child: DropdownButton<String>(
-                  value: 'ru',
-                  icon: const Icon(Icons.language, color: Colors.black,),
-                  iconSize: 24,
-                  style: const TextStyle(color: Colors.white),
-                  dropdownColor: KColors.kMiddleBlue,
-                  underline: Container(
-                    height: 0,
-                    color: Colors.transparent,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  _imageController.pickImage(ImageSource.gallery,delete: false);
+                  Get.back();
+                },
+                child: Card(
+                  child: ListTile(
+                    leading: Icon(Icons.photo),
+                    title: Text("Загрузить с галереи"),
                   ),
-                  onChanged: (String? newValue) async {
-                    String newLang = newValue ?? "ru";
-
-                    await GlobalMixin.setShared("langLocale", newLang);
-                  },
-                  items: ChangeProfileController.languagesApp.map((value) {
-                    return DropdownMenuItem<String>(
-                      value: value["code"],
-                      child: Text(value["title"] ?? "Рус"),
-                    );
-                  }).toList(),
-                )
-            ),
-          )
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          ElevatedButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text("Отмена"))
         ],
+      );
+    }
+
+
+    Widget _header(String imageUrl) {
+      return GetX<ImageController>(
+        builder: (imageController){
+          return Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              Container(
+                alignment: Alignment.bottomCenter,
+                height: MediaQuery.of(context).size.height*0.4,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(
+                          "assets/images/profile_bg.png"
+                        ),
+                        fit: BoxFit.cover
+                    )
+                ),
+                child: Container(
+                    height: MediaQuery.of(context).size.height*0.15,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(40.0),
+                          topLeft: Radius.circular(40.0)
+                      ),
+                      color: Colors.white,
+                    )
+                ),
+              ),
+              !_imageController.imageUploaded.value ? CircleAvatar(
+                radius: 100,
+                backgroundImage:
+                NetworkImage(
+                    imageController.selectedImageUrl.value.isNotEmpty
+                        ? imageController.selectedImageUrl.value
+                        : (controller.user.user?.imageUrl ?? "https://st3.depositphotos.com/4111759/13425/v/600/depositphotos_134255532-stock-illustration-profile-placeholder-male-default-profile.jpg")
+                ),
+                backgroundColor: Colors.transparent,
+              )
+              :
+                  CircleAvatar(
+                    radius: 100,
+                    child: CircularProgressIndicator(),
+                    backgroundColor: Colors.white,
+                  )
+              ,
+              Positioned(
+                right: 30,
+                bottom: MediaQuery.of(context).size.height*0.07,
+                child: GestureDetector(
+                    onTap: (){},
+                    child: DropdownButton<String>(
+                      value: 'ru',
+                      icon: const Icon(Icons.language, color: Colors.black,),
+                      iconSize: 24,
+                      style: const TextStyle(color: Colors.white),
+                      dropdownColor: KColors.kMiddleBlue,
+                      underline: Container(
+                        height: 0,
+                        color: Colors.transparent,
+                      ),
+                      onChanged: (String? newValue) async {
+                        String newLang = newValue ?? "ru";
+
+                        await GlobalMixin.setShared("langLocale", newLang);
+                      },
+                      items: ChangeProfileController.languagesApp.map((value) {
+                        return DropdownMenuItem<String>(
+                          value: value["code"],
+                          child: Text(value["title"] ?? "Рус"),
+                        );
+                      }).toList(),
+                    )
+                ),
+              ),
+              Positioned(
+                bottom: 10,
+                child:  IconButton(
+                  icon: Icon(FontAwesomeIcons.camera,color: Colors.white,),
+                  onPressed: (){
+                    showDialog(context: context, builder: (c) => _showDialog(context));
+                  },
+                ),
+              )
+            ],
+          );
+        },
       );
     }
 
@@ -113,7 +190,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
               padding: const EdgeInsets.only(bottom: 20, top: 10),
               child: InputWidget(
                   const Icon(Icons.account_circle),
-                  'Name',
+                  'Имя',
                   controller.nameController,
                   false,
                   TextInputType.text,
@@ -125,7 +202,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
               padding: const EdgeInsets.only(bottom: 20),
               child: InputWidget(
                   const Icon(Icons.account_circle),
-                  'Surname',
+                  'Фамилия',
                   controller.surnameController,
                   false,
                   TextInputType.text,
@@ -134,28 +211,29 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: InputWidget(
-                  const Icon(Icons.ac_unit),
-                  'Age',
-                  controller.ageController,
-                  false,
-                  TextInputType.number,
-                  (val){return ValidatorMixin().validateText(val, true,isInt: true);},
-                  true
-              ),
+              padding: const EdgeInsets.only(bottom: 20,right: 10,left: 10),
+              child:DatePickerWidget(
+                controller: controller.ageController,
+                icon: Icon(FontAwesomeIcons.calendarCheck),
+                hint: "Дата рождения (+18 лет)",
+                func: (val) {return ValidatorMixin().validateDate(val, true); },
+                firstDate: DateTime(DateTime.now().year - 100),
+                lastDate: DateTime(DateTime.now().year - 18),
+                initialDate: DateTime(DateTime.now().year - 18),
+                format:DateFormat("dd.MM.yyyy"),
+                time: false,
+              )
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: InputWidget(
-                  const Icon(Icons.share_location),
-                  'City',
-                  controller.cityController,
-                  false,
-                  TextInputType.text,
-                  (val){return ValidatorMixin().validateText(val, true,maxLength: 255);},
-                  true
-              ),
+                padding: const EdgeInsets.only(bottom: 20,right: 10,left: 10),
+              child: SelectPicker(
+                controller: controller.cityController,
+                hintText: "Ваш город",
+                func: (val){return ValidatorMixin().validateText(val, true);},
+                icon:Icon(FontAwesomeIcons.globe),
+                labelText: "Ваш город",
+                listItem: GlobalMixin.getListCities(),
+              )
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 20),
@@ -195,18 +273,14 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
       );
     }
 
-    _buttonAction() {
-      if (controller.formKey.currentState!.validate()) {
 
-      }
-    }
 
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
             _header('assets/images/ava.png'),
-            _form('Change', () => null)
+            _form('Change', () => controller.updateUser())
           ],
         ),
       ),

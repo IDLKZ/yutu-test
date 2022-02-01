@@ -16,15 +16,15 @@ class InitialMiddleware extends GetMiddleware{
 
   @override
   RouteSettings? redirect(String? route) {
-    if(FirebaseAuth.instance.currentUser == null){
-      return const RouteSettings(name:Routes.LOGIN);
-    }
-    else if(Get.find<UserController>().user?.isAdmin == true) {
-      return const RouteSettings(name:Routes.DASHBOARD);
-    }
-    else  {
-      return const RouteSettings(name:Routes.HOME);
-    }
+    // if(FirebaseAuth.instance.currentUser == null){
+    //   return const RouteSettings(name:Routes.LOGIN);
+    // }
+    // else if(Get.find<UserController>().user?.isAdmin == true) {
+    //   return const RouteSettings(name:Routes.DASHBOARD);
+    // }
+    // else  {
+    //   return const RouteSettings(name:Routes.HOME);
+    // }
   }
 
 

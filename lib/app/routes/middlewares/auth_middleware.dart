@@ -13,7 +13,7 @@ class AuthMiddleware extends GetMiddleware{
   @override
   // TODO: implement priority
   int? get priority => 2;
-
+//Only for Users
   @override
   RouteSettings? redirect(String? route) {
     if(FirebaseAuth.instance.currentUser == null){

@@ -8,6 +8,9 @@ class ValidatorMixin{
        if(email){
          msg =RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(textField.trim()) ? msg : 'Почта не валидна';
        }
+       if(phone){
+         msg = RegExp(r"^\+?77([0124567][0-8]\d{7})$").hasMatch(textField) ? msg : "Телефон не валиден";
+       }
        if(minLenght > 0){
          msg = textField.trim().length < minLenght ? "Поле не может быть менее ${minLenght} символов" : msg;
        }

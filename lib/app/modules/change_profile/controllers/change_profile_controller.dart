@@ -1,9 +1,12 @@
+import 'package:findout/app/controllers/image_controller.dart';
 import 'package:findout/app/controllers/user_controller.dart';
+import 'package:findout/app/data/providers/users_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class ChangeProfileController extends GetxController {
   UserController user = Get.find<UserController>();
+  ImageController _imageController = Get.find<ImageController>();
   final formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController surnameController = TextEditingController();
@@ -19,7 +22,7 @@ class ChangeProfileController extends GetxController {
    nameController.text = user.user?.name??"";
    surnameController.text = user.user?.surname??"";
    ageController.text = user.user?.age.toString()??'';
-   cityController.text = user.user?.city??"";
+   cityController.text = user.user?.city.toString()??"";
    emailController.text = user.user?.email??"";
   }
 
@@ -28,6 +31,28 @@ class ChangeProfileController extends GetxController {
     // {"title":"Kaz.","code":"kz"},
     {"title":"Eng.","code":"en"},
   ];
+
+
+  updateUser(){
+    if(formKey.currentState!.validate()){
+      UsersProvider().updateUser(prepareData());
+    }
+  }
+
+
+  Map<String,dynamic> prepareData(){
+    Map<String,dynamic> data = {
+      "name":nameController.text.trim(),
+      "surname":surnameController.text.trim(),
+      "password":passwordController.text.trim(),
+      "city":int.parse(cityController.text.trim()),
+      "age":ageController.text.trim(),
+    };
+    if(_imageController.selectedImageUrl.value.isNotEmpty){
+      data.assign("imageUrl", _imageController.selectedImageUrl.value);
+    }
+    return data;
+  }
 
 
 

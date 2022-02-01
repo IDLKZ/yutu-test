@@ -1,6 +1,7 @@
 import 'package:findout/app/routes/app_pages.dart';
 import 'package:findout/app/widgets/advanced_input.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:findout/app/widgets/post_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import '../../../data/models/users_model.dart';
 import '../../../helpers/global_mixin.dart';
 import '../../../helpers/kcolors.dart';
 import '../../../helpers/validator_mixins.dart';
+import '../../../widgets/bottom_widget.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetWidget<HomeController> {
@@ -239,125 +241,6 @@ class HomeView extends GetWidget<HomeController> {
       );
     }
 
-    Widget _card(Posts? post, String? uid) {
-      return Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: GestureDetector(
-          onTap: () {
-            Get.toNamed(Routes.POST_VIEW, arguments: uid);
-          },
-          child: Card(
-            color: KColors.kLightGray,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(top: 10, bottom: 10, right: 3, left: 3),
-              child: Column(
-                children: [
-                  FutureBuilder<Users?>(
-                    future: post?.getUser(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return Row(
-                          children: [
-                            const CircleAvatar(
-                              radius: 30,
-                              backgroundImage:
-                                  AssetImage('assets/images/ava.jpg'),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "${snapshot.data?.name}",
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    '${snapshot.data?.city}, ${snapshot.data?.age} лет',
-                                    style: TextStyle(color: KColors.kSpaceGray),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        );
-                      } else {
-                        return CircularProgressIndicator();
-                      }
-                    },
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    height: 220,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: CachedNetworkImageProvider(
-                                post?.image??"http://via.placeholder.com/350x150",
-                                ),
-                            fit: BoxFit.contain)),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Text(
-                      GlobalMixin.truncateText('${post?.title}', 60),
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 10, top: 10, bottom: 10),
-                    child: Row(
-                      children: [
-                        Icon(FontAwesomeIcons.userAlt),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          '${post?.persons}',
-                          style: TextStyle(
-                              fontSize: 16, color: KColors.kSpaceGray),
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Icon(FontAwesomeIcons.calendarAlt),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          '${post?.getTime()}',
-                          style: TextStyle(
-                              fontSize: 16, color: KColors.kSpaceGray),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    }
 
     Widget _cardList() {
       return GetBuilder<HomeController>(
@@ -380,7 +263,7 @@ class HomeView extends GetWidget<HomeController> {
                       snapshot.fetchMore();
                     }
                     final post = Posts.fromJson(snapshot.docs[index].data());
-                    return _card(post, snapshot.docs[index].id);
+                    return PostWidget(post:post,uid: snapshot.docs[index].id);
                   },
                 );
 
@@ -392,24 +275,28 @@ class HomeView extends GetWidget<HomeController> {
 
       );
     }
-
-
-
-    return Scaffold(
-      extendBody: true,
-      body: Column(
+    Widget _column(){
+     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           GetX<UserController>(
             builder: (controller) {
               return _header('assets/images/ava.jpg',
-                  "Привет, ${controller.user?.name ?? ""}");
+                  "Привет, ${controller.user?.fullname() ?? ""}");
             },
           ),
           _categoryList(),
-           Expanded(child: _cardList()),
+          Expanded(child: _cardList()),
         ],
-      ),
+      );
+    }
+
+
+
+    return Scaffold(
+      extendBody: true,
+      body: _column(),
+      bottomNavigationBar: BottomNavigator(),
     );
   }
 }

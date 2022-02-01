@@ -1,16 +1,20 @@
 import 'package:findout/app/controllers/user_controller.dart';
+import 'package:findout/app/helpers/global_mixin.dart';
 import 'package:findout/app/modules/post_edit/views/post_edit_view.dart';
 import 'package:findout/app/routes/app_pages.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../../../data/models/categories_model.dart';
 import '../../../data/models/posts_model.dart';
 import '../../../data/models/users_model.dart';
+import '../../../data/providers/chats_provider.dart';
 import '../../../helpers/kcolors.dart';
 import '../controllers/post_view_controller.dart';
 
 class PostViewView extends GetView<PostViewController> {
+
   Widget _editDeletePost() {
     if (Get.find<UserController>().auth.currentUser!.uid ==
         controller.post.value?.author) {
@@ -91,10 +95,10 @@ class PostViewView extends GetView<PostViewController> {
   }
 
   Widget _floatButton(){
-    if(Get.find<UserController>().auth.currentUser!.uid == controller.post.value?.author){
+    if(FirebaseAuth.instance.currentUser?.uid != controller.post.value?.author){
       return FloatingActionButton.extended(
         onPressed: () {
-          // Add your onPressed code here!
+          ChatProvider().addNewConnection(controller.post.value?.author);
         },
         label: Row(
           children: const [
@@ -137,7 +141,7 @@ class PostViewView extends GetView<PostViewController> {
                               bottomRight: Radius.circular(40.0)),
                           image: DecorationImage(
                               image: NetworkImage(
-                                  controller.post.value?.image ?? ""),
+                                  controller.post.value?.image ??"http://via.placeholder.com/350x150",),
                               fit: BoxFit.cover)),
                     ),
                     Container(
@@ -200,7 +204,7 @@ class PostViewView extends GetView<PostViewController> {
                                           height: 5,
                                         ),
                                         Text(
-                                          '${snapshot.data?.city ?? ""}  ${snapshot.data?.age ?? ""} лет',
+                                          '${GlobalMixin.cityName(snapshot.data?.city) ?? ""}  ${snapshot.data?.getAge() ?? ""}',
                                           style: TextStyle(
                                               color: KColors.kSpaceGray),
                                         )
@@ -312,7 +316,7 @@ class PostViewView extends GetView<PostViewController> {
                                           height: 5,
                                         ),
                                         Text(
-                                          "${controller.post.value?.place ?? ""}",
+                                          "${GlobalMixin.cityName(controller.post.value?.city) ?? ""} / ${controller.post.value?.place ?? ""}",
                                           style: const TextStyle(
                                               fontSize: 14,
                                               color: Colors.black,

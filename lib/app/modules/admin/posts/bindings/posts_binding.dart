@@ -7,6 +7,7 @@ class PostsBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<PostsController>(
       () => PostsController(),
+      fenix: true
     );
   }
 }

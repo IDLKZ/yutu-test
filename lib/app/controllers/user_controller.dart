@@ -58,6 +58,8 @@ class UserController extends GetxController {
     }
     else{
       Get.find<AuthController>().logout();
+      Get.offAllNamed(Routes.LOGIN);
+
     }
   }
 

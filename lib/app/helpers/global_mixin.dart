@@ -1,3 +1,4 @@
+import 'package:findout/app/helpers/country_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -36,6 +37,29 @@ class GlobalMixin {
       print(e);
     }
   }
+
+  static DateTime convertToDate(String? data){
+    try{
+      if(data != null){
+        return DateFormat("dd.MM.yyyy").parse(data);
+      }
+    }
+    catch(e){}
+    return DateTime.now();
+  }
+
+
+  static List<Map<String,dynamic>> getListCities(){
+    return CountryConstants.cities_ru;
+  }
+
+  static String? cityName(int? city){
+    return city != null ? CountryConstants.citiesMapRu[city] : null;
+  }
+
+
+
+
 
   String? getLocale() {
     String locale = Get.locale!.languageCode;

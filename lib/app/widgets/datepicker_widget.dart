@@ -15,7 +15,7 @@ class DatePickerWidget extends StatelessWidget {
   DateTime? initialDate;
   DateTime? lastDate;
   DateFormat? format;
-
+  bool time;
 
   DatePickerWidget({
     required this.icon,
@@ -26,6 +26,7 @@ class DatePickerWidget extends StatelessWidget {
     this.initialDate,
     this.lastDate,
     this.format,
+    this.time = true
 });
 
 
@@ -68,7 +69,7 @@ class DatePickerWidget extends StatelessWidget {
               initialDate: initialDate??DateTime.now(),
               lastDate: lastDate??DateTime.now().add(Duration(days: 31))
           );
-          if (date != null) {
+          if (date != null && time) {
             final time = await showTimePicker(
                 context: context,
                 initialTime: TimeOfDay.now(),
@@ -80,7 +81,7 @@ class DatePickerWidget extends StatelessWidget {
                 });
             return DateTimeField.combine(date, time);
           } else {
-            return currentValue;
+            return date;
           }
         },
       ),

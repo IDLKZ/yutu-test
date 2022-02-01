@@ -50,6 +50,7 @@ class Posts {
   String? category;
   String? title;
   String? description;
+  int? city;
   String? place;
   DateTime? date;
   DateTime? createdAt;
@@ -79,6 +80,7 @@ class Posts {
       this.category,
       this.title,
       this.description,
+      this.city,
       this.place,
       this.date,
       this.persons,
@@ -93,6 +95,7 @@ class Posts {
     category = json['category'];
     title = json['title'];
     description = json['description'];
+    city = json['city'];
     place = json['place'];
     date = DateTime.fromMillisecondsSinceEpoch(json["date"]??0 * 1000);
     persons = json['persons'];
@@ -109,6 +112,7 @@ class Posts {
     data['category'] = category;
     data['title'] = title;
     data['description'] = description;
+    data['city'] = city;
     data['place'] = place;
     data['date'] = date;
     data["persons"] = persons;

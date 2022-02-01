@@ -24,14 +24,14 @@ class ImageController extends GetxController{
   //Initialize storage
   FirebaseStorage storage = FirebaseStorage.instance;
 
-  Future <void> pickImage(ImageSource source)async {
+  Future <void> pickImage(ImageSource source,{bool delete = true})async {
     try {
       final selectedFile = await picker.pickImage(source: source,imageQuality: 60);
       imageUploaded.value = true;
       if (selectedFile != null) {
         selectedImagePath.value = selectedFile.path;
         bool isModerate = true;
-        bool result = isModerate ? await uploadImage(File(selectedFile.path), basename(selectedFile.path)) : false;
+        bool result = isModerate ? await uploadImage(File(selectedFile.path), basename(selectedFile.path),delete:delete) : false;
         if (result) {
           Get.snackbar('Отлично', 'Фото готово', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kSuccess, colorText: Colors.white);
         }
@@ -47,9 +47,11 @@ class ImageController extends GetxController{
   }
 
 
-  Future <bool> uploadImage(File imageFile,String fileName)async{
+  Future <bool> uploadImage(File imageFile,String fileName,{bool delete = true})async{
     try {
-      selectedImageUrl.value.isNotEmpty ? await deleteFile(selectedImageUrl.value) : null;
+      if(selectedImageUrl.value.isNotEmpty && delete){
+        await deleteFile(selectedImageUrl.value);
+      }
       TaskSnapshot taskSnapshot =  await FirebaseStorage.instance.ref('uploads/$fileName').putFile(imageFile);
       selectedImageUrl.value = await taskSnapshot.ref.getDownloadURL();
       Get.snackbar('Отлично', 'Фото загружено', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kSuccess, colorText: Colors.white);

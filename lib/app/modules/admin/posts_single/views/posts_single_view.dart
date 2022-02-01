@@ -62,11 +62,8 @@ class PostsSingleView extends GetView<PostsSingleController> {
       );
     }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarAdmin(title: "Пост" ,),
-      body: GetX<PostsSingleController>(
+    Widget _post(BuildContext context){
+      return GetX<PostsSingleController>(
         builder: (controller) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +96,7 @@ class PostsSingleView extends GetView<PostsSingleController> {
                       left: 30,
                       child: GestureDetector(
                         onTap: () {
-                          Get.offAllNamed(Routes.DASHBOARD);
+                          Get.offAllNamed(Routes.POSTS);
                         },
                         child: Container(
                           padding: const EdgeInsets.all(5),
@@ -372,7 +369,14 @@ class PostsSingleView extends GetView<PostsSingleController> {
             ],
           );
         },
-      ),
+      );
+    }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBarAdmin(title: "Пост" ,),
+      body: _post(context),
     );
   }
 }

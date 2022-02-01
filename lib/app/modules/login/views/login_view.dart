@@ -2,16 +2,16 @@ import 'package:findout/app/controllers/auth_controller.dart';
 import 'package:findout/app/helpers/kcolors.dart';
 import 'package:findout/app/helpers/validator_mixins.dart';
 import 'package:findout/app/routes/app_pages.dart';
+import 'package:findout/app/widgets/advanced_input.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
-  final _formKey = GlobalKey<FormState>();
 
-  final authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -44,42 +44,7 @@ class LoginView extends GetView<LoginController> {
       );
     }
 
-    Widget _input(Icon icon, String hint, TextEditingController controller,
-        bool obscure, String? Function(String?) func) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: TextFormField(
-          validator: func,
-          controller: controller,
-          obscureText: obscure,
-          style: const TextStyle(fontSize: 20, color: Colors.black),
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintStyle: const TextStyle(fontSize: 20, color: Colors.black),
-              hintText: hint,
-              focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                      color: Colors.transparent, width: 3),
-                  borderRadius: BorderRadius.circular(20)
-              ),
-              enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                      color: Colors.transparent, width: 1),
-                  borderRadius: BorderRadius.circular(20)
-              ),
-              filled: true,
-              fillColor: KColors.kLightGray,
-              prefixIcon: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: IconTheme(
-                  data: const IconThemeData(color: KColors.kMiddleBlue),
-                  child: icon,
-                ),
-              )
-          ),
-        ),
-      );
-    }
+
 
     Widget _button(String text, Function() func) {
       return ElevatedButton(
@@ -109,29 +74,28 @@ class LoginView extends GetView<LoginController> {
 
     Widget _form(String label, Function() func) {
       return Form(
-        key: _formKey,
+        key: controller.loginFormKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 20, top: 10),
-              child: _input(
-                  const Icon(Icons.email), 'Email', controller.emailController, false,
-                      (val) {
-                    return ValidatorMixin().validateText(
-                        val, true, email: true);
-                  }
-              ),
+              child: AdvancedInput(
+                controller: controller.emailController,
+                hint: "Email",
+                icon:Icon(FontAwesomeIcons.envelope),
+                func: (val){return ValidatorMixin().validateText(val, true,email: true,maxLength: 255);},
+              )
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 20),
-              child: _input(
-                  const Icon(Icons.lock), 'Password', controller.passwordController, true,
-                      (val) {
-                    return ValidatorMixin().validateText(
-                        val, true, minLenght: 6);
-                  }
-              ),
+              child: AdvancedInput(
+                controller: controller.passwordController,
+                hint:"Пароль",
+                icon:Icon(FontAwesomeIcons.lock),
+                func: (val){return ValidatorMixin().validateText(val, true,minLenght: 4,maxLength: 255);},
+                obscure: true,
+              )
             ),
             const Padding(
               padding: EdgeInsets.only(bottom: 20, right: 25),
@@ -154,11 +118,6 @@ class LoginView extends GetView<LoginController> {
       );
     }
 
-    _buttonAction() {
-      if (_formKey.currentState!.validate()) {
-        return authController.login(controller.emailController.text.trim(), controller.passwordController.text.trim());
-      }
-    }
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -166,7 +125,7 @@ class LoginView extends GetView<LoginController> {
         child: Column(
           children: [
             _welcome(),
-            _form('Login', _buttonAction),
+            _form('Login', controller.authenticateUser),
             const SizedBox(height: 30,),
             GestureDetector(
                 onTap: () => Get.toNamed(Routes.REGISTER),

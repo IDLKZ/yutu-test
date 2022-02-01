@@ -13,10 +13,12 @@ abstract class Routes {
   static const USERS = _Paths.USERS;
   static const INITIALPAGE = _Paths.INITIALPAGE;
   static const POST_VIEW = _Paths.POST_VIEW;
-  static const POST_EDIT =  _Paths.POST_EDIT;
+  static const POST_EDIT = _Paths.POST_EDIT;
   static const PROFILE = _Paths.PROFILE;
   static const CHANGE_PROFILE = _Paths.CHANGE_PROFILE;
   static const POSTS_SINGLE = _Paths.POSTS_SINGLE;
+  static const CHAT_PAGE = _Paths.CHAT_PAGE;
+  static const CHATROOM_VIEW = _Paths.CHATROOM_VIEW;
 }
 
 abstract class _Paths {
@@ -35,4 +37,6 @@ abstract class _Paths {
   static const PROFILE = '/profile';
   static const CHANGE_PROFILE = '/change-profile';
   static const POSTS_SINGLE = '/post-single';
+  static const CHAT_PAGE = '/chat-page';
+  static const CHATROOM_VIEW = '/chatroom-view';
 }

@@ -28,6 +28,8 @@ class PostViewController extends GetxController {
     }
   }
 
+
+
   @override
   void onReady() {
     super.onReady();

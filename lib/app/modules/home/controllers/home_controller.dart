@@ -2,10 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findout/app/data/providers/categories_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:paginate_firestore/bloc/pagination_listeners.dart';
-
 import '../../../data/models/categories_model.dart';
-import '../../../helpers/global_mixin.dart';
+
+
 
 class HomeController extends GetxController {
   Rx<CategoriesList?> categoryStream = Rxn<CategoriesList>();
@@ -15,15 +14,17 @@ class HomeController extends GetxController {
   final TextEditingController title = TextEditingController();
 
   @override
-  void onInit() {
+  void onInit()async {
     super.onInit();
     categoryStream.bindStream(CategoriesProvider().getCategoriesStream());
     ever(activeCategory, setActiveCategory);
     ever(categoryStream,addCategoriesList);
 
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
 
   }
-
+//Custom function
   setActiveCategory(String? active){
 
     if(active.toString().isNotEmpty && active.toString() != "null"){
@@ -66,7 +67,7 @@ class HomeController extends GetxController {
    getQuery<Query>(){
     return postsQuery.value;
   }
-
+  //Custom Function
   @override
   void onReady()async {
     super.onReady();

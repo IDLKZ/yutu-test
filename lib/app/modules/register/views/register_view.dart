@@ -1,31 +1,23 @@
 import 'package:findout/app/controllers/auth_controller.dart';
+import 'package:findout/app/helpers/global_mixin.dart';
 import 'package:findout/app/helpers/kcolors.dart';
 import 'package:findout/app/helpers/validator_mixins.dart';
 import 'package:findout/app/routes/app_pages.dart';
+import 'package:findout/app/widgets/advanced_input.dart';
+import 'package:findout/app/widgets/datepicker_widget.dart';
+import 'package:findout/app/widgets/select_picker.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:get/get.dart';
 
 import '../controllers/register_controller.dart';
 
 class RegisterView extends GetView<RegisterController> {
-  final authController = Get.find<AuthController>();
-  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-
-    _buttonAction() {
-      if(_formKey.currentState!.validate()){
-        return authController.register(
-            controller.emailController.text.trim(),
-            controller.passwordController.text.trim(),
-            controller.nameController.text.trim(),
-            controller.surnameController.text.trim(),
-            int.parse(controller.ageController.text.trim()),
-            controller.cityController.text.trim()
-        );
-      }
-    }
 
     Widget _welcome(){
       return Stack(
@@ -51,44 +43,6 @@ class RegisterView extends GetView<RegisterController> {
       );
     }
 
-    Widget _input(Icon icon, String hint, TextEditingController controller, bool obscure, TextInputType keyboard, String? Function(String?) func){
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: TextFormField(
-          validator: func,
-          controller: controller,
-          keyboardType: keyboard,
-          obscureText: obscure,
-          style: const TextStyle(fontSize: 20, color: Colors.black),
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintStyle: const TextStyle(fontSize: 20, color: Colors.black),
-              hintText: hint,
-              focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.transparent, width: 3),
-                  borderRadius: BorderRadius.circular(20)
-              ),
-              enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.transparent, width: 1),
-                  borderRadius: BorderRadius.circular(20)
-              ),
-              errorBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.red, width: 1),
-                  borderRadius: BorderRadius.circular(20)
-              ),
-              filled: true,
-              fillColor: KColors.kLightGray,
-              prefixIcon: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: IconTheme(
-                  data: const IconThemeData(color: KColors.kMiddleBlue),
-                  child: icon,
-                ),
-              )
-          ),
-        ),
-      );
-    }
 
     Widget _button(String text, void Function() func){
       return ElevatedButton(
@@ -117,7 +71,7 @@ class RegisterView extends GetView<RegisterController> {
 
     Widget _form(String label, void Function() func){
       return Form(
-        key: _formKey,
+        key: controller.registerFormKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -126,76 +80,89 @@ class RegisterView extends GetView<RegisterController> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 20, top: 10),
-                    child: _input(
-                        const Icon(Icons.account_circle),
-                        'Name',
-                        controller.nameController,
-                        false,
-                        TextInputType.text,
-                            (val){return ValidatorMixin().validateText(val, true,maxLength: 255);}
-                    ),
+                    child: AdvancedInput(
+                      controller: controller.nameController,
+                      hint: "Имя",
+                      icon: Icon(FontAwesomeIcons.userCircle),
+                      obscure: false,
+                      func: (String? val ) {return ValidatorMixin().validateText(val, true,maxLength: 255,minLenght: 1); },
+                      hintStyle: TextStyle(fontSize: 16, color: Colors.black),
+                    )
                   ),
                 ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 20),
-                    child: _input(
-                        const Icon(Icons.account_circle),
-                        'Surname',
-                        controller.surnameController,
-                        false,
-                        TextInputType.text,
-                            (val){return ValidatorMixin().validateText(val, true,maxLength: 255);}
-                    ),
+                    child: AdvancedInput(
+                      controller: controller.surnameController,
+                      hint: "Фамилия",
+                      icon: Icon(FontAwesomeIcons.userCircle),
+                      obscure: false,
+                      func: (String? val ) {return ValidatorMixin().validateText(val, true,maxLength: 255,minLenght: 1); },
+                      hintStyle: TextStyle(fontSize: 12, color: Colors.black),
+
+                    )
                   ),
                 ),
               ],
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 20),
-              child: _input(
-                  const Icon(Icons.ac_unit),
-                  'Age',
-                  controller.ageController,
-                  false,
-                  TextInputType.number,
-                      (val){return ValidatorMixin().validateText(val, true,isInt: true);}
-              ),
+              child: DatePickerWidget(
+                controller: controller.ageController,
+                icon: Icon(FontAwesomeIcons.calendarCheck),
+                hint: "Дата рождения (+18 лет)",
+                func: (val) {return ValidatorMixin().validateDate(val, true); },
+                firstDate: DateTime(DateTime.now().year - 100),
+                lastDate: DateTime(DateTime.now().year - 18),
+                initialDate: DateTime(DateTime.now().year - 18),
+                format:DateFormat("dd.MM.yyyy"),
+                time: false,
+              )
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 20),
-              child: _input(
-                  const Icon(Icons.share_location),
-                  'City',
-                  controller.cityController,
-                  false,
-                  TextInputType.text,
-                      (val){return ValidatorMixin().validateText(val, true,maxLength: 255);}
-              ),
+              child: AdvancedInput(
+                controller: controller.emailController,
+                hint: "Email",
+                icon: Icon(FontAwesomeIcons.envelope),
+                obscure: false,
+                func: (String? val ) {return ValidatorMixin().validateText(val, true,email: true); },
+                keyboard:TextInputType.emailAddress
+              )
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 20),
-              child: _input(
-                  const Icon(Icons.email),
-                  'Email',
-                  controller.emailController,
-                  false,
-                  TextInputType.emailAddress,
-                      (val){return ValidatorMixin().validateText(val, true,email: true,maxLength: 255);}
-              ),
+              child: AdvancedInput(
+                controller: controller.passwordController,
+                hint: "Пароль",
+                icon: Icon(FontAwesomeIcons.lock),
+                obscure: true,
+                func: (String? val ) {return ValidatorMixin().validateText(val, true,minLenght: 4, maxLength: 255); },
+                keyboard:TextInputType.emailAddress
+              )
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 20),
-              child: _input(
-                  const Icon(Icons.lock),
-                  'Password',
-                  controller.passwordController,
-                  true,
-                  TextInputType.visiblePassword,
-                      (val){return ValidatorMixin().validateText(val, true,minLenght: 6,maxLength: 255);}
-              ),
+                child: AdvancedInput(
+                    controller: controller.phoneController,
+                    hint: "Телефон",
+                    icon: Icon(FontAwesomeIcons.phone),
+                    obscure: false,
+                    func: (String? val ) {return ValidatorMixin().validateText(val, true,phone: true); },
+                )
             ),
-            const SizedBox(height: 20,),
+            Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: SelectPicker(
+                  controller: controller.cityController,
+                  hintText: "Ваш город",
+                  func: (val){return ValidatorMixin().validateText(val, true);},
+                  icon:Icon(FontAwesomeIcons.globe),
+                  labelText: "Ваш город",
+                  listItem: GlobalMixin.getListCities(),
+                )
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SizedBox(
@@ -214,7 +181,7 @@ class RegisterView extends GetView<RegisterController> {
           child: Column(
             children: [
               _welcome(),
-              _form('Register', _buttonAction),
+              _form('Register', controller.authenticateUser),
               const SizedBox(height: 30,),
               GestureDetector(
                   onTap: (){

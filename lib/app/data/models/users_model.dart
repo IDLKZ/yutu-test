@@ -1,3 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:findout/app/helpers/global_mixin.dart';
+import 'package:intl/intl.dart';
+
 class UsersList {
   late List<Users>? users;
 
@@ -25,8 +29,8 @@ class Users {
   String? id;
   String? name;
   String? surname;
-  int? age;
-  String? city;
+  String? age;
+  int? city;
   String? email;
   String? phone;
   String? imageUrl;
@@ -35,6 +39,10 @@ class Users {
 
   String fullname(){
     return  (this.name??"") +" "+ (this.surname??"");
+  }
+
+   String getAge(){
+     return (DateTime.now().toUtc().difference(GlobalMixin.convertToDate(this.age)).inDays/365).floor().toString() + " лет";
   }
 
   Users(
@@ -76,5 +84,29 @@ class Users {
     data['status'] = status;
     return data;
   }
+
+}
+
+class UserChat{
+  String? chat_id;
+  String? connection;
+  int? last_time;
+  int? totalUnread;
+
+  UserChat({
+    this.chat_id,
+    this.connection,
+    this.last_time,
+    this.totalUnread,
+  });
+
+  UserChat.fromJson(Map<String, dynamic> json){
+    chat_id = json["chat_id"];
+    connection = json["connection"];
+    last_time = json["last_time"];
+    totalUnread = json["totalUnread"];
+  }
+
+
 
 }

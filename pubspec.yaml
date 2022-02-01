@@ -25,6 +25,9 @@ dependencies:
     sdk: flutter
   flutterfire_ui: ^0.3.1
   cached_network_image: ^3.2.0
+  emoji_picker_flutter: ^1.1.0
+  mask_text_input_formatter: ^2.1.0
+
 
 
 dev_dependencies: 
