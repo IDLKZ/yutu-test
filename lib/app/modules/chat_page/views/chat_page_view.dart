@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findout/app/controllers/user_controller.dart';
 import 'package:findout/app/data/models/chats_model.dart';
 import 'package:findout/app/data/models/users_model.dart';
+import 'package:findout/app/data/providers/banlists_provider.dart';
 import 'package:findout/app/data/providers/chats_provider.dart';
 import 'package:findout/app/data/providers/users_provider.dart';
 import 'package:findout/app/helpers/global_mixin.dart';
@@ -30,7 +31,10 @@ class ChatPageView extends GetView<ChatPageController> {
           child: ListBody(
             children: [
               GestureDetector(
-                onTap: () {
+                onTap: ()async {
+                  bool banned = await BanlistsProvider().isFriendBanned(friend_id);
+                  banned ? await   BanlistsProvider().deleteBan(friend_id)
+                          :await BanlistsProvider().banPerson(friend_id);
                   Get.back();
                 },
                 child: Card(
