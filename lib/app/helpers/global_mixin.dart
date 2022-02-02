@@ -48,6 +48,15 @@ class GlobalMixin {
     return DateTime.now();
   }
 
+  static DateTime getBirthDate(String? data){
+    try{
+      return DateFormat("dd.MM.yyyy").parse(data??"");
+    }
+    catch(e){
+      return DateTime(DateTime.now().year - 18);
+    }
+
+  }
 
   static List<Map<String,dynamic>> getListCities(){
     return CountryConstants.cities_ru;

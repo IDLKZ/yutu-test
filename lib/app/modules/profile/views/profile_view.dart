@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findout/app/controllers/user_controller.dart';
+import 'package:findout/app/data/providers/users_provider.dart';
 import 'package:findout/app/helpers/global_mixin.dart';
 import 'package:findout/app/helpers/kcolors.dart';
 import 'package:findout/app/modules/change_profile/views/change_profile_view.dart';
@@ -9,17 +10,20 @@ import 'package:findout/app/widgets/post_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import '../../../data/models/posts_model.dart';
+import '../../../data/models/users_model.dart';
 import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
-  PaginateRefreshedChangeListener refreshChangeListener = PaginateRefreshedChangeListener();
+  PaginateRefreshedChangeListener refreshChangeListener =
+      PaginateRefreshedChangeListener();
+
   @override
   Widget build(BuildContext context) {
-
-    Widget _header() {
+    Widget _header(Users? user) {
       return Column(
         children: [
           Stack(
@@ -27,35 +31,32 @@ class ProfileView extends GetView<ProfileController> {
             children: [
               Container(
                 alignment: Alignment.bottomCenter,
-                height: MediaQuery.of(context).size.height*0.4,
+                height: MediaQuery.of(context).size.height * 0.4,
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage('assets/images/profile_bg.png'),
-                        fit: BoxFit.cover
-                    )
-                ),
+                        fit: BoxFit.cover)),
                 child: Container(
-                    height: MediaQuery.of(context).size.height*0.15,
+                    height: MediaQuery.of(context).size.height * 0.15,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                           topRight: Radius.circular(40.0),
-                          topLeft: Radius.circular(40.0)
-                      ),
+                          topLeft: Radius.circular(40.0)),
                       color: Colors.white,
-                    )
-                ),
+                    )),
               ),
               CircleAvatar(
-                  radius: 100,
-                  backgroundImage: GlobalMixin.getImage(controller.currentUser.value?.imageUrl),
-                  backgroundColor: Colors.transparent,
+                radius: 100,
+                backgroundImage: GlobalMixin.getImage(
+                    user?.imageUrl),
+                backgroundColor: Colors.transparent,
               ),
               Positioned(
                 right: 30,
-                bottom: MediaQuery.of(context).size.height*0.07,
+                bottom: MediaQuery.of(context).size.height * 0.07,
                 child: GestureDetector(
-                  onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
-                  child: Image.asset('assets/images/settings_img.png')
+                    onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
+                    child: Icon(FontAwesomeIcons.cog)
                 ),
               ),
             ],
@@ -65,11 +66,18 @@ class ProfileView extends GetView<ProfileController> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("${controller.currentUser.value?.fullname()??""}",style: TextStyle(color: KColors.kDarkViolet, fontSize: 30,fontWeight: FontWeight.bold),),
+                  child: Text(
+                    "${user?.fullname() ?? ""}",
+                    style: TextStyle(
+                        color: KColors.kDarkViolet,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("${GlobalMixin.cityName(controller.currentUser.value?.city)??""}/${controller.currentUser.value?.getAge()??""}"),
+                  child: Text(
+                      "${GlobalMixin.cityName(user?.city) ?? ""}/${user?.getAge() ?? ""}"),
                 ),
               ],
             ),
@@ -78,42 +86,63 @@ class ProfileView extends GetView<ProfileController> {
       );
     }
 
-    Widget _cardList(){
-          return Container(
-            child: FirestoreQueryBuilder(
-              query: FirebaseFirestore.instance.collection("posts").where("author",isEqualTo: FirebaseAuth.instance.currentUser?.uid).orderBy("date",descending: true),
-              pageSize: 2,
-              builder: (BuildContext context, FirestoreQueryBuilderSnapshot<Map<String, dynamic>> snapshot, Widget? child) {
-                if (snapshot.isFetching) {
-                  return Center(child: const CircularProgressIndicator());
+    Widget _cardList(Users? user) {
+      return Container(
+        child: FirestoreQueryBuilder(
+          query: FirebaseFirestore.instance
+              .collection("posts")
+              .where("author",
+                  isEqualTo: user?.id)
+              .orderBy("date", descending: true),
+          pageSize: 2,
+          builder: (BuildContext context,
+              FirestoreQueryBuilderSnapshot<Map<String, dynamic>> snapshot,
+              Widget? child) {
+            if (snapshot.isFetching) {
+              return Center(child: const CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return Text('error ${snapshot.error}');
+            }
+            return ListView.builder(
+              itemCount: snapshot.docs.length,
+              itemBuilder: (context, index) {
+                if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
+                  snapshot.fetchMore();
                 }
-                if (snapshot.hasError) {
-                  return Text('error ${snapshot.error}');
-                }
-                return ListView.builder(
-                  itemCount: snapshot.docs.length,
-                  itemBuilder: (context, index) {
-                    if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
-                      snapshot.fetchMore();
-                    }
-                    final post = Posts.fromJson(snapshot.docs[index].data());
-                    return PostWidget(post:post,uid:snapshot.docs[index].id);
-                  },
-                );
+                final post = Posts.fromJson(snapshot.docs[index].data());
+                return PostWidget(post: post, uid: snapshot.docs[index].id);
               },
-            ),
+            );
+          },
+        ),
       );
     };
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          _header(),
-          Expanded(
-            child: _cardList(),
-          )
-        ],
+      body: FutureBuilder<Users?>(
+        future: UsersProvider().getUsersByEmail(controller.userEmail.value),
+        builder: (context, snapshot) {
+          if (!snapshot.hasError) {
+            if (snapshot.hasData) {
+              return Column(children: [
+                _header(snapshot.data),
+                Expanded(
+                  child: _cardList(snapshot.data),
+                )
+              ]);
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
       bottomNavigationBar: BottomNavigator(),
     );

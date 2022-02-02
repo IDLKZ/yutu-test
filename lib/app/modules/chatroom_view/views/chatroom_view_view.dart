@@ -127,7 +127,9 @@ class ChatroomViewView extends GetView<ChatroomViewController> {
             builder: (controller) {
               return ListTile(
                 onTap: (){
-                  Get.toNamed(Routes.PROFILE,arguments: controller.teammate.value?.email);
+                  if(controller.teammate.value?.email != null){
+                    Get.toNamed(Routes.PROFILE,arguments: controller.teammate.value?.email);
+                  }
                 },
                 leading: CircleAvatar(
                   backgroundImage: GlobalMixin.getImage(controller.teammate.value?.imageUrl),

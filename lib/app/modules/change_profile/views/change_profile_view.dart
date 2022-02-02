@@ -217,7 +217,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                 func: (val) {return ValidatorMixin().validateDate(val, true); },
                 firstDate: DateTime(DateTime.now().year - 100),
                 lastDate: DateTime(DateTime.now().year - 18),
-                initialDate: DateTime(DateTime.now().year - 18),
+                initialDate: GlobalMixin.getBirthDate(controller.ageController.text),
                 format:DateFormat("dd.MM.yyyy"),
                 time: false,
               )

@@ -1,13 +1,11 @@
 import 'package:findout/app/controllers/user_controller.dart';
 import 'package:findout/app/helpers/global_mixin.dart';
-import 'package:findout/app/modules/post_edit/views/post_edit_view.dart';
 import 'package:findout/app/routes/app_pages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../../../data/models/categories_model.dart';
-import '../../../data/models/posts_model.dart';
 import '../../../data/models/users_model.dart';
 import '../../../data/providers/chats_provider.dart';
 import '../../../helpers/kcolors.dart';
@@ -95,6 +93,7 @@ class PostViewView extends GetView<PostViewController> {
   }
 
   Widget _floatButton(){
+    print(FirebaseAuth.instance.currentUser?.uid != controller.post.value?.author);
     if(FirebaseAuth.instance.currentUser?.uid != controller.post.value?.author){
       return FloatingActionButton.extended(
         onPressed: () {
