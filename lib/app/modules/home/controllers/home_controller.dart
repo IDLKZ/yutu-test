@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:findout/app/controllers/user_controller.dart';
 import 'package:findout/app/data/providers/categories_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../../data/models/categories_model.dart';
@@ -7,6 +9,7 @@ import '../../../data/models/categories_model.dart';
 
 
 class HomeController extends GetxController {
+  UserController _userController = Get.find<UserController>();
   Rx<CategoriesList?> categoryStream = Rxn<CategoriesList>();
   Rx<String?> activeCategory = Rxn<String?>("");
   Rx<List<Category>> categoriesList = Rx<List<Category>>([Category(id: "",titleRu:"Все",titleEn: "All")]);
@@ -16,6 +19,7 @@ class HomeController extends GetxController {
   @override
   void onInit()async {
     super.onInit();
+      postsQuery.value = FirebaseFirestore.instance.collection("posts").where("city",isEqualTo: _userController.user?.city).orderBy("date",descending: true);
     categoryStream.bindStream(CategoriesProvider().getCategoriesStream());
     ever(activeCategory, setActiveCategory);
     ever(categoryStream,addCategoriesList);
@@ -28,10 +32,10 @@ class HomeController extends GetxController {
   setActiveCategory(String? active){
 
     if(active.toString().isNotEmpty && active.toString() != "null"){
-      postsQuery.value = FirebaseFirestore.instance.collection("posts").where("category",isEqualTo: active).orderBy("date",descending: true);
+      postsQuery.value = FirebaseFirestore.instance.collection("posts").where("city",isEqualTo: _userController.user?.city).where("category",isEqualTo: active).orderBy("date",descending: true);
     }
     else{
-      postsQuery.value = FirebaseFirestore.instance.collection("posts").orderBy("date",descending: true);
+      postsQuery.value = FirebaseFirestore.instance.collection("posts").where("city",isEqualTo: _userController.user?.city).orderBy("date",descending: true);
     }
     getQuery();
     update();

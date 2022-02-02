@@ -90,7 +90,7 @@ class Users {
 class UserChat{
   String? chat_id;
   String? connection;
-  int? last_time;
+  Timestamp? last_time;
   int? totalUnread;
 
   UserChat({

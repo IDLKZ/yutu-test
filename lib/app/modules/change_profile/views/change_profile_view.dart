@@ -93,14 +93,12 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                     )
                 ),
               ),
-              !_imageController.imageUploaded.value ? CircleAvatar(
+              !_imageController.imageUploaded.value
+                  ? CircleAvatar(
                 radius: 100,
-                backgroundImage:
-                NetworkImage(
-                    imageController.selectedImageUrl.value.isNotEmpty
-                        ? imageController.selectedImageUrl.value
-                        : (controller.user.user?.imageUrl ?? "https://st3.depositphotos.com/4111759/13425/v/600/depositphotos_134255532-stock-illustration-profile-placeholder-male-default-profile.jpg")
-                ),
+                backgroundImage:imageController.selectedImageUrl.value.isNotEmpty
+                  ?GlobalMixin.getImage(imageController.selectedImageUrl.value)
+                  :GlobalMixin.getImage(controller.user.user?.imageUrl ),
                 backgroundColor: Colors.transparent,
               )
               :

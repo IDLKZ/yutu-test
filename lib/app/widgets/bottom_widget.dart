@@ -1,4 +1,5 @@
 import 'package:findout/app/routes/app_pages.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,7 +17,7 @@ class BottomNavigator extends StatelessWidget {
   List<Map<String,dynamic>> listsItem = [
     {"icon":Icons.apps_outlined,"page":Routes.HOME},
     {"icon":FontAwesomeIcons.comment,"page":Routes.CHAT_PAGE},
-    {"icon":FontAwesomeIcons.user,"page":Routes.PROFILE},
+    {"icon":FontAwesomeIcons.user,"page":Routes.PROFILE,},
   ];
 
   BottomNavigator({

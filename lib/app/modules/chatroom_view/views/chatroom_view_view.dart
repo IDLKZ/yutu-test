@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findout/app/data/models/chats_model.dart';
+import 'package:findout/app/helpers/global_mixin.dart';
 import 'package:findout/app/helpers/kcolors.dart';
 import 'package:findout/app/helpers/validator_mixins.dart';
 import 'package:findout/app/widgets/emoji_picker_widget.dart';
@@ -102,7 +103,7 @@ class ChatroomViewView extends GetView<ChatroomViewController> {
               return Center(child: const CircularProgressIndicator());
             }
             if (snapshot.hasError) {
-              return Text('error ${snapshot.error}');
+              return Center(child: CircularProgressIndicator());
             }
             return Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -125,10 +126,11 @@ class ChatroomViewView extends GetView<ChatroomViewController> {
           title: GetX<ChatroomViewController>(
             builder: (controller) {
               return ListTile(
+                onTap: (){
+                  Get.toNamed(Routes.PROFILE,arguments: controller.teammate.value?.email);
+                },
                 leading: CircleAvatar(
-                  backgroundImage: NetworkImage(controller
-                          .teammate.value?.imageUrl ??
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMzAVKjI3Bg7dPRxLON_MSpyM5rNA6Ig1Lt6Bym85ZDXv_IB484aVqkIsq65tIeU-zXbM&usqp=CAU"),
+                  backgroundImage: GlobalMixin.getImage(controller.teammate.value?.imageUrl),
                 ),
                 title: Text(
                   controller.teammate.value?.fullname() ?? "",
@@ -142,35 +144,43 @@ class ChatroomViewView extends GetView<ChatroomViewController> {
         body: Column(
           children: [
             Expanded(child: chatList()),
-            Container(
-                padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-                child: Form(
-                  key: controller.formKey,
-                  child: AdvancedInput(
-                    controller: controller.message,
-                    icon: IconButton(
-                      onPressed: () {
-                        controller.focusNode.unfocus();
-                        controller.showEmoji.value = true;
-                      },
-                      icon: Icon(FontAwesomeIcons.smile),
-                    ),
-                    hint: "",
-                    obscure: false,
-                    maxLines: 2,
-                    func: (val) {
-                      return ValidatorMixin()
-                          .validateText(val, true, maxLength: 1000);
-                    },
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        controller.sendMessages();
-                      },
-                      icon: Icon(FontAwesomeIcons.paperPlane),
-                    ),
-                    focusNode: controller.focusNode,
-                  ),
-                )),
+            GetX<ChatroomViewController>(
+              builder: (_chatroomController){
+                return Container(
+                    padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+                    child: _chatroomController.isBanned.value
+                    ?Text("Вы не можете писать сообщения так как отмечены в черном списке")
+                    :Form(
+                      key: controller.formKey,
+                      child: AdvancedInput(
+                        controller: controller.message,
+                        icon: IconButton(
+                          onPressed: () {
+                            controller.focusNode.unfocus();
+                            controller.showEmoji.value = true;
+                          },
+                          icon: Icon(FontAwesomeIcons.smile),
+                        ),
+                        hint: "",
+                        obscure: false,
+                        maxLines: 2,
+                        func: (val) {
+                          return ValidatorMixin()
+                              .validateText(val, true, maxLength: 1000);
+                        },
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            controller.sendMessages();
+                          },
+                          icon: Icon(FontAwesomeIcons.paperPlane),
+                        ),
+                        focusNode: controller.focusNode,
+                      ),
+                    ));
+              },
+            ),
+
+
             GetX<ChatroomViewController>(
               builder: (controller){
                 if(controller.showEmoji.value){

@@ -63,7 +63,7 @@ class ChatProvider extends GetConnect {
              {
                "chat_id":chat_id,
                "connection":friendID,
-               "last_time":DateTime.now().millisecondsSinceEpoch,
+               "last_time":FieldValue.serverTimestamp(),
                "totalUnread":0
              }
          );

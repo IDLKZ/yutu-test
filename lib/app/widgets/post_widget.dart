@@ -42,10 +42,9 @@ class PostWidget extends StatelessWidget {
                     if (snapshot.connectionState == ConnectionState.done) {
                       return Row(
                         children: [
-                          const CircleAvatar(
+                           CircleAvatar(
                             radius: 30,
-                            backgroundImage:
-                            AssetImage('assets/images/ava.jpg'),
+                            backgroundImage:GlobalMixin.getImage(snapshot.data?.imageUrl),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 10.0),
@@ -65,7 +64,7 @@ class PostWidget extends StatelessWidget {
                                 Text(
                                   '${GlobalMixin.cityName(snapshot.data?.city) ?? ""}, ${snapshot.data?.getAge()}',
                                   style: TextStyle(color: KColors.kSpaceGray),
-                                )
+                                ),
                               ],
                             ),
                           )
@@ -94,15 +93,23 @@ class PostWidget extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Text(
-                    GlobalMixin.truncateText('${post?.title}', 60),
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 18),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      GlobalMixin.truncateText('${GlobalMixin.truncateText(post?.title??"", 50)}', 60),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
+                Padding(padding: EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    Icon(Icons.location_on_outlined,color:KColors.kMiddleBlue ,size: 25,),
+                    Text("${GlobalMixin.cityName(post?.city)}",style: TextStyle(
+                        fontSize: 16, color: KColors.kMiddleBlue,fontWeight: FontWeight.bold))
+                  ],
+                ),
                 ),
                 Padding(
                   padding:

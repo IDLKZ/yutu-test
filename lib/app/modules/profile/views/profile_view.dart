@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:findout/app/controllers/user_controller.dart';
+import 'package:findout/app/helpers/global_mixin.dart';
+import 'package:findout/app/helpers/kcolors.dart';
 import 'package:findout/app/modules/change_profile/views/change_profile_view.dart';
 import 'package:findout/app/routes/app_pages.dart';
 import 'package:findout/app/widgets/bottom_widget.dart';
@@ -16,41 +19,59 @@ class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
 
-    Widget _header(String imageUrl) {
-      return Stack(
-        alignment: Alignment.bottomCenter,
+    Widget _header() {
+      return Column(
         children: [
-          Container(
+          Stack(
             alignment: Alignment.bottomCenter,
-            height: MediaQuery.of(context).size.height*0.4,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/images/profile_bg.png'),
-                    fit: BoxFit.cover
-                )
-            ),
-            child: Container(
-                height: MediaQuery.of(context).size.height*0.15,
+            children: [
+              Container(
+                alignment: Alignment.bottomCenter,
+                height: MediaQuery.of(context).size.height*0.4,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(40.0),
-                      topLeft: Radius.circular(40.0)
-                  ),
-                  color: Colors.white,
-                )
-            ),
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/profile_bg.png'),
+                        fit: BoxFit.cover
+                    )
+                ),
+                child: Container(
+                    height: MediaQuery.of(context).size.height*0.15,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(40.0),
+                          topLeft: Radius.circular(40.0)
+                      ),
+                      color: Colors.white,
+                    )
+                ),
+              ),
+              CircleAvatar(
+                  radius: 100,
+                  backgroundImage: GlobalMixin.getImage(controller.currentUser.value?.imageUrl),
+                  backgroundColor: Colors.transparent,
+              ),
+              Positioned(
+                right: 30,
+                bottom: MediaQuery.of(context).size.height*0.07,
+                child: GestureDetector(
+                  onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
+                  child: Image.asset('assets/images/settings_img.png')
+                ),
+              ),
+            ],
           ),
-          CircleAvatar(
-              radius: 100,
-              backgroundImage: AssetImage(imageUrl),
-              backgroundColor: Colors.transparent,
-          ),
-          Positioned(
-            right: 30,
-            bottom: MediaQuery.of(context).size.height*0.07,
-            child: GestureDetector(
-              onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
-              child: Image.asset('assets/images/settings_img.png')
+          Center(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("${controller.currentUser.value?.fullname()??""}",style: TextStyle(color: KColors.kDarkViolet, fontSize: 30,fontWeight: FontWeight.bold),),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("${GlobalMixin.cityName(controller.currentUser.value?.city)??""}/${controller.currentUser.value?.getAge()??""}"),
+                ),
+              ],
             ),
           )
         ],
@@ -88,7 +109,7 @@ class ProfileView extends GetView<ProfileController> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          _header('assets/images/ava.png'),
+          _header(),
           Expanded(
             child: _cardList(),
           )

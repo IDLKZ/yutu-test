@@ -33,8 +33,8 @@ class ChatPageView extends GetView<ChatPageController> {
               GestureDetector(
                 onTap: ()async {
                   bool banned = await BanlistsProvider().isFriendBanned(friend_id);
-                  banned ? await   BanlistsProvider().deleteBan(friend_id)
-                          :await BanlistsProvider().banPerson(friend_id);
+                  banned ?    BanlistsProvider().deleteBan(friend_id)
+                          : BanlistsProvider().banPerson(friend_id);
                   Get.back();
                 },
                 child: Card(
@@ -46,8 +46,8 @@ class ChatPageView extends GetView<ChatPageController> {
                 ),
               ),
               GestureDetector(
-                onTap: () async {
-                 await ChatProvider().clearMessages(chat_id, friend_id);
+                onTap: ()  {
+                  ChatProvider().clearMessages(chat_id, friend_id);
                   Get.back();
                 },
                 child: Card(
@@ -92,7 +92,7 @@ class ChatPageView extends GetView<ChatPageController> {
                             child: ListTile(
                               leading: CircleAvatar(
                                 radius: 25,
-                                backgroundImage: NetworkImage(_userController.user?.imageUrl??'https://img2.wtftime.ru/store/2020/07/23/O04h39gB.jpg'),
+                                backgroundImage: GlobalMixin.getImage(_userController.user?.imageUrl),
                               ),
                               title: Text("${_userController.user?.fullname()}"),
 
@@ -141,7 +141,7 @@ class ChatPageView extends GetView<ChatPageController> {
                   child: ListTile(
                     leading: CircleAvatar(
                       radius: 30,
-                      backgroundImage: NetworkImage(snapshot.data?.imageUrl??'https://img2.wtftime.ru/store/2020/07/23/O04h39gB.jpg'),
+                      backgroundImage: GlobalMixin.getImage(snapshot.data?.imageUrl),
                       // child: Image(image: AssetImage('assets/images/ava.png'),),
                     ),
                     title: Text("${snapshot.data?.fullname()}",style: TextStyle(color: KColors.kDarkViolet,fontSize: 20,fontWeight: FontWeight.bold),),

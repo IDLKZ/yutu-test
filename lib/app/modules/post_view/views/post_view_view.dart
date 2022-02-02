@@ -184,10 +184,9 @@ class PostViewView extends GetView<PostViewController> {
                                 ConnectionState.done) {
                               return Row(
                                 children: [
-                                  const CircleAvatar(
+                                   CircleAvatar(
                                     radius: 25,
-                                    backgroundImage:
-                                        AssetImage('assets/images/ava.jpg'),
+                                    backgroundImage:GlobalMixin.getImage(snapshot.data?.imageUrl),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10.0),

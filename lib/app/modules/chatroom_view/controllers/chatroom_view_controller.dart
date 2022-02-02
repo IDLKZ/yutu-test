@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:findout/app/data/providers/banlists_provider.dart';
 import 'package:findout/app/data/providers/users_provider.dart';
 import 'package:findout/app/helpers/global_mixin.dart';
 import 'package:findout/app/routes/app_pages.dart';
@@ -21,6 +22,7 @@ class ChatroomViewController extends GetxController {
   Rx<bool> showEmoji = Rx<bool>(false);
   Rx<Users?> teammate = Rxn<Users>();
   Rx<Chats>? chat;
+  Rx<bool> isBanned = Rx<bool>(false);
   TextEditingController message = TextEditingController();
   final focusNode = FocusNode();
 
@@ -30,13 +32,18 @@ class ChatroomViewController extends GetxController {
       dynamic args = Get.arguments;
       chatId = args["chat_id"];
       friendId = args["friendId"];
+
+      if(await BanlistsProvider().isFriendBanned(friendId) || await BanlistsProvider().banned(friendId)){
+        isBanned.value = true;
+      }
+
       if(chatId != null && friendId != null){focusNode.addListener(() {
           if(focusNode.hasFocus){
             showEmoji.value = false;
           }
         });
          await _chatRef.doc(chatId).collection("chats").where("receiver",isEqualTo: currentUser?.uid).get().then((value){value.docs.forEach((element) {element.reference.update({"isRead":true});});});
-         await _userRef.doc(currentUser?.uid).collection("chats").doc(chatId).update({"last_time":DateTime.now().millisecondsSinceEpoch, "totalUnread":0}
+         await _userRef.doc(currentUser?.uid).collection("chats").doc(chatId).update({"last_time":FieldValue.serverTimestamp(), "totalUnread":0}
         );
         teammate.bindStream(UsersProvider().teammate(friendId));
        final early = await _userRef.doc(friendId).collection("chats").doc(chatId).get();
@@ -75,7 +82,7 @@ class ChatroomViewController extends GetxController {
               {
                 "chat_id":chatId,
                 "connection":currentUser?.uid,
-                "last_time":DateTime.now().millisecondsSinceEpoch,
+                "last_time":FieldValue.serverTimestamp(),
                 "totalUnread":0
               }
           );
@@ -86,24 +93,19 @@ class ChatroomViewController extends GetxController {
               "sender":currentUser?.uid,
               "receiver":friendId,
               "message":msg.trim(),
-              "date":DateTime.now().millisecondsSinceEpoch,
+              "date":FieldValue.serverTimestamp(),
               "isRead":false
             }
         );
 
         final totalUnRead = await _chatRef.doc(chatId).collection("chats").where("receiver",isLessThanOrEqualTo: friendId).where("isRead",isEqualTo: false).get();
-        await _userRef.doc(friendId).collection("chats").doc(chatId).update({"totalUnread":totalUnRead.docs.length,"last_time":DateTime.now().millisecondsSinceEpoch});
+        await _userRef.doc(friendId).collection("chats").doc(chatId).update({"totalUnread":totalUnRead.docs.length,"last_time":FieldValue.serverTimestamp(),});
       }
       catch(e){
         GlobalMixin.warningSnackBar("Упс", "Попробуйте позже");
         print(e);
       }
     }
-
-
-
-
-
   }
 
 

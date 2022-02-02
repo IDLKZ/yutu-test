@@ -57,10 +57,6 @@ class GlobalMixin {
     return city != null ? CountryConstants.citiesMapRu[city] : null;
   }
 
-
-
-
-
   String? getLocale() {
     String locale = Get.locale!.languageCode;
     return locale.capitalizeFirst;
@@ -87,4 +83,15 @@ class GlobalMixin {
       prefs.setDouble(key, value);
     }
   }
+
+  static getImage(String? image){
+    if(image.toString() != "null" && image.toString().isNotEmpty){
+      return NetworkImage(image.toString());
+    }
+    else{
+      return AssetImage("assets/images/ava.png");
+    }
+
+  }
+
 }

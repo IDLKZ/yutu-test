@@ -92,7 +92,7 @@ class HomeView extends GetWidget<HomeController> {
 
     }
 
-    Widget _header(String imageUrl, String name) {
+    Widget _header(String? image,String name) {
       return Container(
         padding: const EdgeInsets.only(top: 30),
         height: MediaQuery.of(context).size.height * 0.35,
@@ -113,7 +113,7 @@ class HomeView extends GetWidget<HomeController> {
                     onTap: () => Get.toNamed(Routes.PROFILE),
                     child: CircleAvatar(
                       radius: 30,
-                      backgroundImage: AssetImage(imageUrl),
+                      backgroundImage: GlobalMixin.getImage(image),
                     ),
                   ),
                   const SizedBox(
@@ -245,32 +245,34 @@ class HomeView extends GetWidget<HomeController> {
     Widget _cardList() {
       return GetBuilder<HomeController>(
         builder: (controller){
-          return Container(
-            child: FirestoreQueryBuilder(
-              query: controller.getQuery(),
-              pageSize: 2,
-              builder: (BuildContext context, FirestoreQueryBuilderSnapshot<Map<String, dynamic>> snapshot, Widget? child) {
-                if (snapshot.isFetching) {
-                  return Center(child: const CircularProgressIndicator());
-                }
-                if (snapshot.hasError) {
-                  return Text('error ${snapshot.error}');
-                }
-                return ListView.builder(
-                  itemCount: snapshot.docs.length,
-                  itemBuilder: (context, index) {
-                    if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
-                      snapshot.fetchMore();
-                    }
-                    final post = Posts.fromJson(snapshot.docs[index].data());
-                    return PostWidget(post:post,uid: snapshot.docs[index].id);
-                  },
-                );
+
+            return Container(
+              child: FirestoreQueryBuilder(
+                query: controller.getQuery(),
+                pageSize: 2,
+                builder: (BuildContext context, FirestoreQueryBuilderSnapshot<Map<String, dynamic>> snapshot, Widget? child) {
+                  if (snapshot.isFetching) {
+                    return Center(child: const CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return Center(child: CircularProgressIndicator(),);
+                  }
+                  return ListView.builder(
+                    itemCount: snapshot.docs.length,
+                    itemBuilder: (context, index) {
+                      if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
+                        snapshot.fetchMore();
+                      }
+                      final post = Posts.fromJson(snapshot.docs[index].data());
+                      return PostWidget(post:post,uid: snapshot.docs[index].id);
+                    },
+                  );
 
 
-              },
-            ),
-          );
+                },
+              ),
+            );
+
         },
 
       );
@@ -281,8 +283,7 @@ class HomeView extends GetWidget<HomeController> {
         children: [
           GetX<UserController>(
             builder: (controller) {
-              return _header('assets/images/ava.jpg',
-                  "Привет, ${controller.user?.fullname() ?? ""}");
+              return _header(controller.user?.imageUrl,"Привет, ${controller.user?.fullname() ?? ""}");
             },
           ),
           _categoryList(),

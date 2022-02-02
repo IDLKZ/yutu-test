@@ -31,11 +31,11 @@ class ChatMessages{
   String? receiver;
   String? message;
   bool? isRead;
-  int? date;
+  Timestamp? date;
 
 
   getDate(){
-    return  DateFormat("dd.MM.yyyy HH:mm").format(DateTime.fromMillisecondsSinceEpoch(this.date??0));
+    return  this.date != null ? DateFormat("dd.MM.yyyy HH:mm").format(DateTime.fromMillisecondsSinceEpoch(this.date?.millisecondsSinceEpoch??0)) : "";
 
   }
 

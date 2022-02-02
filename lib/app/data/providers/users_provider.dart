@@ -16,6 +16,16 @@ class UsersProvider extends GetConnect {
     }
   }
 
+  Future<Users?> getUsersByEmail(String? email) async {
+    QuerySnapshot userDoc = await _userRef.where("email",isEqualTo: email).get();
+    try{
+      return Users.fromJson(userDoc.docs.first.data() as Map<String,dynamic>);
+    }
+    catch(e){
+      print(e);
+    }
+  }
+
   Stream<Users?> currentUser(){
       return _userRef.doc(FirebaseAuth.instance.currentUser?.uid).snapshots().map((event){
         if(event.data() != null){
@@ -31,6 +41,7 @@ class UsersProvider extends GetConnect {
       }
     });
   }
+
 
   Future<Response<Users>> postUsers(Users users) async =>
     await post('users', users);
