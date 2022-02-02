@@ -128,7 +128,7 @@ class ChatroomViewView extends GetView<ChatroomViewController> {
               return ListTile(
                 onTap: (){
                   if(controller.teammate.value?.email != null){
-                    Get.toNamed(Routes.PROFILE,arguments: controller.teammate.value?.email);
+                    Get.toNamed(Routes.PROFILE,arguments: controller.teammate.value?.id);
                   }
                 },
                 leading: CircleAvatar(
@@ -194,8 +194,7 @@ class ChatroomViewView extends GetView<ChatroomViewController> {
                 else{
                   return SizedBox();
                 }
-              },
-                ),
+              },),
           ],
         ));
   }

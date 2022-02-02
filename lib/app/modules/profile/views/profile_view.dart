@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findout/app/controllers/user_controller.dart';
+import 'package:findout/app/data/providers/chats_provider.dart';
 import 'package:findout/app/data/providers/users_provider.dart';
 import 'package:findout/app/helpers/global_mixin.dart';
 import 'package:findout/app/helpers/kcolors.dart';
@@ -18,9 +19,8 @@ import '../../../data/models/users_model.dart';
 import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
-  PaginateRefreshedChangeListener refreshChangeListener =
-      PaginateRefreshedChangeListener();
-
+  PaginateRefreshedChangeListener refreshChangeListener = PaginateRefreshedChangeListener();
+  UserController _userController = Get.find<UserController>();
   @override
   Widget build(BuildContext context) {
     Widget _header(Users? user) {
@@ -51,14 +51,15 @@ class ProfileView extends GetView<ProfileController> {
                     user?.imageUrl),
                 backgroundColor: Colors.transparent,
               ),
-              Positioned(
+              user?.id ==_userController.user?.id
+              ?Positioned(
                 right: 30,
                 bottom: MediaQuery.of(context).size.height * 0.07,
                 child: GestureDetector(
                     onTap: () => Get.toNamed(Routes.CHANGE_PROFILE),
                     child: Icon(FontAwesomeIcons.cog)
                 ),
-              ),
+              ):SizedBox(),
             ],
           ),
           Center(
@@ -81,7 +82,24 @@ class ProfileView extends GetView<ProfileController> {
                 ),
               ],
             ),
+          ),
+          user?.id !=_userController.user?.id
+              ?Container(
+            child: GetX<ProfileController>(
+              builder: (controller){
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(onPressed: (){ChatProvider().addNewConnection(user?.id);}, icon: Icon(FontAwesomeIcons.comment)),
+                    controller.isBanned.value
+                        ? IconButton(onPressed: (){controller.clearBan();}, icon: Icon(FontAwesomeIcons.userLock))
+                        : IconButton(onPressed: (){controller.banUser();}, icon: Icon(FontAwesomeIcons.unlockAlt)),
+                  ],
+                );
+              },),
           )
+              :SizedBox(),
+
         ],
       );
     }
@@ -122,7 +140,7 @@ class ProfileView extends GetView<ProfileController> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: FutureBuilder<Users?>(
-        future: UsersProvider().getUsersByEmail(controller.userEmail.value),
+        future: UsersProvider().getUsers(controller.userId.value),
         builder: (context, snapshot) {
           if (!snapshot.hasError) {
             if (snapshot.hasData) {
