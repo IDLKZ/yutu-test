@@ -6,7 +6,7 @@ import '../../../controllers/auth_controller.dart';
 
 class RegisterController extends GetxController {
   final authController = Get.find<AuthController>();
-  final registerFormKey = GlobalKey<FormState>();
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController surnameController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
@@ -18,16 +18,7 @@ class RegisterController extends GetxController {
 
   //Custom function
   authenticateUser(){
-    if(registerFormKey.currentState!.validate()){
-      return authController.register(
-          emailController.text.trim(),
-          passwordController.text.trim(),
-          nameController.text.trim(),
-          surnameController.text.trim(),
-          ageController.text.trim(),
-          int.parse(cityController.text.trim())
-      );
-    }
+
   }
 
 

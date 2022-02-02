@@ -15,6 +15,7 @@ class LoginView extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
+    GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
     Widget _welcome() {
       return Stack(
         children: [
@@ -44,8 +45,6 @@ class LoginView extends GetView<LoginController> {
       );
     }
 
-
-
     Widget _button(String text, Function() func) {
       return ElevatedButton(
         onPressed: func,
@@ -72,9 +71,15 @@ class LoginView extends GetView<LoginController> {
       );
     }
 
+    _buttonAction() {
+      if (loginFormKey.currentState!.validate()) {
+        return controller.authController.login(controller.emailController.text.trim(), controller.passwordController.text.trim());
+      }
+    }
+
     Widget _form(String label, Function() func) {
       return Form(
-        key: controller.loginFormKey,
+        key: loginFormKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -125,10 +130,10 @@ class LoginView extends GetView<LoginController> {
         child: Column(
           children: [
             _welcome(),
-            _form('Login', controller.authenticateUser),
+            _form('Login', _buttonAction),
             const SizedBox(height: 30,),
             GestureDetector(
-                onTap: () => Get.toNamed(Routes.REGISTER),
+                onTap: () => Get.to(() => Routes.REGISTER),
                 child: const Text('Registration', style: TextStyle(fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: KColors.kDarkViolet),)

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../controllers/auth_controller.dart';
 
 class LoginController extends GetxController {
-  final loginFormKey = GlobalKey<FormState>();
+
   final authController = Get.find<AuthController>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -13,9 +13,7 @@ class LoginController extends GetxController {
   //Custom function
 
   authenticateUser(){
-    if (loginFormKey.currentState!.validate()) {
-      return authController.login(emailController.text.trim(), passwordController.text.trim());
-    }
+
   }
 
 

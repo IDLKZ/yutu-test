@@ -18,7 +18,7 @@ import '../controllers/register_controller.dart';
 class RegisterView extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
-
+    GlobalKey<FormState> registerFormKey = GlobalKey<FormState>();
     Widget _welcome(){
       return Stack(
         children: [
@@ -71,7 +71,7 @@ class RegisterView extends GetView<RegisterController> {
 
     Widget _form(String label, void Function() func){
       return Form(
-        key: controller.registerFormKey,
+        key: registerFormKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -176,12 +176,24 @@ class RegisterView extends GetView<RegisterController> {
       );
     }
 
+    _buttonAction() {
+      if(registerFormKey.currentState!.validate()){
+        return controller.authController.register(
+            controller.emailController.text.trim(),
+            controller.passwordController.text.trim(),
+            controller.nameController.text.trim(),
+            controller.surnameController.text.trim(),
+            controller.ageController.text.trim(),
+            int.parse(controller.cityController.text.trim())
+        );
+      }
+    }
     return Scaffold(
         body: SingleChildScrollView(
           child: Column(
             children: [
               _welcome(),
-              _form('Register', controller.authenticateUser),
+              _form('Register', _buttonAction),
               const SizedBox(height: 30,),
               GestureDetector(
                   onTap: (){
