@@ -133,7 +133,7 @@ class LoginView extends GetView<LoginController> {
             _form('Login', _buttonAction),
             const SizedBox(height: 30,),
             GestureDetector(
-                onTap: () => Get.to(() => Routes.REGISTER),
+                onTap: () => Get.toNamed(Routes.REGISTER),
                 child: const Text('Registration', style: TextStyle(fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: KColors.kDarkViolet),)
