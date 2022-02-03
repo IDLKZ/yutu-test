@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:findout/app/helpers/global_mixin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
@@ -7,6 +8,7 @@ import '../models/users_model.dart';
 class UsersProvider extends GetConnect {
 
   final CollectionReference _userRef = FirebaseFirestore.instance.collection("users");
+  final CollectionReference _userPostsRef = FirebaseFirestore.instance.collection("posts");
   final fAuth = FirebaseAuth.instance.currentUser;
 
   Future<Users?> getUsers(String? id) async {
@@ -40,6 +42,18 @@ class UsersProvider extends GetConnect {
 
   Future updateUser(Map<String,dynamic> data)async{
     await _userRef.doc(fAuth?.uid).update(data);
+  }
+
+  Future<bool> deleteUser(String? id) async {
+    try{
+      // await _userRef.doc(id).delete();
+      GlobalMixin.successSnackBar("Отлично", "Пользователь успешно удален!");
+      return true;
+    }
+    catch (e){
+      print(e);
+      return false;
+    }
   }
 
 

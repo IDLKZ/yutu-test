@@ -68,7 +68,7 @@ class DashboardView extends GetView<DashboardController> {
             ),
             SizedBox(height: 10,),
             GestureDetector(
-              onTap: () => Get.toNamed(Routes.LOGIN),
+              onTap: () => Get.toNamed(Routes.USERS),
               child: Card(
                 color: Color(0xFF2a2c35),
                 elevation: 4,
