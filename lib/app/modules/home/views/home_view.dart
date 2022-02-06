@@ -22,8 +22,6 @@ class HomeView extends GetWidget<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-
-
     Widget _searchForm(){
       return Padding(
         padding: const EdgeInsets.all(15.0),
@@ -210,9 +208,7 @@ class HomeView extends GetWidget<HomeController> {
               scrollDirection: Axis.horizontal,
               itemCount: controller.categoriesList.value.length,
               itemBuilder: (context,index){
-                return GetX<HomeController>(
-                    builder:(controller){
-                      return Padding(
+                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: GestureDetector(
                             onTap: (){
@@ -231,8 +227,6 @@ class HomeView extends GetWidget<HomeController> {
                               ],
                             )),
                       );
-                    }
-                );
               },
 
             ),
@@ -245,7 +239,6 @@ class HomeView extends GetWidget<HomeController> {
     Widget _cardList() {
       return GetBuilder<HomeController>(
         builder: (controller){
-
             return Container(
               child: FirestoreQueryBuilder(
                 query: controller.getQuery(),
@@ -277,6 +270,7 @@ class HomeView extends GetWidget<HomeController> {
 
       );
     }
+
     Widget _column(){
      return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -286,7 +280,12 @@ class HomeView extends GetWidget<HomeController> {
               return _header(controller.user?.imageUrl,"Привет, ${controller.user?.fullname() ?? ""}");
             },
           ),
-          _categoryList(),
+          GetX<HomeController>(
+            builder: (controller) {
+              return _categoryList();
+            },
+          ),
+
           Expanded(child: _cardList()),
         ],
       );

@@ -12,10 +12,10 @@ import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
 
+  GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
     Widget _welcome() {
       return Stack(
         children: [

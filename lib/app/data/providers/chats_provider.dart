@@ -89,7 +89,7 @@ class ChatProvider extends GetConnect {
    }
 
 
-   Future clearMessages(String? chat_id, String? friend_id)async{
+  Future clearMessages(String? chat_id, String? friend_id)async{
      try{
        await _userRef.doc(auth.currentUser?.uid).collection('chats').doc(chat_id).delete();
        await _userRef.doc(friend_id).collection('chats').doc(chat_id).delete();
@@ -101,7 +101,18 @@ class ChatProvider extends GetConnect {
 
    }
 
+  Future deleteUserChat(String? uid)async{
+     try{
+       final chats = await _userRef.doc(uid).collection("chats").get();
+       chats.docs.forEach((element) {
+         _chatRef.doc(element.id).delete();
+       });
+     }
+     catch(e){
 
+     }
+
+  }
 
 
 }

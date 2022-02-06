@@ -100,12 +100,15 @@ class ChatPageView extends GetView<ChatPageController> {
                           );
                     },
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Мессенджер",style: TextStyle(color: KColors.kDarkViolet,fontSize: 28,fontWeight: FontWeight.bold),),
-                      IconButton(onPressed: (){}, icon: Icon(FontAwesomeIcons.edit,color: KColors.kDarkViolet))
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20.0,horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Мессенджер",style: TextStyle(color: KColors.kDarkViolet,fontSize: 28,fontWeight: FontWeight.bold),),
+                        //IconButton(onPressed: (){}, icon: Icon(FontAwesomeIcons.edit,color: KColors.kDarkViolet))
+                      ],
+                    ),
                   )
                 ],
               ),

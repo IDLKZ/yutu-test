@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findout/app/helpers/country_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -8,7 +9,7 @@ import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:ntp/ntp.dart';
 
 import 'kcolors.dart';
 
@@ -100,7 +101,11 @@ class GlobalMixin {
     else{
       return AssetImage("assets/images/ava.png");
     }
+  }
 
+  static getTimestamp()async {
+    DateTime startDate = await NTP.now();
+    return startDate.millisecondsSinceEpoch;
   }
 
 }

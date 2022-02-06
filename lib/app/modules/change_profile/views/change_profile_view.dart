@@ -214,7 +214,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                 controller: controller.ageController,
                 icon: Icon(FontAwesomeIcons.calendarCheck),
                 hint: "Дата рождения (+18 лет)",
-                func: (val) {return ValidatorMixin().validateDate(val, true); },
+                func: (val) { ValidatorMixin().validateDate(val, true); },
                 firstDate: DateTime(DateTime.now().year - 100),
                 lastDate: DateTime(DateTime.now().year - 18),
                 initialDate: GlobalMixin.getBirthDate(controller.ageController.text),

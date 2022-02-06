@@ -7,7 +7,7 @@ class HomeBinding extends Bindings {
   void dependencies() {
     Get.put<HomeController>(
       HomeController(),
-      permanent: true
+      //permanent: true
     );
   }
 }

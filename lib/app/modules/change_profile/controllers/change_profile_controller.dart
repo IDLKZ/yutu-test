@@ -1,6 +1,8 @@
 import 'package:findout/app/controllers/image_controller.dart';
 import 'package:findout/app/controllers/user_controller.dart';
 import 'package:findout/app/data/providers/users_provider.dart';
+import 'package:findout/app/helpers/global_mixin.dart';
+import 'package:findout/app/routes/app_pages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -36,6 +38,8 @@ class ChangeProfileController extends GetxController {
   updateUser(){
     if(formKey.currentState!.validate()){
       UsersProvider().updateUser(prepareData());
+      GlobalMixin.successSnackBar("Отлично", "Успешно обновлено!");
+      Get.offAllNamed(Routes.PROFILE);
     }
   }
 

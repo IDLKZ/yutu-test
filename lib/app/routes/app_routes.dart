@@ -19,6 +19,10 @@ abstract class Routes {
   static const POSTS_SINGLE = _Paths.POSTS_SINGLE;
   static const CHAT_PAGE = _Paths.CHAT_PAGE;
   static const CHATROOM_VIEW = _Paths.CHATROOM_VIEW;
+  static const SETTINGS = _Paths.SETTINGS;
+  static const BANS = _Paths.BANS;
+  static const WISHLISTS = _Paths.WISHLISTS;
+  static const DELETE = _Paths.DELETE;
 }
 
 abstract class _Paths {
@@ -39,4 +43,8 @@ abstract class _Paths {
   static const POSTS_SINGLE = '/post-single';
   static const CHAT_PAGE = '/chat-page';
   static const CHATROOM_VIEW = '/chatroom-view';
+  static const SETTINGS = '/settings';
+  static const BANS = '/bans';
+  static const WISHLISTS = '/wishlists';
+  static const DELETE = '/delete';
 }

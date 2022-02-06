@@ -53,8 +53,31 @@ class BanlistsProvider extends GetConnect {
       }
     }
 
+    Future<List<String?>> banLists ()async{
+      List<String?> bannedList = [];
+      QuerySnapshot _banned = await _banRef.where("initiator",isEqualTo: auth.currentUser?.uid).get();
+      _banned.docs.forEach((element) {
+        final data = element.data() as Map<String,dynamic>;
+        if(data["banned"] != null){
+          bannedList.add(data["banned"]);
+        }
+      });
 
 
+      return bannedList;
+    }
+
+
+    Future deleteUserFromBan(String? uid)async{
+      final banned =  await _banRef.where("initiator", isEqualTo: uid).get();
+      for(var item in banned.docs){
+        item.reference.delete();
+      }
+      final wasbanned =  await _banRef.where("banned", isEqualTo: uid).get();
+      for(var item in wasbanned.docs){
+        item.reference.delete();
+      }
+    }
 
 
 }

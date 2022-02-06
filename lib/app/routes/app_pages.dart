@@ -1,4 +1,3 @@
-import 'package:findout/app/routes/middlewares/initial_middleware.dart';
 import 'package:get/get.dart';
 
 import '../controllers/user_controller.dart';
@@ -9,16 +8,19 @@ import '../modules/admin/dashboard/views/dashboard_view.dart';
 import '../modules/admin/posts/bindings/posts_binding.dart';
 import '../modules/admin/posts/views/posts_view.dart';
 import '../modules/admin/posts_single/bindings/posts_single_binding.dart';
-import '../modules/admin/posts_single/controllers/posts_single_controller.dart';
 import '../modules/admin/posts_single/views/posts_single_view.dart';
 import '../modules/admin/users/bindings/users_binding.dart';
 import '../modules/admin/users/views/users_view.dart';
+import '../modules/bans/bindings/bans_binding.dart';
+import '../modules/bans/views/bans_view.dart';
 import '../modules/change_profile/bindings/change_profile_binding.dart';
 import '../modules/change_profile/views/change_profile_view.dart';
 import '../modules/chat_page/bindings/chat_page_binding.dart';
 import '../modules/chat_page/views/chat_page_view.dart';
 import '../modules/chatroom_view/bindings/chatroom_view_binding.dart';
 import '../modules/chatroom_view/views/chatroom_view_view.dart';
+import '../modules/delete/bindings/delete_binding.dart';
+import '../modules/delete/views/delete_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/initial/bindings/initial_binding.dart';
@@ -35,9 +37,14 @@ import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
+import '../modules/settings/bindings/settings_binding.dart';
+import '../modules/settings/views/settings_view.dart';
+import '../modules/wishlists/bindings/wishlists_binding.dart';
+import '../modules/wishlists/views/wishlists_view.dart';
 import 'middlewares/admin_middleware.dart';
 import 'middlewares/auth_middleware.dart';
 import 'middlewares/guest_middleware.dart';
+import 'middlewares/initial_middleware.dart';
 
 part 'app_routes.dart';
 
@@ -76,6 +83,7 @@ class AppPages {
       name: _Paths.POST_CREATE,
       page: () => PostCreateView(),
       binding: PostCreateBinding(),
+      middlewares: [AuthMiddleware()],
     ),
     GetPage(
         name: _Paths.POSTS,
@@ -86,11 +94,13 @@ class AppPages {
       name: _Paths.POST_EDIT,
       page: () => PostEditView(),
       binding: PostEditBinding(),
+      middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: _Paths.POST_VIEW,
       page: () => PostViewView(),
       binding: PostViewBinding(),
+      middlewares: [AuthMiddleware()],
     ),
     GetPage(
         name: _Paths.USERS,
@@ -107,26 +117,56 @@ class AppPages {
       name: _Paths.PROFILE,
       page: () => ProfileView(),
       binding: ProfileBinding(),
+      middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: _Paths.CHANGE_PROFILE,
       page: () => ChangeProfileView(),
       binding: ChangeProfileBinding(),
+      middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: _Paths.POSTS_SINGLE,
       page: () => PostsSingleView(),
       binding: PostsSingleBinding(),
+      middlewares: [AdminMiddleware()],
     ),
     GetPage(
       name: _Paths.CHAT_PAGE,
       page: () => ChatPageView(),
       binding: ChatPageBinding(),
+      middlewares: [AuthMiddleware()],
     ),
     GetPage(
       name: _Paths.CHATROOM_VIEW,
       page: () => ChatroomViewView(),
       binding: ChatroomViewBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: _Paths.SETTINGS,
+      page: () => SettingsView(),
+      binding: SettingsBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: _Paths.BANS,
+      page: () => BansView(),
+      binding: BansBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: _Paths.WISHLISTS,
+      page: () => WishlistsView(),
+      binding: WishlistsBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: _Paths.DELETE,
+      page: () => DeleteView(),
+      binding: DeleteBinding(),
+      middlewares: [AuthMiddleware()],
+
     ),
   ];
 }

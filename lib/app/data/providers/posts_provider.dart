@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findout/app/controllers/image_controller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import '../../helpers/global_mixin.dart';
@@ -95,4 +96,18 @@ class PostsProvider extends GetConnect {
     });
   }
 
+  Future deleteUserPost(String? uid)async{
+    final allPosts = await _postRef.where("author",isEqualTo:uid).get();
+      for(var item in allPosts.docs){
+        try{
+          Posts _post = Posts.fromJson(item.data() as Map<String,dynamic>);
+          _post.image != null ? ImageController().deleteFile(_post.image??"") : null;
+          item.reference.delete();
+        }
+        catch(e){
+
+        }
+
+      }
+    }
 }

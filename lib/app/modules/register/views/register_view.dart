@@ -16,9 +16,10 @@ import 'package:get/get.dart';
 import '../controllers/register_controller.dart';
 
 class RegisterView extends GetView<RegisterController> {
+  GlobalKey<FormState> registerFormKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    GlobalKey<FormState> registerFormKey = GlobalKey<FormState>();
     Widget _welcome(){
       return Stack(
         children: [
@@ -194,12 +195,13 @@ class RegisterView extends GetView<RegisterController> {
             children: [
               _welcome(),
               _form('Register', _buttonAction),
-              const SizedBox(height: 30,),
-              GestureDetector(
-                  onTap: (){
-                    Get.offNamed(Routes.LOGIN);
-                  },
-                  child: const Text('Login', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: KColors.kDarkViolet),)),
+              SafeArea(
+                child: GestureDetector(
+                    onTap: (){
+                      Get.offNamed(Routes.LOGIN);
+                    },
+                    child: const Text('Login', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: KColors.kDarkViolet),)),
+              ),
             ],
           ),
         )

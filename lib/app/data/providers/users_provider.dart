@@ -1,6 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:findout/app/data/providers/banlists_provider.dart';
+import 'package:findout/app/data/providers/chats_provider.dart';
+import 'package:findout/app/data/providers/posts_provider.dart';
+import 'package:findout/app/data/providers/wishlists_provider.dart';
 import 'package:findout/app/helpers/global_mixin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 
 import '../models/users_model.dart';
@@ -46,7 +51,11 @@ class UsersProvider extends GetConnect {
 
   Future<bool> deleteUser(String? id) async {
     try{
-      // await _userRef.doc(id).delete();
+      await BanlistsProvider().deleteUserFromBan(id);
+      await PostsProvider().deleteUserPost(id);
+      await WishlistsProvider().deleteUserWishlist(id);
+      await ChatProvider().deleteUserChat(id);
+      await _userRef.doc(id).delete();
       GlobalMixin.successSnackBar("Отлично", "Пользователь успешно удален!");
       return true;
     }
@@ -55,6 +64,8 @@ class UsersProvider extends GetConnect {
       return false;
     }
   }
+
+
 
 
 }

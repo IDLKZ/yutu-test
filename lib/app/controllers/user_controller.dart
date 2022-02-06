@@ -19,11 +19,11 @@ class UserController extends GetxController {
     super.onInit();
     final firebaseUser = Rx<User?>(auth.currentUser);
     firebaseUser.bindStream(auth.userChanges());
-    firebaseUser.bindStream(auth.idTokenChanges());
-    firebaseUser.bindStream(auth.authStateChanges());
+    //firebaseUser.bindStream(auth.idTokenChanges());
+    //firebaseUser.bindStream(auth.authStateChanges());
     ever(firebaseUser,_setUser);
     _userModel.bindStream(UsersProvider().currentUser());
-    ever(_userModel, _setUserModel);
+    //ever(_userModel, _setUserModel);
   }
 
   _setUser(User? _user)async{
@@ -59,7 +59,6 @@ class UserController extends GetxController {
     else{
       Get.find<AuthController>().logout();
       Get.offAllNamed(Routes.LOGIN);
-
     }
   }
 

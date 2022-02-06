@@ -12,7 +12,6 @@ import '../../../helpers/kcolors.dart';
 import '../controllers/post_view_controller.dart';
 
 class PostViewView extends GetView<PostViewController> {
-
   Widget _editDeletePost() {
     if (Get.find<UserController>().auth.currentUser!.uid ==
         controller.post.value?.author) {
@@ -45,20 +44,27 @@ class PostViewView extends GetView<PostViewController> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           ElevatedButton(
-                              onPressed: (){controller.deletePost(); Get.back();},
-                              child: Text("Удалить",style: TextStyle(color: Colors.white),),
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(KColors.kError)
-                              ),
-
+                            onPressed: () {
+                              controller.deletePost();
+                              Get.back();
+                            },
+                            child: Text(
+                              "Удалить",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(KColors.kError)),
                           ),
                           ElevatedButton(
-                              onPressed: () => {Get.back()},
-                              child: Text("Отмена",style: TextStyle(color: Colors.white),),
+                            onPressed: () => {Get.back()},
+                            child: Text(
+                              "Отмена",
+                              style: TextStyle(color: Colors.white),
+                            ),
                             style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(KColors.kLightBlue)
-                          ),
-
+                                backgroundColor: MaterialStateProperty.all(
+                                    KColors.kLightBlue)),
                           ),
                         ],
                       )
@@ -77,47 +83,53 @@ class PostViewView extends GetView<PostViewController> {
         ),
       );
     } else {
-      return Positioned(
-        right: 20,
-        bottom: 0,
-        child: CircleAvatar(
-          backgroundColor: KColors.kDarkenGray,
-          radius: 25,
-          child: Icon(
-            FontAwesomeIcons.solidHeart,
-            color: Colors.red,
+      return GetX<PostViewController>(builder: (controller) {
+        return Positioned(
+          right: 20,
+          bottom: 0,
+          child: CircleAvatar(
+            backgroundColor: KColors.kDarkenGray,
+            radius: 25,
+            child: IconButton(
+              onPressed: (){controller.toggle();},
+              icon: Icon(
+                FontAwesomeIcons.solidHeart,
+                color: controller.saved.value ? Colors.red : Colors.white,
+              ),
+            ),
           ),
-        ),
-      );
+        );
+      });
     }
   }
 
-  Widget _floatButton(){
-    print(FirebaseAuth.instance.currentUser?.uid != controller.post.value?.author);
-    if(FirebaseAuth.instance.currentUser?.uid != controller.post.value?.author){
-      return FloatingActionButton.extended(
-        onPressed: () {
-          ChatProvider().addNewConnection(controller.post.value?.author);
-        },
-        label: Row(
-          children: const [
-            Text(
-              "Написать",
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Icon(FontAwesomeIcons.arrowRight)
-          ],
-        ),
-        // icon: const Icon(Icons.thumb_up),
-        backgroundColor: KColors.kMiddleBlue,
-      );
-    }
-    else{
-      return SizedBox();
-    }
+  Widget _floatButton() {
+    return GetX<PostViewController>(builder: (controller) {
+      if (FirebaseAuth.instance.currentUser?.uid !=
+          controller.post.value?.author) {
+        return FloatingActionButton.extended(
+          onPressed: () {
+            ChatProvider().addNewConnection(controller.post.value?.author);
+          },
+          label: Row(
+            children: const [
+              Text(
+                "Написать",
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Icon(FontAwesomeIcons.arrowRight)
+            ],
+          ),
+          // icon: const Icon(Icons.thumb_up),
+          backgroundColor: KColors.kMiddleBlue,
+        );
+      } else {
+        return SizedBox();
+      }
+    });
   }
 
   @override
@@ -140,7 +152,9 @@ class PostViewView extends GetView<PostViewController> {
                               bottomRight: Radius.circular(40.0)),
                           image: DecorationImage(
                               image: NetworkImage(
-                                  controller.post.value?.image ??"http://via.placeholder.com/350x150",),
+                                controller.post.value?.image ??
+                                    "http://via.placeholder.com/350x150",
+                              ),
                               fit: BoxFit.cover)),
                     ),
                     Container(
@@ -181,35 +195,45 @@ class PostViewView extends GetView<PostViewController> {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
-                              return Row(
-                                children: [
-                                   CircleAvatar(
-                                    radius: 25,
-                                    backgroundImage:GlobalMixin.getImage(snapshot.data?.imageUrl),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10.0),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "${snapshot.data?.fullname()}",
-                                          style: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white),
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          '${GlobalMixin.cityName(snapshot.data?.city) ?? ""}  ${snapshot.data?.getAge() ?? ""}',
-                                          style: TextStyle(
-                                              color: KColors.kSpaceGray),
-                                        )
-                                      ],
+                              return GestureDetector(
+                                onTap: () {
+                                  if (snapshot.data?.id != null) {
+                                    Get.toNamed(Routes.PROFILE,
+                                        arguments: snapshot.data?.id);
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 25,
+                                      backgroundImage: GlobalMixin.getImage(
+                                          snapshot.data?.imageUrl),
                                     ),
-                                  )
-                                ],
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            "${snapshot.data?.fullname()}",
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            '${GlobalMixin.cityName(snapshot.data?.city) ?? ""}  ${snapshot.data?.getAge() ?? ""}',
+                                            style: TextStyle(
+                                                color: KColors.kSpaceGray),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
                               );
                             } else {
                               return CircularProgressIndicator();
@@ -430,7 +454,6 @@ class PostViewView extends GetView<PostViewController> {
         },
       ),
       floatingActionButton: _floatButton(),
-
     );
   }
 }
