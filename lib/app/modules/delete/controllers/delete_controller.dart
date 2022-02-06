@@ -1,3 +1,4 @@
+import 'package:findout/app/controllers/auth_controller.dart';
 import 'package:findout/app/data/providers/users_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -7,16 +8,23 @@ class DeleteController extends GetxController {
 
   @override
   void onInit()async {
-    super.onInit();
-    print("starting....");
-    await UsersProvider().deleteUser(FirebaseAuth.instance.currentUser?.uid);
-    await FirebaseAuth.instance.currentUser?.delete();
-    print("done");
+    try{
+      super.onInit();
+      await UsersProvider().deleteUser(FirebaseAuth.instance.currentUser?.uid);
+      await FirebaseAuth.instance.currentUser?.delete();
+    }
+    catch(e){
+      print(e);
+    }
+    await Get.find<AuthController>().logout();
+
+
+
 
   }
 
   @override
-  void onReady() {
+  void onReady()async {
     super.onReady();
   }
 

@@ -30,7 +30,8 @@ class ChatPageView extends GetView<ChatPageController> {
         content: SingleChildScrollView(
           child: ListBody(
             children: [
-              GestureDetector(
+              friend_id != null
+              ?GestureDetector(
                 onTap: ()async {
                   bool banned = await BanlistsProvider().isFriendBanned(friend_id);
                   banned ?    BanlistsProvider().deleteBan(friend_id)
@@ -44,7 +45,7 @@ class ChatPageView extends GetView<ChatPageController> {
                     title: Text("Добавить в черный список",style: TextStyle(color: Colors.black),),
                   ),
                 ),
-              ),
+              ) : SizedBox(),
               GestureDetector(
                 onTap: ()  {
                   ChatProvider().clearMessages(chat_id, friend_id);
@@ -136,7 +137,7 @@ class ChatPageView extends GetView<ChatPageController> {
           child: StreamBuilder<Users?>(
             stream: UsersProvider().teammate(userChat.connection),
             builder: (context, snapshot) {
-              if(!snapshot.hasError && snapshot.hasData){
+              if(!snapshot.hasError){
                 return GestureDetector(
                   onLongPress: (){
                     showDialog(context: context, builder: (c) => _showDialog(context,userChat.chat_id, userChat.connection));
@@ -147,7 +148,7 @@ class ChatPageView extends GetView<ChatPageController> {
                       backgroundImage: GlobalMixin.getImage(snapshot.data?.imageUrl),
                       // child: Image(image: AssetImage('assets/images/ava.png'),),
                     ),
-                    title: Text("${snapshot.data?.fullname()}",style: TextStyle(color: KColors.kDarkViolet,fontSize: 20,fontWeight: FontWeight.bold),),
+                    title: Text("${snapshot.data != null ? snapshot.data?.fullname().isEmpty : "Пользователь удален" }",style: TextStyle(color: KColors.kDarkViolet,fontSize: 20,fontWeight: FontWeight.bold),),
                     subtitle: StreamBuilder<ChatMessages?>(
                       stream: ChatProvider().getLastMessage(userChat.chat_id),
                       builder: (context, snapshot) {
@@ -177,7 +178,7 @@ class ChatPageView extends GetView<ChatPageController> {
                 );
               }
               else{
-                return Center(child: CircularProgressIndicator());
+                return SizedBox();
               }
 
             }

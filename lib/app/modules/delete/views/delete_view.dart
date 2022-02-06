@@ -6,8 +6,12 @@ import '../../../helpers/kcolors.dart';
 import '../controllers/delete_controller.dart';
 
 class DeleteView extends GetView<DeleteController> {
+  DeleteController _deleteController = Get.find<DeleteController>();
+
+
   @override
   Widget build(BuildContext context) {
+    _deleteController.refresh();
     Widget _welcome(BuildContext context) {
       return Stack(
         children: [
