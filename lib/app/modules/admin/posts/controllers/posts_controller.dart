@@ -28,8 +28,13 @@ class PostsController extends GetxController {
 
   filterByDate(TextEditingController category, TextEditingController dateStart, TextEditingController dateEnd){
     if(!dateStart.text.isEmpty && !dateEnd.text.isEmpty){
-      postsQuery.value = FirebaseFirestore.instance.collection('posts').where('category', isEqualTo: category.text.trim().toString()).orderBy("date",descending: true).where('date', isGreaterThanOrEqualTo: GlobalMixin.convertToDateFormatControllerToMilliseconds(dateStart))
-          .where('date', isLessThan: GlobalMixin.convertToDateFormatControllerToMilliseconds(dateEnd));
+      if(!category.text.isEmpty){
+        postsQuery.value = FirebaseFirestore.instance.collection('posts').where('category', isEqualTo: category.text.trim().toString()).orderBy("date",descending: true).where('date', isGreaterThanOrEqualTo: GlobalMixin.convertToDateFormatControllerToMilliseconds(dateStart))
+            .where('date', isLessThan: GlobalMixin.convertToDateFormatControllerToMilliseconds(dateEnd));
+      } else {
+        postsQuery.value = FirebaseFirestore.instance.collection('posts').where('date', isGreaterThanOrEqualTo: GlobalMixin.convertToDateFormatControllerToMilliseconds(dateStart))
+            .where('date', isLessThan: GlobalMixin.convertToDateFormatControllerToMilliseconds(dateEnd));
+      }
     } else {
       postsQuery.value = FirebaseFirestore.instance.collection("posts").orderBy("date",descending: true);
     }
