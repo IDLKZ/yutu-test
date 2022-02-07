@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:findout/app/controllers/location_controller.dart';
 import 'package:findout/app/helpers/country_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_navigation/src/snackbar/snackbar.dart';
@@ -39,9 +41,9 @@ class GlobalMixin {
     }
   }
 
-  static int convertToDateFormatControllerToMilliseconds(TextEditingController dateController){
+  static int convertToDateFormatControllerToMilliseconds(TextEditingController dateController,{String format = "dd-MM-yyyy HH:mm"}){
     try{
-     return DateTime.parse(DateFormat("dd-MM-yyyy HH:mm").parse(dateController.text.trim()).toString()).millisecondsSinceEpoch;
+     return DateTime.parse(DateFormat(format).parse(dateController.text.trim()).toString()).millisecondsSinceEpoch;
     }
     catch(e){
       print(e);
@@ -70,11 +72,11 @@ class GlobalMixin {
   }
 
   static List<Map<String,dynamic>> getListCities(){
-    return CountryConstants.cities_ru;
+    return Get.find<LocationController>().locale.value == "en"? CountryConstants.cities_en :       CountryConstants.cities_ru;
   }
 
   static String? cityName(int? city){
-    return city != null ? CountryConstants.citiesMapRu[city] : null;
+    return city != null ? (Get.find<LocationController>().locale.value == "en"? CountryConstants.citiesMapEn[city] : CountryConstants.citiesMapRu[city] ) : null;
   }
 
   String? getLocale() {
@@ -92,6 +94,8 @@ class GlobalMixin {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if(value.runtimeType == String){
       prefs.setString(key, value);
+      Get.updateLocale(Locale(value??"ru"));
+      Get.find<LocationController>().locale.value = value??"ru";
     }
     if(value.runtimeType == bool){
       prefs.setBool(key, value);

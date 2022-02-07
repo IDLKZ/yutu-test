@@ -60,7 +60,7 @@ class PostCreateController extends GetxController {
         _imageController.selectedImageUrl.value = "";
       }
       else{
-        GlobalMixin.warningSnackBar("Упс", "Заполните все поля");
+        GlobalMixin.warningSnackBar("oops".tr, "fill_fields".tr);
       }
     }
   }

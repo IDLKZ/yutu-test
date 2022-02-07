@@ -23,7 +23,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
 
     Widget _showDialog(BuildContext context) {
       return AlertDialog(
-        title: Text("Загрузите изображение"),
+        title: Text("upload_image".tr),
         content: SingleChildScrollView(
           child: ListBody(
             children: [
@@ -35,7 +35,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                 child: Card(
                   child: ListTile(
                     leading: Icon(Icons.camera_alt_rounded),
-                    title: Text("Сделать фото"),
+                    title: Text("take_photo".tr),
                   ),
                 ),
               ),
@@ -47,7 +47,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                 child: Card(
                   child: ListTile(
                     leading: Icon(Icons.photo),
-                    title: Text("Загрузить с галереи"),
+                    title: Text("upload_gallery".tr),
                   ),
                 ),
               ),
@@ -59,7 +59,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
               onPressed: () {
                 Get.back();
               },
-              child: Text("Отмена"))
+              child: Text("cancel".tr))
         ],
       );
     }
@@ -188,7 +188,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
               padding: const EdgeInsets.only(bottom: 20, top: 10),
               child: InputWidget(
                   const Icon(Icons.account_circle),
-                  'Имя',
+                  'name'.tr,
                   controller.nameController,
                   false,
                   TextInputType.text,
@@ -200,7 +200,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
               padding: const EdgeInsets.only(bottom: 20),
               child: InputWidget(
                   const Icon(Icons.account_circle),
-                  'Фамилия',
+                  'surname'.tr,
                   controller.surnameController,
                   false,
                   TextInputType.text,
@@ -213,7 +213,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
               child:DatePickerWidget(
                 controller: controller.ageController,
                 icon: Icon(FontAwesomeIcons.calendarCheck),
-                hint: "Дата рождения (+18 лет)",
+                hint: "birthday".tr,
                 func: (val) { ValidatorMixin().validateDate(val, true); },
                 firstDate: DateTime(DateTime.now().year - 100),
                 lastDate: DateTime(DateTime.now().year - 18),
@@ -226,10 +226,10 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                 padding: const EdgeInsets.only(bottom: 20,right: 10,left: 10),
               child: SelectPicker(
                 controller: controller.cityController,
-                hintText: "Ваш город",
+                hintText: "city".tr,
                 func: (val){return ValidatorMixin().validateText(val, true);},
                 icon:Icon(FontAwesomeIcons.globe),
-                labelText: "Ваш город",
+                labelText: "city".tr,
                 listItem: GlobalMixin.getListCities(),
               )
             ),
@@ -237,7 +237,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
               padding: const EdgeInsets.only(bottom: 20),
               child: InputWidget(
                   const Icon(Icons.email),
-                  'Email',
+                  'email'.tr,
                   controller.emailController,
                   false,
                   TextInputType.emailAddress,
@@ -249,11 +249,11 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
               padding: const EdgeInsets.only(bottom: 20),
               child: InputWidget(
                   const Icon(Icons.lock),
-                  'Password',
+                  'password'.tr,
                   controller.passwordController,
                   true,
                   TextInputType.visiblePassword,
-                  (val){return ValidatorMixin().validateText(val, true,minLenght: 6,maxLength: 255);},
+                  (val){return ValidatorMixin().validateText(val, false,minLenght: 6,maxLength: 255);},
                   true
               ),
             ),
@@ -278,7 +278,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
         child: Column(
           children: [
             _header('assets/images/ava.png'),
-            _form('Change', () => controller.updateUser())
+            _form('update'.tr, () => controller.updateUser())
           ],
         ),
       ),

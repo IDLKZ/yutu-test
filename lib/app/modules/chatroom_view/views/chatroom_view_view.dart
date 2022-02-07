@@ -151,7 +151,7 @@ class ChatroomViewView extends GetView<ChatroomViewController> {
                 return Container(
                     padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
                     child: _chatroomController.isBanned.value
-                    ?Text("Вы не можете писать сообщения так как отмечены в черном списке")
+                    ?Text("you_are_in_banlist".tr)
                     :Form(
                       key: controller.formKey,
                       child: AdvancedInput(

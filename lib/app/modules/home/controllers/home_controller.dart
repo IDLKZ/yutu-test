@@ -18,6 +18,8 @@ class HomeController extends GetxController {
   Rx<List<Category>> categoriesList = Rx<List<Category>>([Category(id: "",titleRu:"Все",titleEn: "All")]);
   Rx<Query> postsQuery = Rx<Query>(FirebaseFirestore.instance.collection("posts").where("city",isEqualTo: Get.find<UserController>().user?.city).where("date",isGreaterThanOrEqualTo: DateTime.now().millisecondsSinceEpoch).orderBy("date",descending: true));
   final TextEditingController title = TextEditingController();
+  final TextEditingController startTime = TextEditingController();
+  final TextEditingController endTime = TextEditingController();
   @override
   void onInit()async {
     super.onInit();
@@ -46,18 +48,20 @@ class HomeController extends GetxController {
   }
   
   searchPosts()async{
-    Query query = FirebaseFirestore.instance.collection("posts");
-    if(title.text.isNotEmpty){
-      query = query.where("title",isGreaterThanOrEqualTo: title.text.trim()).where("title",isLessThan: title.text.trim() + 'z');
-      postsQuery.value = query;
-      update();
+    int start = startTime.text.isNotEmpty ? await GlobalMixin.convertToDateFormatControllerToMilliseconds(startTime,format: "dd.MM.yyyy") : DateTime(2022).millisecondsSinceEpoch;
+    int end = endTime.text.isNotEmpty ? await GlobalMixin.convertToDateFormatControllerToMilliseconds(endTime,format: "dd.MM.yyyy") : DateTime.now().add(Duration(days: 14)).millisecondsSinceEpoch;
+    if(activeCategory.value.toString().isNotEmpty){
+      postsQuery.value = FirebaseFirestore.instance.collection("posts").where("category",isEqualTo: activeCategory.value).where("city",isEqualTo: _userController.user?.city).where("date",isGreaterThanOrEqualTo: start).where("date",isLessThanOrEqualTo: end).orderBy("date",descending: true);
     }
-    //query
+    else{
+      postsQuery.value = FirebaseFirestore.instance.collection("posts").where("city",isEqualTo: _userController.user?.city).where("date",isGreaterThanOrEqualTo: start).where("date",isLessThanOrEqualTo: end).orderBy("date",descending: true);
 
-
+    }
+    update();
   }
 
   addCategoriesList(CategoriesList? _categoriesList){
+    categoriesList.value = [Category(id: "",titleRu:"Все",titleEn: "All")];
     if(_categoriesList != null){
       if(_categoriesList.categoriesList != null){
           _categoriesList.categoriesList?.forEach((element) {

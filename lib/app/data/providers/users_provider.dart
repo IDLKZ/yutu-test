@@ -56,7 +56,7 @@ class UsersProvider extends GetConnect {
       await WishlistsProvider().deleteUserWishlist(id);
       await ChatProvider().deleteUserChat(id);
       await _userRef.doc(id).delete();
-      GlobalMixin.successSnackBar("Отлично", "Пользователь успешно удален!");
+      GlobalMixin.successSnackBar("success".tr, "account_deleted".tr);
       return true;
     }
     catch (e){

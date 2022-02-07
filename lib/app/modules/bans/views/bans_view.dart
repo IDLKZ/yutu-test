@@ -80,7 +80,7 @@ class BansView extends GetView<BansController> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: KColors.kMiddleBlue,
-        title: Text('Черный список'),
+        title: Text('blacklists'.tr),
         centerTitle: true,
       ),
       body: Container(

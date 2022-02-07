@@ -33,7 +33,7 @@ class ImageController extends GetxController{
         bool isModerate = true;
         bool result = isModerate ? await uploadImage(File(selectedFile.path), basename(selectedFile.path),delete:delete) : false;
         if (result) {
-          Get.snackbar('Отлично', 'Фото готово', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kSuccess, colorText: Colors.white);
+          Get.snackbar('success'.tr, 'image_is_ready'.tr, snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kSuccess, colorText: Colors.white);
         }
         else {
           selectedImageUrl.value = "";
@@ -54,11 +54,11 @@ class ImageController extends GetxController{
       }
       TaskSnapshot taskSnapshot =  await FirebaseStorage.instance.ref('uploads/$fileName').putFile(imageFile);
       selectedImageUrl.value = await taskSnapshot.ref.getDownloadURL();
-      Get.snackbar('Отлично', 'Фото загружено', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kSuccess, colorText: Colors.white);
+      Get.snackbar('success'.tr, 'image_is_uploaded'.tr, snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kSuccess, colorText: Colors.white);
       return true;
     } on FirebaseException catch (e) {
       print(e.code);
-      Get.snackbar('Упс', 'Что-то пошло не так', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kWarning, colorText: Colors.white);
+      Get.snackbar('oops'.tr, 'something_went_wrong'.tr, snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kWarning, colorText: Colors.white);
       return false;
     }
   }
@@ -70,7 +70,7 @@ class ImageController extends GetxController{
     }
     catch(e){
       print(e);
-      Get.snackbar('Упс', 'Что-то пошло не так', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kWarning, colorText: Colors.white);
+      Get.snackbar('oops'.tr, 'something_went_wrong'.tr, snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kWarning, colorText: Colors.white);
     }
   }
 
@@ -90,18 +90,17 @@ class ImageController extends GetxController{
           return true;
         }
         else{
-          Get.snackbar('Упс', 'Фото не соответсвует правилам приложения!', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kWarning, colorText: Colors.white);
-          print("oopsie");
+          Get.snackbar('oops'.tr, 'incorrect_image'.tr, snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kWarning, colorText: Colors.white);
           return false;
         }
       }
       else{
-        Get.snackbar('Упс', 'Что-то пошло не так', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kWarning, colorText: Colors.white);
+        Get.snackbar('oops'.tr, 'something_went_wrong'.tr, snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kWarning, colorText: Colors.white);
         return false;
       }
     }
     catch(e){
-      Get.snackbar('Упс', 'Что-то пошло не так', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kWarning, colorText: Colors.white);
+      Get.snackbar('oops'.tr, 'something_went_wrong'.tr, snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kWarning, colorText: Colors.white);
       print(e);
       return false;
     }

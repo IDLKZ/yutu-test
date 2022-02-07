@@ -26,7 +26,7 @@ class ChatPageView extends GetView<ChatPageController> {
 
     Widget _showDialog(BuildContext context,String? chat_id, String? friend_id) {
       return AlertDialog(
-        title: Text("Выберите действие"),
+        title: Text("choose_action".tr),
         content: SingleChildScrollView(
           child: ListBody(
             children: [
@@ -42,7 +42,7 @@ class ChatPageView extends GetView<ChatPageController> {
                   elevation: 0,
                   child: ListTile(
                     leading: Icon(FontAwesomeIcons.userLock,color: Colors.black,),
-                    title: Text("Добавить в черный список",style: TextStyle(color: Colors.black),),
+                    title: Text("ban_user".tr,style: TextStyle(color: Colors.black),),
                   ),
                 ),
               ) : SizedBox(),
@@ -55,7 +55,7 @@ class ChatPageView extends GetView<ChatPageController> {
                   elevation: 0,
                   child: ListTile(
                     leading: Icon(FontAwesomeIcons.trash,color: Colors.redAccent),
-                    title: Text("Удалить переписку",style: TextStyle(color: Colors.redAccent),),
+                    title: Text("delete_chat".tr,style: TextStyle(color: Colors.redAccent),),
                   ),
                 ),
               ),
@@ -67,7 +67,7 @@ class ChatPageView extends GetView<ChatPageController> {
               onPressed: () {
                 Get.back();
               },
-              child: Text("Отмена"))
+              child: Text("cancel".tr))
         ],
       );
     }
@@ -106,7 +106,7 @@ class ChatPageView extends GetView<ChatPageController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Мессенджер",style: TextStyle(color: KColors.kDarkViolet,fontSize: 28,fontWeight: FontWeight.bold),),
+                        Text("messenger".tr,style: TextStyle(color: KColors.kDarkViolet,fontSize: 28,fontWeight: FontWeight.bold),),
                         //IconButton(onPressed: (){}, icon: Icon(FontAwesomeIcons.edit,color: KColors.kDarkViolet))
                       ],
                     ),
@@ -148,7 +148,7 @@ class ChatPageView extends GetView<ChatPageController> {
                       backgroundImage: GlobalMixin.getImage(snapshot.data?.imageUrl),
                       // child: Image(image: AssetImage('assets/images/ava.png'),),
                     ),
-                    title: Text("${snapshot.data != null ? snapshot.data?.fullname().isEmpty : "Пользователь удален" }",style: TextStyle(color: KColors.kDarkViolet,fontSize: 20,fontWeight: FontWeight.bold),),
+                    title: Text("${(snapshot.data != null ? snapshot.data?.fullname() : "deleted_account".tr) }",style: TextStyle(color: KColors.kDarkViolet,fontSize: 20,fontWeight: FontWeight.bold),),
                     subtitle: StreamBuilder<ChatMessages?>(
                       stream: ChatProvider().getLastMessage(userChat.chat_id),
                       builder: (context, snapshot) {
@@ -199,14 +199,14 @@ class ChatPageView extends GetView<ChatPageController> {
             color: KColors.kChatColor,
           ),
           child: FirestoreQueryBuilder(
-            query: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser?.uid).collection("chats").orderBy("last_time"),
+            query: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser?.uid).collection("chats").orderBy("last_time",descending:true),
           pageSize: 4,
           builder: (BuildContext context, FirestoreQueryBuilderSnapshot<Map<String, dynamic>> snapshot, Widget? child) {
             if (snapshot.isFetching) {
               return Center(child: const CircularProgressIndicator());
             }
             if (snapshot.hasError) {
-              return Text('error ${snapshot.error}');
+              return SizedBox();
             }
             return Padding(
                 padding: const EdgeInsets.all(10.0),

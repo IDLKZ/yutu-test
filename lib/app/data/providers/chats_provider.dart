@@ -96,7 +96,7 @@ class ChatProvider extends GetConnect {
        await _chatRef.doc(chat_id).delete();
      }
      catch(e){
-       GlobalMixin.warningSnackBar("Упс", "Что-то пошло не так");
+       GlobalMixin.warningSnackBar("oops".tr, "something_went_wrong".tr);
      }
 
    }

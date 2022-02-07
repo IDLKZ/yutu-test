@@ -19,7 +19,7 @@ class PostCreateView extends GetView<PostCreateController> {
 
   Widget _showDialog(BuildContext context) {
     return AlertDialog(
-      title: Text("Загрузите изображение"),
+      title: Text("upload_image".tr),
       content: SingleChildScrollView(
         child: ListBody(
           children: [
@@ -31,7 +31,7 @@ class PostCreateView extends GetView<PostCreateController> {
               child: Card(
                 child: ListTile(
                   leading: Icon(Icons.camera_alt_rounded),
-                  title: Text("Сделать фото"),
+                  title: Text("take_photo".tr),
                 ),
               ),
             ),
@@ -43,7 +43,7 @@ class PostCreateView extends GetView<PostCreateController> {
               child: Card(
                 child: ListTile(
                   leading: Icon(Icons.photo),
-                  title: Text("Загрузить с галереи"),
+                  title: Text("upload_gallery".tr),
                 ),
               ),
             ),
@@ -55,7 +55,7 @@ class PostCreateView extends GetView<PostCreateController> {
             onPressed: () {
               Get.back();
             },
-            child: Text("Отмена"))
+            child: Text("cancel".tr))
       ],
     );
   }
@@ -212,8 +212,8 @@ class PostCreateView extends GetView<PostCreateController> {
                   controller: controller.categoryController,
                   func: (val){return ValidatorMixin().validateText(val, true);},
                   icon: Icon(FontAwesomeIcons.boxes),
-                  hintText: "Категория",
-                  labelText:"Выберите категорию",
+                  hintText: "categories".tr,
+                  labelText:"select_category".tr,
                   listItem:controller.items.value
                 ),
 
@@ -225,7 +225,7 @@ class PostCreateView extends GetView<PostCreateController> {
               padding: const EdgeInsets.all(10.0),
               child: AdvancedInput(
                 icon:Icon(Icons.title),
-                hint:"Наименование",
+                hint:"title".tr,
                 controller:controller.titleController,
                 obscure:false,
                 func:(val) =>
@@ -241,7 +241,7 @@ class PostCreateView extends GetView<PostCreateController> {
               padding: const EdgeInsets.all(10.0),
               child: AdvancedInput(
                   icon:Icon(Icons.message),
-                  hint:"Описание",
+                  hint:"description".tr,
                   controller:controller.descriptionController,
                   obscure:false,
                   func:(val) => ValidatorMixin()
@@ -260,8 +260,8 @@ class PostCreateView extends GetView<PostCreateController> {
                   controller: controller.cityController,
                   func: (val){return ValidatorMixin().validateText(val, true);},
                   icon: Icon(FontAwesomeIcons.globe),
-                  hintText: "Место действия",
-                  labelText:"Выберите город/область",
+                  hintText: "action_location".tr,
+                  labelText:"select_city".tr,
                   listItem:GlobalMixin.getListCities(),
               ),
 
@@ -273,7 +273,7 @@ class PostCreateView extends GetView<PostCreateController> {
               padding: const EdgeInsets.all(10.0),
               child: AdvancedInput(
                 icon:Icon(Icons.location_on),
-                hint:"Локация",
+                hint:"location".tr,
                 controller:controller.placeController,
                 obscure:false,
                 keyboard:TextInputType.text,
@@ -287,7 +287,7 @@ class PostCreateView extends GetView<PostCreateController> {
             Padding(
                 padding:EdgeInsets.all(10),
               child: DatePickerWidget(
-                hint: "Дата события",
+                hint: "date".tr,
                 controller: controller.dateController,
                 func: (val){
                   return ValidatorMixin().validateDate(val, true);
@@ -303,7 +303,7 @@ class PostCreateView extends GetView<PostCreateController> {
               padding: const EdgeInsets.all(10.0),
               child: AdvancedInput(
                   icon:Icon(FontAwesomeIcons.users),
-                  hint:"Кол-во людей",
+                  hint:"persons".tr,
                   controller:controller.personController,
                   obscure:false,
                   keyboard:TextInputType.number,
@@ -312,7 +312,7 @@ class PostCreateView extends GetView<PostCreateController> {
             ),
             //Count of person
 
-            _button("Сохранить", () => controller.onSave()),
+            _button("save".tr, () => controller.onSave()),
             SizedBox(
               height: 20,
             )

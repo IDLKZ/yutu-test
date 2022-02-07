@@ -34,12 +34,12 @@ class PostsProvider extends GetConnect {
   Future<bool> createPost(Map<String,dynamic> data)async{
     try{
       await _postRef.add(data);
-      GlobalMixin.successSnackBar("Отлично", "Пост успешно создан!");
+      GlobalMixin.successSnackBar("success".tr, "post_created".tr);
       return true;
     }
     catch(e){
       print(e);
-      GlobalMixin.warningSnackBar("Упс", "Что-то пошло не так!");
+      GlobalMixin.warningSnackBar("oops".tr, "something_went_wrong".tr);
       return false;
     }
   }
@@ -49,17 +49,17 @@ class PostsProvider extends GetConnect {
       DocumentSnapshot _post = await _postRef.doc(uid).get();
       if(_post.exists){
         await _postRef.doc(uid).update(data);
-        GlobalMixin.successSnackBar("Отлично", "Пост успешно изменен!");
+        GlobalMixin.successSnackBar("success".tr, "post_updated".tr);
         return true;
       }
       else{
-        GlobalMixin.warningSnackBar("Упс", "Поста не существует");
+        GlobalMixin.warningSnackBar("oops".tr, "post_not_fount".tr);
         return false;
       }
     }
     catch(e){
       print(e);
-      GlobalMixin.warningSnackBar("Упс", "Что-то пошло не так!");
+      GlobalMixin.warningSnackBar("oops".tr, "something_went_wrong".tr);
       return false;
     }
   }
@@ -74,17 +74,17 @@ class PostsProvider extends GetConnect {
       DocumentSnapshot _post = await _postRef.doc(uid).get();
       if(_post.exists){
         await _postRef.doc(uid).delete();
-        GlobalMixin.successSnackBar("Отлично", "Пост успешно удален!");
+        GlobalMixin.successSnackBar("success".tr, "post_deleted".tr);
         return true;
       }
       else{
-        GlobalMixin.warningSnackBar("Упс", "Поста не существует");
+        GlobalMixin.warningSnackBar("oops".tr, "post_not_fount".tr);
         return false;
       }
     }
     catch(e){
       print(e);
-      GlobalMixin.warningSnackBar("Упс", "Что-то пошло не так!");
+      GlobalMixin.warningSnackBar("oops".tr, "something_went_wrong".tr);
       return false;
     }
   }

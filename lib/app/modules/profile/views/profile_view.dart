@@ -31,7 +31,7 @@ class ProfileView extends GetView<ProfileController> {
             children: [
               Container(
                 alignment: Alignment.bottomCenter,
-                height: MediaQuery.of(context).size.height * 0.4,
+                height: MediaQuery.of(context).size.height * 0.3,
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage('assets/images/profile_bg.png'),
@@ -46,7 +46,7 @@ class ProfileView extends GetView<ProfileController> {
                     )),
               ),
               CircleAvatar(
-                radius: 100,
+                radius: 70,
                 backgroundImage: GlobalMixin.getImage(
                     user?.imageUrl),
                 backgroundColor: Colors.transparent,
@@ -120,7 +120,7 @@ class ProfileView extends GetView<ProfileController> {
               return Center(child: const CircularProgressIndicator());
             }
             if (snapshot.hasError) {
-              return Text('error ${snapshot.error}');
+              return Center(child: CircularProgressIndicator());
             }
             return ListView.builder(
               itemCount: snapshot.docs.length,

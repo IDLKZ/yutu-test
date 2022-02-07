@@ -30,8 +30,8 @@ class DeleteView extends GetView<DeleteController> {
           ),
           Container(
             padding: const EdgeInsets.only(top: 95, left: 20),
-            child: const Text(
-              'Удаление аккаунта....',
+            child:  Text(
+              'deleting_account'.tr +"...",
               style: TextStyle(fontSize: 44,
                   fontWeight: FontWeight.bold,
                   color: KColors.kDarkViolet),

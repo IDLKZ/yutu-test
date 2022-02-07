@@ -34,8 +34,8 @@ class LoginView extends GetView<LoginController> {
           ),
           Container(
             padding: const EdgeInsets.only(top: 95, left: 20),
-            child: const Text(
-              'Добро пожаловать',
+            child: Text(
+              'welcome'.tr,
               style: TextStyle(fontSize: 44,
                   fontWeight: FontWeight.bold,
                   color: KColors.kDarkViolet),
@@ -87,7 +87,7 @@ class LoginView extends GetView<LoginController> {
               padding: const EdgeInsets.only(bottom: 20, top: 10),
               child: AdvancedInput(
                 controller: controller.emailController,
-                hint: "Email",
+                hint: "email".tr,
                 icon:Icon(FontAwesomeIcons.envelope),
                 func: (val){return ValidatorMixin().validateText(val, true,email: true,maxLength: 255);},
               )
@@ -96,15 +96,15 @@ class LoginView extends GetView<LoginController> {
               padding: const EdgeInsets.only(bottom: 20),
               child: AdvancedInput(
                 controller: controller.passwordController,
-                hint:"Пароль",
+                hint:"password".tr,
                 icon:Icon(FontAwesomeIcons.lock),
                 func: (val){return ValidatorMixin().validateText(val, true,minLenght: 4,maxLength: 255);},
                 obscure: true,
               )
             ),
-            const Padding(
+             Padding(
               padding: EdgeInsets.only(bottom: 20, right: 25),
-              child: Text('Forget password?', style: TextStyle(fontSize: 16),),
+              child: Text('forget'.tr, style: TextStyle(fontSize: 16),),
             ),
             const SizedBox(height: 20,),
             Padding(
@@ -130,11 +130,11 @@ class LoginView extends GetView<LoginController> {
         child: Column(
           children: [
             _welcome(),
-            _form('Login', _buttonAction),
+            _form('login'.tr, _buttonAction),
             const SizedBox(height: 30,),
             GestureDetector(
                 onTap: () => Get.toNamed(Routes.REGISTER),
-                child: const Text('Registration', style: TextStyle(fontSize: 20,
+                child: Text('register'.tr, style: TextStyle(fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: KColors.kDarkViolet),)
             ),

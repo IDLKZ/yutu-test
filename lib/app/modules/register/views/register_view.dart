@@ -35,8 +35,8 @@ class RegisterView extends GetView<RegisterController> {
           ),
           Container(
             padding: const EdgeInsets.only(top:120, left: 20),
-            child: const Text(
-              'Регистрация',
+            child:  Text(
+              'registration'.tr,
               style: TextStyle(fontSize: 44, fontWeight: FontWeight.bold, color: KColors.kDarkViolet),
             ),
           )
@@ -76,43 +76,33 @@ class RegisterView extends GetView<RegisterController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 20, top: 10),
-                    child: AdvancedInput(
-                      controller: controller.nameController,
-                      hint: "Имя",
-                      icon: Icon(FontAwesomeIcons.userCircle),
-                      obscure: false,
-                      func: (String? val ) {return ValidatorMixin().validateText(val, true,maxLength: 255,minLenght: 1); },
-                      hintStyle: TextStyle(fontSize: 16, color: Colors.black),
-                    )
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: AdvancedInput(
-                      controller: controller.surnameController,
-                      hint: "Фамилия",
-                      icon: Icon(FontAwesomeIcons.userCircle),
-                      obscure: false,
-                      func: (String? val ) {return ValidatorMixin().validateText(val, true,maxLength: 255,minLenght: 1); },
-                      hintStyle: TextStyle(fontSize: 12, color: Colors.black),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20, top: 10),
+              child: AdvancedInput(
+                controller: controller.nameController,
+                hint: "name".tr,
+                icon: Icon(FontAwesomeIcons.userCircle),
+                obscure: false,
+                func: (String? val ) {return ValidatorMixin().validateText(val, true,maxLength: 255,minLenght: 1); },
+              )
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: AdvancedInput(
+                controller: controller.surnameController,
+                hint: "surname".tr,
+                icon: Icon(FontAwesomeIcons.userCircle),
+                obscure: false,
+                func: (String? val ) {return ValidatorMixin().validateText(val, true,maxLength: 255,minLenght: 1); },
 
-                    )
-                  ),
-                ),
-              ],
+              )
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 20),
               child: DatePickerWidget(
                 controller: controller.ageController,
                 icon: Icon(FontAwesomeIcons.calendarCheck),
-                hint: "Дата рождения (+18 лет)",
+                hint: "birthday".tr,
                 func: (val) {return ValidatorMixin().validateDate(val, true); },
                 firstDate: DateTime(DateTime.now().year - 100),
                 lastDate: DateTime(DateTime.now().year - 18),
@@ -125,7 +115,7 @@ class RegisterView extends GetView<RegisterController> {
               padding: const EdgeInsets.only(bottom: 20),
               child: AdvancedInput(
                 controller: controller.emailController,
-                hint: "Email",
+                hint: "email".tr,
                 icon: Icon(FontAwesomeIcons.envelope),
                 obscure: false,
                 func: (String? val ) {return ValidatorMixin().validateText(val, true,email: true); },
@@ -136,7 +126,7 @@ class RegisterView extends GetView<RegisterController> {
               padding: const EdgeInsets.only(bottom: 20),
               child: AdvancedInput(
                 controller: controller.passwordController,
-                hint: "Пароль",
+                hint: "password".tr,
                 icon: Icon(FontAwesomeIcons.lock),
                 obscure: true,
                 func: (String? val ) {return ValidatorMixin().validateText(val, true,minLenght: 4, maxLength: 255); },
@@ -144,23 +134,13 @@ class RegisterView extends GetView<RegisterController> {
               )
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-                child: AdvancedInput(
-                    controller: controller.phoneController,
-                    hint: "Телефон",
-                    icon: Icon(FontAwesomeIcons.phone),
-                    obscure: false,
-                    func: (String? val ) {return ValidatorMixin().validateText(val, true,phone: true); },
-                )
-            ),
-            Padding(
                 padding: const EdgeInsets.only(bottom: 20),
                 child: SelectPicker(
                   controller: controller.cityController,
-                  hintText: "Ваш город",
+                  hintText: "city".tr,
                   func: (val){return ValidatorMixin().validateText(val, true);},
                   icon:Icon(FontAwesomeIcons.globe),
-                  labelText: "Ваш город",
+                  labelText: "city".tr,
                   listItem: GlobalMixin.getListCities(),
                 )
             ),
@@ -194,14 +174,15 @@ class RegisterView extends GetView<RegisterController> {
           child: Column(
             children: [
               _welcome(),
-              _form('Register', _buttonAction),
+              _form('register'.tr, _buttonAction),
               SafeArea(
                 child: GestureDetector(
                     onTap: (){
                       Get.offNamed(Routes.LOGIN);
                     },
-                    child: const Text('Login', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: KColors.kDarkViolet),)),
+                    child: Text('login'.tr, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: KColors.kDarkViolet),)),
               ),
+              SizedBox(height: 20,)
             ],
           ),
         )

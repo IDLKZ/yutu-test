@@ -28,11 +28,6 @@ class ConnectionController extends GetxController {
   }
 
 
-  _printconnect(ConnectivityResult result){
-    print("printconnect");
-    print(result);
-  }
-
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initConnectivity() async {

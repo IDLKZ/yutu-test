@@ -20,7 +20,7 @@ class AuthController extends GetxController {
           password: password
       );
       // if(userCredential.user!.emailVerified){
-      GlobalMixin.successSnackBar('FindOut!', 'С возвращением');
+      GlobalMixin.successSnackBar('FindOut!', 'return_back'.tr);
       // } else {
       //   Get.defaultDialog(
       //     title: 'Подтвердите почту',
@@ -30,12 +30,12 @@ class AuthController extends GetxController {
 
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        GlobalMixin.warningSnackBar('Упс...', 'Такого пользователя не существует');
+        GlobalMixin.warningSnackBar('oops'.tr, 'account_doesnt_exist'.tr);
       } else if (e.code == 'wrong-password') {
-        GlobalMixin.warningSnackBar('Упс...', 'Неверный пароль!');
+        GlobalMixin.warningSnackBar('oops'.tr, 'incorrect_password'.tr);
       }
     } catch(e) {
-      Get.snackbar('Упс...', 'Что-то пошло не так', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar('oops'.tr, 'something_went_wrong'.tr, snackPosition: SnackPosition.BOTTOM);
     }
   }
 
@@ -56,7 +56,7 @@ class AuthController extends GetxController {
         "isAdmin":false,
         "status":0,
       });
-      GlobalMixin.successSnackBar('FindOut!', 'Добро пожаловать');
+      GlobalMixin.successSnackBar('FindOut!', 'return_back'.tr);
       //Get.offAllNamed(AppPages.INITIAL);
       // await userCredential.user!.sendEmailVerification();
       // Get.defaultDialog(
@@ -70,13 +70,13 @@ class AuthController extends GetxController {
       // );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        GlobalMixin.warningSnackBar('Упс...', 'Пароль слишком слаб');
+        GlobalMixin.warningSnackBar('oops'.tr, 'weak_password'.tr);
       } else if (e.code == 'email-already-in-use') {
-        GlobalMixin.warningSnackBar('Упс...', 'Такая почта уже используется');
+        GlobalMixin.warningSnackBar('oops'.tr, 'email_in_used'.tr);
       }
     } catch (e) {
       print(e);
-      Get.snackbar('Упс...', 'Что-то пошло не так', snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kError, colorText: Colors.white);
+      Get.snackbar('oops'.tr, 'something_went_wrong'.tr, snackPosition: SnackPosition.BOTTOM, backgroundColor: KColors.kError, colorText: Colors.white);
     }
   }
 

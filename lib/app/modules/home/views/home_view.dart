@@ -1,3 +1,4 @@
+import 'package:findout/app/controllers/location_controller.dart';
 import 'package:findout/app/routes/app_pages.dart';
 import 'package:findout/app/widgets/advanced_input.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../../../controllers/user_controller.dart';
 import '../../../data/models/posts_model.dart';
 import '../../../data/models/users_model.dart';
@@ -16,6 +18,7 @@ import '../../../helpers/global_mixin.dart';
 import '../../../helpers/kcolors.dart';
 import '../../../helpers/validator_mixins.dart';
 import '../../../widgets/bottom_widget.dart';
+import '../../../widgets/datepicker_widget.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetWidget<HomeController> {
@@ -47,32 +50,43 @@ class HomeView extends GetWidget<HomeController> {
                         ),
                       ],
                     ),
-                    Text("Поиск по постам",style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: KColors.kDarkViolet)),
+                    Text("search_post".tr,style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: KColors.kDarkViolet)),
                     SizedBox(height: 20,),
-                    AdvancedInput(
-                      icon:Icon(Icons.title),
-                      hint: "Наименование",
-                      controller:controller.title,
-                      obscure:false,
-                      func: (val){
-                        return ValidatorMixin().validateText(val, true);
-                      },
-                      maxLength: 100,
-                      ),
+                    DatePickerWidget(
+                        controller:controller.startTime,
+                        firstDate: DateTime(2022),
+                        lastDate: DateTime.now().add(Duration(days: 14)),
+                        hint:"start_time".tr,
+                        icon:Icon(FontAwesomeIcons.clock),
+                        func: (val){},
+                        format: DateFormat("dd.MM.yyyy"),
+                        time: false,
+                    ),
+                    SizedBox(height: 15,),
+                    DatePickerWidget(
+                      controller:controller.endTime,
+                      firstDate: DateTime(2022),
+                      lastDate: DateTime.now().add(Duration(days: 14)),
+                      hint:"end_time".tr,
+                      icon:Icon(FontAwesomeIcons.clock),
+                      func: (val){},
+                      format: DateFormat("dd.MM.yyyy"),
+                      time: false,
+                    ),
                     SizedBox(height: 15,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         ElevatedButton(
                           onPressed: (){controller.searchPosts();Get.back();},
-                          child: Text("Поиск",style: TextStyle(color: Colors.white),),
+                          child: Text("search".tr,style: TextStyle(color: Colors.white),),
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(KColors.kMiddleBlue)
                           ),
                         ),
                         ElevatedButton(
                           onPressed: (){Get.back();},
-                          child: Text("Отмена",style: TextStyle(color: Colors.white),),
+                          child: Text("cancel".tr,style: TextStyle(color: Colors.white),),
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(KColors.kError)
                           ),
@@ -130,8 +144,8 @@ class HomeView extends GetWidget<HomeController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Главная',
+                   Text(
+                    'main'.tr,
                     style: TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
                   ),
                   Row(
@@ -217,7 +231,9 @@ class HomeView extends GetWidget<HomeController> {
                             child: Column(
                               children: [
                                 Text(
-                                  controller.categoriesList.value[index].titleRu ?? "",
+                                  Get.find<LocationController>().locale.value == "en"
+                                      ?(controller.categoriesList.value[index].titleEn ?? "")
+                                  :(controller.categoriesList.value[index].titleRu ?? ""),
                                   style:  TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -277,7 +293,7 @@ class HomeView extends GetWidget<HomeController> {
         children: [
           GetX<UserController>(
             builder: (controller) {
-              return _header(controller.user?.imageUrl,"Привет, ${controller.user?.fullname() ?? ""}");
+              return _header(controller.user?.imageUrl, "${'hello'.tr}, ${controller.user?.fullname() ?? ""}");
             },
           ),
           GetX<HomeController>(

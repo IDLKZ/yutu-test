@@ -54,7 +54,7 @@ class WishlistsView extends GetView<WishlistsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Закладки постов'),
+        title: Text('liked_posts'.tr),
         centerTitle: true,
         backgroundColor: KColors.kChatColor,
       ),

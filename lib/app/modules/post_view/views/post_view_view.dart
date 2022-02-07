@@ -1,3 +1,4 @@
+import 'package:findout/app/controllers/location_controller.dart';
 import 'package:findout/app/controllers/user_controller.dart';
 import 'package:findout/app/helpers/global_mixin.dart';
 import 'package:findout/app/routes/app_pages.dart';
@@ -37,8 +38,8 @@ class PostViewView extends GetView<PostViewController> {
             GestureDetector(
               onTap: () {
                 Get.defaultDialog(
-                    title: "Вы уверены?",
-                    middleText: "Удаленный пост невозможно восстановить",
+                    title: "are_you_sure".tr,
+                    middleText: "cant_restore".tr,
                     actions: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -49,7 +50,7 @@ class PostViewView extends GetView<PostViewController> {
                               Get.back();
                             },
                             child: Text(
-                              "Удалить",
+                              "delete".tr,
                               style: TextStyle(color: Colors.white),
                             ),
                             style: ButtonStyle(
@@ -59,7 +60,7 @@ class PostViewView extends GetView<PostViewController> {
                           ElevatedButton(
                             onPressed: () => {Get.back()},
                             child: Text(
-                              "Отмена",
+                              "cancel".tr,
                               style: TextStyle(color: Colors.white),
                             ),
                             style: ButtonStyle(
@@ -112,9 +113,9 @@ class PostViewView extends GetView<PostViewController> {
             ChatProvider().addNewConnection(controller.post.value?.author);
           },
           label: Row(
-            children: const [
+            children:  [
               Text(
-                "Написать",
+                "write".tr,
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(
@@ -269,7 +270,7 @@ class PostViewView extends GetView<PostViewController> {
                                   if (snapshot.connectionState ==
                                       ConnectionState.done) {
                                     return Text(
-                                      '${snapshot.data?.titleRu ?? ""}',
+                                      Get.find<LocationController>().locale.value == "en" ? '${snapshot.data?.titleEn ?? ""}' :'${snapshot.data?.titleRu ?? ""}',
                                       style: TextStyle(
                                           fontSize: 36,
                                           fontWeight: FontWeight.w600),
@@ -327,8 +328,8 @@ class PostViewView extends GetView<PostViewController> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const Text(
-                                          'Локация',
+                                         Text(
+                                          'location'.tr,
                                           style: TextStyle(
                                               fontSize: 14,
                                               color: KColors.kAdminBgColor,
@@ -373,8 +374,8 @@ class PostViewView extends GetView<PostViewController> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const Text(
-                                          'Дата',
+                                         Text(
+                                          'date'.tr,
                                           style: TextStyle(
                                               fontSize: 14,
                                               color: KColors.kDarkenGray,
@@ -419,8 +420,8 @@ class PostViewView extends GetView<PostViewController> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const Text(
-                                          'Кол-во свободных мест',
+                                         Text(
+                                          'persons'.tr,
                                           style: TextStyle(
                                               fontSize: 14,
                                               color: KColors.kDarkenGray,

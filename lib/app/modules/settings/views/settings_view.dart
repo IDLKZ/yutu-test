@@ -45,11 +45,11 @@ class SettingsView extends GetView<SettingsController> {
                         ),
                       ],
                     ),
-                    Text("Аккаунт и все связанные данные будут навсегда потеряны? Вы уверены",style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: KColors.kDarkViolet)),
+                    Text("sure_to_delete".tr,style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: KColors.kDarkViolet)),
                     SizedBox(height: 20,),
                     AdvancedInput(
                       icon:Icon(Icons.title),
-                      hint: "Введите 0000 если уверены в удалении аккаунта",
+                      hint: "enter_to_delete".tr,
                       controller:controller.text,
                       obscure:false,
                       func: (val){
@@ -63,7 +63,7 @@ class SettingsView extends GetView<SettingsController> {
                       children: [
                         ElevatedButton(
                           onPressed: (){Get.back();},
-                          child: Text("Отмена",style: TextStyle(color: Colors.white),),
+                          child: Text("cancel".tr,style: TextStyle(color: Colors.white),),
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(KColors.kChatColor)
                           ),
@@ -72,7 +72,7 @@ class SettingsView extends GetView<SettingsController> {
                           onPressed: (){
                             controller.deleteUser();
                           },
-                          child: Text("Удалить",style: TextStyle(color: Colors.white),),
+                          child: Text("delete".tr,style: TextStyle(color: Colors.white),),
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(KColors.kError)
                           ),
@@ -132,8 +132,8 @@ class SettingsView extends GetView<SettingsController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Настройки',
+                   Text(
+                    'setting'.tr,
                     style: TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
                   ),
                 ],
@@ -153,28 +153,28 @@ class SettingsView extends GetView<SettingsController> {
               child: ListTile(
                 onTap: (){Get.toNamed(Routes.CHANGE_PROFILE);},
                 leading: Icon(FontAwesomeIcons.user),
-                title: Text("Изменить данные"),
+                title: Text("change_profile".tr),
               ),
             ),
             Card(
               child: ListTile(
                 onTap: (){Get.toNamed(Routes.WISHLISTS);},
                 leading: Icon(FontAwesomeIcons.heart),
-                title: Text("Понравившиеся посты"),
+                title: Text("liked_posts".tr),
               ),
             ),
             Card(
               child: ListTile(
                 onTap: (){Get.toNamed(Routes.BANS);},
                 leading: Icon(FontAwesomeIcons.lock),
-                title: Text("Черный список"),
+                title: Text("blacklists".tr),
               ),
             ),
             Card(
               child: ListTile(
                 onTap: (){_authController.logout();},
                 leading: Icon(FontAwesomeIcons.powerOff),
-                title: Text("Выйти"),
+                title: Text("logout".tr),
               ),
             ),
             Divider(height: 5,),
@@ -186,7 +186,7 @@ class SettingsView extends GetView<SettingsController> {
                   );
                 },
                 leading: Icon(FontAwesomeIcons.userMinus,color: KColors.kError,),
-                title: Text("Удалить аккаунт",style: TextStyle(
+                title: Text("delete_account".tr,style: TextStyle(
                     color: KColors.kError
                 ),),
               ),
