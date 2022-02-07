@@ -39,6 +39,16 @@ class GlobalMixin {
     }
   }
 
+  static int convertToDateFormatControllerToMilliseconds(TextEditingController dateController){
+    try{
+     return DateTime.parse(DateFormat("dd-MM-yyyy HH:mm").parse(dateController.text.trim()).toString()).millisecondsSinceEpoch;
+    }
+    catch(e){
+      print(e);
+      return getTimestamp();
+    }
+  }
+
   static DateTime convertToDate(String? data){
     try{
       if(data != null){

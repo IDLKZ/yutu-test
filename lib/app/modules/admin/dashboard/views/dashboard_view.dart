@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findout/app/controllers/auth_controller.dart';
 import 'package:findout/app/helpers/kcolors.dart';
 import 'package:findout/app/routes/app_pages.dart';
@@ -9,6 +10,7 @@ import '../controllers/dashboard_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {
   final authC = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,10 +41,25 @@ class DashboardView extends GetView<DashboardController> {
                 ),
                 child: Container(
                   alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 15),
+                  padding: EdgeInsets.symmetric(horizontal: 15),
                   width: MediaQuery.of(context).size.width,
                   height: 70,
-                  child: Text('Категории', style: TextStyle(fontSize: 20, color: Colors.white),),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Категории', style: TextStyle(fontSize: 20, color: Colors.white),),
+                      StreamBuilder<QuerySnapshot>(
+                        stream: controller.categoriesStream,
+                        builder: (context, snapshot) {
+                          return GetBuilder<DashboardController>(
+                              builder: (_) {
+                                return Text('${snapshot.data?.docs.length}', style: TextStyle(fontSize: 20, color: Colors.white),);
+                              }
+                          );
+                        },
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -59,10 +76,25 @@ class DashboardView extends GetView<DashboardController> {
                 ),
                 child: Container(
                   alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 15),
+                  padding: EdgeInsets.symmetric(horizontal: 15),
                   width: MediaQuery.of(context).size.width,
                   height: 70,
-                  child: Text('Посты', style: TextStyle(fontSize: 20, color: Colors.white),),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Посты', style: TextStyle(fontSize: 20, color: Colors.white),),
+                      StreamBuilder<QuerySnapshot>(
+                        stream: controller.postsStream,
+                        builder: (context, snapshot) {
+                          return GetBuilder<DashboardController>(
+                              builder: (_) {
+                                return Text('${snapshot.data?.docs.length}', style: TextStyle(fontSize: 20, color: Colors.white),);
+                              }
+                          );
+                        },
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -79,10 +111,25 @@ class DashboardView extends GetView<DashboardController> {
                 ),
                 child: Container(
                   alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 15),
+                  padding: EdgeInsets.symmetric(horizontal: 15),
                   width: MediaQuery.of(context).size.width,
                   height: 70,
-                  child: Text('Пользователи', style: TextStyle(fontSize: 20, color: Colors.white),),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Пользователи', style: TextStyle(fontSize: 20, color: Colors.white),),
+                      StreamBuilder<QuerySnapshot>(
+                        stream: controller.usersStream,
+                        builder: (context, snapshot) {
+                          return GetBuilder<DashboardController>(
+                              builder: (_) {
+                                return Text('${snapshot.data?.docs.length}', style: TextStyle(fontSize: 20, color: Colors.white),);
+                              }
+                          );
+                        },
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

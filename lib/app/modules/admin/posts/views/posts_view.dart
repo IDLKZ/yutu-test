@@ -1,14 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:findout/app/controllers/auth_controller.dart';
 import 'package:findout/app/helpers/global_mixin.dart';
 import 'package:findout/app/helpers/kcolors.dart';
 import 'package:findout/app/widgets/appbar_admin.dart';
 import 'package:findout/app/widgets/cardPost_widget.dart';
+import 'package:findout/app/widgets/select_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../data/models/posts_model.dart';
 import '../../../../data/models/users_model.dart';
@@ -51,7 +54,7 @@ class PostsView extends GetView<PostsController> {
                                   style:  TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      color: controller.categoriesList.value[index].id.toString() == controller.activeCategory.value ? KColors.kRGBABlue : Colors.black
+                                      color: controller.categoriesList.value[index].id.toString() == controller.activeCategory.value ? KColors.kRGBABlue : Colors.white
                                   ),
                                 ),
                               ],
@@ -81,7 +84,7 @@ class PostsView extends GetView<PostsController> {
             ),
             child: Padding(
               padding:
-              const EdgeInsets.only(top: 10, bottom: 10, right: 3, left: 3),
+              const EdgeInsets.all(10),
               child: Column(
                 children: [
                   FutureBuilder<Users?>(
@@ -236,7 +239,7 @@ class PostsView extends GetView<PostsController> {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _categoryList(),
+          // _categoryList(),
           Expanded(child: _cardList()),
         ],
       );
@@ -251,8 +254,74 @@ class PostsView extends GetView<PostsController> {
         title: Text('Посты'),
         actions: [
           IconButton(
-              onPressed: () => Get.find<AuthController>().logout(),
-              icon: Icon(Icons.logout)
+              onPressed: () => Get.defaultDialog(
+                title: 'Filter',
+                content: Column(
+                  children: [
+                    SelectPicker(
+                        controller: controller.filterCategory,
+                        func: (val){return ValidatorMixin().validateText(val, true);},
+                        icon: Icon(FontAwesomeIcons.boxes),
+                        hintText: "Категория",
+                        labelText:"Выберите категорию",
+                        listItem:controller.categoriesItems.value
+                    ),
+                    DateTimeField(
+                      format: DateFormat('dd-MM-yyyy HH:mm'),
+                      controller: controller.filterDateStart,
+                      decoration: InputDecoration(
+                          icon: Icon(Icons.date_range),
+                          label: Text('Выберите дату (от)'),
+                      ),
+                      onShowPicker: (context, currentValue) async{
+                        final date = await showDatePicker(
+                            context: context,
+                            firstDate: DateTime(1900),
+                            initialDate: currentValue ?? DateTime.now(),
+                            lastDate: DateTime(2100));
+                        if (date != null) {
+                          final time = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                          );
+                          return DateTimeField.combine(date, time);
+                        } else {
+                          return currentValue;
+                        }
+                      },
+                    ),
+                    SizedBox(height: 5,),
+                    DateTimeField(
+                      format: DateFormat('dd-MM-yyyy HH:mm'),
+                      controller: controller.filterDateEnd,
+                      decoration: InputDecoration(
+                          icon: Icon(Icons.date_range),
+                          label: Text('Выберите дату (до)')
+                      ),
+                      onShowPicker: (context, currentValue) async{
+                        final date = await showDatePicker(
+                            context: context,
+                            firstDate: DateTime(1900),
+                            initialDate: currentValue ?? DateTime.now(),
+                            lastDate: DateTime(2100));
+                        if (date != null) {
+                          final time = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                          );
+                          return DateTimeField.combine(date, time);
+                        } else {
+                          return currentValue;
+                        }
+                      },
+                    )
+                  ],
+                ),
+                onConfirm: (){
+                  controller.filterByDate(controller.filterCategory, controller.filterDateStart, controller.filterDateEnd);
+                }
+              ),
+              icon: Icon(Icons.filter)
           )
         ],
       ),
