@@ -59,8 +59,7 @@ class HomeView extends GetWidget<HomeController> {
                         hint:"start_time".tr,
                         icon:Icon(FontAwesomeIcons.clock),
                         func: (val){},
-                        format: DateFormat("dd.MM.yyyy"),
-                        time: false,
+                        format: DateFormat("dd.MM.yyyy HH:mm"),
                     ),
                     SizedBox(height: 15,),
                     DatePickerWidget(
@@ -70,8 +69,7 @@ class HomeView extends GetWidget<HomeController> {
                       hint:"end_time".tr,
                       icon:Icon(FontAwesomeIcons.clock),
                       func: (val){},
-                      format: DateFormat("dd.MM.yyyy"),
-                      time: false,
+                      format: DateFormat("dd.MM.yyyy HH:mm"),
                     ),
                     SizedBox(height: 15,),
                     Row(

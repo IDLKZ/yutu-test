@@ -48,8 +48,8 @@ class HomeController extends GetxController {
   }
   
   searchPosts()async{
-    int start = startTime.text.isNotEmpty ? await GlobalMixin.convertToDateFormatControllerToMilliseconds(startTime,format: "dd.MM.yyyy") : DateTime(2022).millisecondsSinceEpoch;
-    int end = endTime.text.isNotEmpty ? await GlobalMixin.convertToDateFormatControllerToMilliseconds(endTime,format: "dd.MM.yyyy") : DateTime.now().add(Duration(days: 14)).millisecondsSinceEpoch;
+    int start = startTime.text.isNotEmpty ? await GlobalMixin.convertToDateFormatControllerToMilliseconds(startTime,format: "dd.MM.yyyy HH:mm") : DateTime(2022).millisecondsSinceEpoch;
+    int end = endTime.text.isNotEmpty ? await GlobalMixin.convertToDateFormatControllerToMilliseconds(endTime,format: "dd.MM.yyyy HH:mm") : DateTime.now().add(Duration(days: 14)).millisecondsSinceEpoch;
     if(activeCategory.value.toString().isNotEmpty){
       postsQuery.value = FirebaseFirestore.instance.collection("posts").where("category",isEqualTo: activeCategory.value).where("city",isEqualTo: _userController.user?.city).where("date",isGreaterThanOrEqualTo: start).where("date",isLessThanOrEqualTo: end).orderBy("date",descending: true);
     }
