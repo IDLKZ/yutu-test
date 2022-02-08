@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findout/app/controllers/user_controller.dart';
 import 'package:findout/app/helpers/global_mixin.dart';
@@ -13,6 +15,29 @@ class AuthController extends GetxController {
 
   Stream<User?> get streamAuthStatus => auth.authStateChanges();
 
+  void resetPassword(String email) async {
+    if(GetUtils.isEmail(email)){
+      try {
+        await auth.sendPasswordResetEmail(email: email);
+        Get.defaultDialog(
+          title: 'Проверьте почту',
+          middleText: 'На вашу почту отправлено письмо с подтверждением'
+        );
+        Timer.periodic(new Duration(seconds: 3), (timer) {
+          Get.back();
+          Get.toNamed(Routes.LOGIN);
+        });
+      } catch(e) {
+        print(e);
+      }
+    } else {
+      Get.defaultDialog(
+          title: 'Error',
+          middleText: 'Error!'
+      );
+    }
+  }
+
   void login(String email, String password) async{
     try {
       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -20,7 +45,7 @@ class AuthController extends GetxController {
           password: password
       );
       // if(userCredential.user!.emailVerified){
-      GlobalMixin.successSnackBar('FindOut!', 'return_back'.tr);
+      //   GlobalMixin.successSnackBar('FindOut!', 'return_back'.tr);
       // } else {
       //   Get.defaultDialog(
       //     title: 'Подтвердите почту',
@@ -57,8 +82,8 @@ class AuthController extends GetxController {
         "status":0,
       });
       GlobalMixin.successSnackBar('FindOut!', 'return_back'.tr);
-      //Get.offAllNamed(AppPages.INITIAL);
-      // await userCredential.user!.sendEmailVerification();
+      // Get.offAllNamed(AppPages.INITIAL);
+      await userCredential.user!.sendEmailVerification();
       // Get.defaultDialog(
       //     title: 'Подтвердите почту',
       //     middleText: 'На вашу почту отправлена ссылка. Перейдите чтобы завершить регистрацию!',

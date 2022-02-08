@@ -183,23 +183,6 @@ class HomeView extends GetWidget<HomeController> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: CircleAvatar(
-                          backgroundColor: KColors.kDarkenGray,
-                          radius: 20,
-                          child: GestureDetector(
-                            onTap: () {
-                              FirebaseAuth.instance.signOut();
-                            },
-                            child: Icon(
-                              Icons.power_settings_new,
-                              size: 36,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
                     ],
                   )
                 ],

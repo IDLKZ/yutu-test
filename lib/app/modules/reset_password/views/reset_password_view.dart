@@ -8,14 +8,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 
-import '../controllers/login_controller.dart';
+import '../controllers/reset_password_controller.dart';
 
-class LoginView extends GetView<LoginController> {
-
-  GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
+class ResetPasswordView extends GetView<ResetPasswordController> {
 
   @override
   Widget build(BuildContext context) {
+
     Widget _welcome() {
       return Stack(
         children: [
@@ -35,8 +34,8 @@ class LoginView extends GetView<LoginController> {
           Container(
             padding: const EdgeInsets.only(top: 95, left: 20),
             child: Text(
-              'welcome'.tr,
-              style: TextStyle(fontSize: 44,
+              'reset'.tr,
+              style: TextStyle(fontSize: 36,
                   fontWeight: FontWeight.bold,
                   color: KColors.kDarkViolet),
             ),
@@ -72,44 +71,27 @@ class LoginView extends GetView<LoginController> {
     }
 
     _buttonAction() {
-      if (loginFormKey.currentState!.validate()) {
-        return controller.authController.login(controller.emailController.text.trim(), controller.passwordController.text.trim());
+      if (controller.resetFormKey.currentState!.validate()) {
+        return controller.authController.resetPassword(controller.emailController.text.trim());
       }
     }
 
     Widget _form(String label, Function() func) {
       return Form(
-        key: loginFormKey,
+        key: controller.resetFormKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 20, top: 10),
-              child: AdvancedInput(
-                controller: controller.emailController,
-                hint: "email".tr,
-                icon:Icon(FontAwesomeIcons.envelope),
-                func: (val){return ValidatorMixin().validateText(val, true,email: true,maxLength: 255);},
-              )
+                padding: const EdgeInsets.only(bottom: 20, top: 10),
+                child: AdvancedInput(
+                  controller: controller.emailController,
+                  hint: "email".tr,
+                  icon:Icon(FontAwesomeIcons.envelope),
+                  func: (val){return ValidatorMixin().validateText(val, true,email: true,maxLength: 255);},
+                )
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: AdvancedInput(
-                controller: controller.passwordController,
-                hint:"password".tr,
-                icon:Icon(FontAwesomeIcons.lock),
-                func: (val){return ValidatorMixin().validateText(val, true,minLenght: 4,maxLength: 255);},
-                obscure: true,
-              )
-            ),
-             Padding(
-              padding: EdgeInsets.only(right: 25),
-              child: TextButton(
-                onPressed: () => Get.toNamed(Routes.RESET_PASSWORD),
-                  child: Text('forget'.tr, style: TextStyle(fontSize: 16),)
-              ),
-            ),
-            const SizedBox(height: 20,),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SizedBox(
@@ -133,13 +115,12 @@ class LoginView extends GetView<LoginController> {
         child: Column(
           children: [
             _welcome(),
-            _form('login'.tr, _buttonAction),
-            const SizedBox(height: 30,),
-            GestureDetector(
-                onTap: () => Get.toNamed(Routes.REGISTER),
-                child: Text('register'.tr, style: TextStyle(fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: KColors.kDarkViolet),)
+            _form('reset_btn'.tr, _buttonAction),
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text('login'.tr, style: TextStyle(fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: KColors.kDarkViolet),),
             ),
           ],
         ),

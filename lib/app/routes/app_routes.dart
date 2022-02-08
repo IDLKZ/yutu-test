@@ -23,6 +23,7 @@ abstract class Routes {
   static const BANS = _Paths.BANS;
   static const WISHLISTS = _Paths.WISHLISTS;
   static const DELETE = _Paths.DELETE;
+  static const RESET_PASSWORD = _Paths.RESET_PASSWORD;
 }
 
 abstract class _Paths {
@@ -47,4 +48,5 @@ abstract class _Paths {
   static const BANS = '/bans';
   static const WISHLISTS = '/wishlists';
   static const DELETE = '/delete';
+  static const RESET_PASSWORD = '/reset-password';
 }

@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findout/app/controllers/auth_controller.dart';
 import 'package:findout/app/data/models/users_model.dart';
 import 'package:findout/app/data/providers/users_provider.dart';
 import 'package:findout/app/routes/app_pages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UserController extends GetxController {
@@ -49,12 +52,31 @@ class UserController extends GetxController {
   set user(Users? value){
     _userModel.value = value;
     if(value != null){
-      if(value.isAdmin == true){
-        Get.offAllNamed(Routes.DASHBOARD);
+      if(auth.currentUser!.emailVerified){
+        if(value.isAdmin == true){
+          Get.offAllNamed(Routes.DASHBOARD);
+        }
+        else{
+          Get.offAllNamed(Routes.HOME);
+        }
+      } else {
+        Get.defaultDialog(
+            title: 'Подтвердите почту',
+            middleText: 'Добро пожаловать на FindOut, пожалуйста, подтвердите свой адрес электронной почты!',
+          textConfirm: 'Отправить снова',
+          confirmTextColor: Colors.white,
+          onConfirm: () {
+              auth.currentUser!.sendEmailVerification();
+              Get.find<AuthController>().logout();
+          },
+        );
+        Timer.periodic(new Duration(seconds: 3), (timer) {
+          Get.find<AuthController>().logout();
+        });
+        // Get.find<AuthController>().logout();
+
       }
-      else{
-        Get.offAllNamed(Routes.HOME);
-      }
+
     }
     else{
       Get.find<AuthController>().logout();
