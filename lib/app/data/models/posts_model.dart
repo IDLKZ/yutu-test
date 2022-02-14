@@ -50,7 +50,7 @@ class Posts {
   String? category;
   String? title;
   String? description;
-  int? city;
+  String? city;
   String? place;
   DateTime? date;
   DateTime? createdAt;

@@ -64,7 +64,7 @@ class AuthController extends GetxController {
     }
   }
 
-  void register(String email, String password, String name, String surname, String age, int city) async {
+  void register(String email, String password, String name, String surname, String age, String city) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,

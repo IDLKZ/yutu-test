@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findout/app/controllers/location_controller.dart';
 import 'package:findout/app/helpers/country_constants.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,9 @@ import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ntp/ntp.dart';
-
+import 'dart:async';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 import 'kcolors.dart';
 
 class GlobalMixin {
@@ -75,8 +76,38 @@ class GlobalMixin {
     return Get.find<LocationController>().locale.value == "en"? CountryConstants.cities_en :       CountryConstants.cities_ru;
   }
 
-  static String? cityName(int? city){
-    return city != null ? (Get.find<LocationController>().locale.value == "en"? CountryConstants.citiesMapEn[city] : CountryConstants.citiesMapRu[city] ) : null;
+  static String? cityName(String? city){
+    // return city != null ? (Get.find<LocationController>().locale.value == "en"? CountryConstants.citiesMapEn[city] : CountryConstants.citiesMapRu[city] ) : null;
+    return city != null ? "$city" : null;
+  }
+
+  static Future<List<Map<String, String>>> getSuggestions(String query) async {
+    if (query.isEmpty && query.length < 3) {
+      print('Query needs to be at least 3 chars');
+      return Future.value([]);
+    }
+    var url = Uri.https('api.geoapify.com', '/v1/geocode/autocomplete', {'text': query, 'apiKey': 'bfc117fe64f2427f8390c8ebd9b54f83'});
+
+    var response = await http.get(url);
+
+    List<Suggestion> suggestions = [];
+    if (response.statusCode == 200) {
+      // Iterable json = convert.jsonDecode(response.body);
+      var jsonResponse =
+      convert.jsonDecode(response.body) as Map<String, dynamic>;
+      var json = jsonResponse['features'];
+
+      suggestions =
+      List<Suggestion>.from(json.map((model) => Suggestion.fromJson(model)));
+
+      print('Number of suggestion: ${suggestions.length}.');
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+
+    return Future.value(suggestions
+        .map((e) => {'name': e.word})
+        .toList());
   }
 
   String? getLocale() {
@@ -122,4 +153,19 @@ class GlobalMixin {
     return startDate.millisecondsSinceEpoch;
   }
 
+}
+
+class Suggestion {
+  final String word;
+
+  Suggestion({
+    required this.word,
+  });
+
+  factory Suggestion.fromJson(Map<String, dynamic> json) {
+
+    return Suggestion(
+      word: json['properties']['address_line1'],
+    );
+  }
 }

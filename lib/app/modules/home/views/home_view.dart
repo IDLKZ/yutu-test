@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -72,6 +73,54 @@ class HomeView extends GetWidget<HomeController> {
                       format: DateFormat("dd.MM.yyyy HH:mm"),
                     ),
                     SizedBox(height: 15,),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: TypeAheadFormField(
+                        textFieldConfiguration: TextFieldConfiguration(
+                          controller: controller.cityController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintStyle: const TextStyle(fontSize: 18, color: Colors.black),
+                            hintText: 'select_city'.tr,
+                            focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                const BorderSide(color: Colors.transparent, width: 3),
+                                borderRadius: BorderRadius.circular(20)),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                const BorderSide(color: Colors.transparent, width: 1),
+                                borderRadius: BorderRadius.circular(20)),
+                            errorBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red, width: 1),
+                                borderRadius: BorderRadius.circular(20)),
+                            disabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red, width: 1),
+                                borderRadius: BorderRadius.circular(20)),
+                            filled: true,
+                            fillColor: KColors.kLightGray,
+                            prefixIcon: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              child: IconTheme(
+                                data: const IconThemeData(color: KColors.kMiddleBlue),
+                                child: Icon(FontAwesomeIcons.globe),
+                              ),
+                            ),
+                          ),
+                        ),
+                        suggestionsCallback: (pattern) async {
+                          return await GlobalMixin.getSuggestions(pattern);
+                        },
+                        itemBuilder: (context, Map<String, String> suggestion) {
+                          return ListTile(
+                            title: Text(suggestion['name']!),
+                          );
+                        },
+                        onSuggestionSelected: (Map<String, String> suggestion) {
+                          controller.cityController.text = suggestion['name'] as String;
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 15,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -99,7 +148,6 @@ class HomeView extends GetWidget<HomeController> {
           ),
         ),
       );
-
     }
 
     Widget _header(String? image,String name) {

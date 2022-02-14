@@ -1,12 +1,10 @@
-import 'package:findout/app/helpers/global_mixin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-
 import '../../../controllers/auth_controller.dart';
 
 class RegisterController extends GetxController {
   final authController = Get.find<AuthController>();
-
+  final List<String> cities = [];
   final TextEditingController nameController = TextEditingController();
   final TextEditingController surnameController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
@@ -15,20 +13,7 @@ class RegisterController extends GetxController {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-
   //Custom function
-  authenticateUser(){
-
-  }
-
-
-
-
-
-  //Custom function
-
-
-
 
   @override
   void onClose() {
@@ -41,4 +26,5 @@ class RegisterController extends GetxController {
     passwordController.dispose();
     super.onClose();
   }
+
 }

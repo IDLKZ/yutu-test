@@ -30,7 +30,7 @@ class Users {
   String? name;
   String? surname;
   String? age;
-  int? city;
+  String? city;
   String? email;
   String? phone;
   String? imageUrl;

@@ -38,10 +38,15 @@ class ChangeProfileController extends GetxController {
 
   updateUser(){
     if(formKey.currentState!.validate()){
-      UsersProvider().updateUser(prepareData());
-      FirebaseAuth.instance.currentUser?.updatePassword(passwordController.text);
-      GlobalMixin.successSnackBar("Отлично", "Успешно обновлено!");
-      Get.offAllNamed(Routes.PROFILE);
+      if(cityController.text.isNotEmpty){
+        UsersProvider().updateUser(prepareData());
+        FirebaseAuth.instance.currentUser?.updatePassword(passwordController.text);
+        GlobalMixin.successSnackBar("Отлично", "Успешно обновлено!");
+        Get.offAllNamed(Routes.PROFILE);
+      } else {
+        GlobalMixin.warningSnackBar("Warning", "Выберите город!");
+      }
+
     }
   }
 
@@ -50,7 +55,7 @@ class ChangeProfileController extends GetxController {
     Map<String,dynamic> data = {
       "name":nameController.text.trim(),
       "surname":surnameController.text.trim(),
-      "city":int.parse(cityController.text.trim()),
+      "city":cityController.text.trim(),
       "age":ageController.text.trim(),
     };
     if(_imageController.selectedImageUrl.value.isNotEmpty){

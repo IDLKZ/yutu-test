@@ -38,7 +38,7 @@ class DatePickerWidget extends StatelessWidget {
         format: format??DateFormat("dd.MM.yyyy HH:mm"),
         decoration: InputDecoration(
             border: InputBorder.none,
-            hintStyle: const TextStyle(fontSize: 20, color: Colors.black),
+            hintStyle: const TextStyle(fontSize: 18, color: Colors.black),
             hintText: hint,
             focusedBorder: OutlineInputBorder(
                 borderSide:
