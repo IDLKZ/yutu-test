@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ class NotificationController extends GetxController {
   //TODO: Implement NotificationController
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+  final CollectionReference _userRef = FirebaseFirestore.instance.collection("users");
 
   AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
@@ -60,7 +63,9 @@ class NotificationController extends GetxController {
     super.onInit();
     String? tokenApi = await getToken();
     print(tokenApi);
-
+    _userRef.doc(FirebaseAuth.instance.currentUser?.uid).update(
+      {"device_token":tokenApi}
+    );
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<

@@ -1,4 +1,6 @@
 import 'package:findout/app/controllers/location_controller.dart';
+import 'package:findout/app/data/models/fcm_model.dart';
+import 'package:findout/app/helpers/api_constants.dart';
 import 'package:findout/app/helpers/country_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -163,9 +165,38 @@ class Suggestion {
   });
 
   factory Suggestion.fromJson(Map<String, dynamic> json) {
-
     return Suggestion(
       word: json['properties']['address_line1'],
     );
   }
+}
+
+class FCMSender{
+
+    static Future sendNotification(String to, String collapseKey, Map<String,dynamic> notification,{String priority = "high"}) async
+    {
+
+      FCMNotification FCMnotification =  FCMNotification(title:notification["title"],body:notification["body"]);
+        FCM fcm = FCM(to: to, collapseKey: collapseKey, priority: priority,notification: FCMnotification);
+        final data = fcm.toJson();
+        String token = ApiConstants.FCM_AUTH;
+        try{
+          await http.post(
+            Uri.parse("https://fcm.googleapis.com/fcm/send"),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer $token',
+            },
+            body: convert.jsonEncode(data),
+          );
+        }
+        catch(e){
+          print(e);
+        }
+
+
+    }
+
+
+
 }

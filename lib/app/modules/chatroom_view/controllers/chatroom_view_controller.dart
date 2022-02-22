@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+import '../../../controllers/user_controller.dart';
 import '../../../data/models/chats_model.dart';
 import '../../../data/models/users_model.dart';
 
@@ -100,6 +101,17 @@ class ChatroomViewController extends GetxController {
 
         final totalUnRead = await _chatRef.doc(chatId).collection("chats").where("receiver",isLessThanOrEqualTo: friendId).where("isRead",isEqualTo: false).get();
         await _userRef.doc(friendId).collection("chats").doc(chatId).update({"totalUnread":totalUnRead.docs.length,"last_time":FieldValue.serverTimestamp(),});
+        Users? toFriend = await UsersProvider().getUsers(friendId);
+        if(toFriend != null){
+          if(toFriend.device_token != null){
+            String friendName = toFriend.fullname()??"";
+            String title = "Новое сообщение от $friendName";
+            String body = GlobalMixin.truncateText(msg.trim(), 50);
+            await FCMSender.sendNotification(toFriend.device_token.toString(), "Новое сообщение", {"title":title,"body":body});
+          }
+        }
+        
+
       }
       catch(e){
         GlobalMixin.warningSnackBar("Упс", "Попробуйте позже");
