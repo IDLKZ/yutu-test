@@ -2,6 +2,7 @@ import 'package:findout/app/controllers/image_controller.dart';
 import 'package:findout/app/data/models/categories_model.dart';
 import 'package:findout/app/data/providers/categories_provider.dart';
 import 'package:findout/app/data/providers/posts_provider.dart';
+import 'package:findout/app/routes/app_pages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,7 @@ class PostCreateController extends GetxController {
         formKey.currentState?.reset();
         dateController.text = "";
         _imageController.selectedImageUrl.value = "";
+        Get.offAllNamed(Routes.HOME);
       }
       else{
         GlobalMixin.warningSnackBar("oops".tr, "fill_fields".tr);

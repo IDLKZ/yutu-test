@@ -30,7 +30,7 @@ class ChatroomViewView extends GetView<ChatroomViewController> {
           alignment: isMyMessage ? Alignment.centerRight : Alignment.centerLeft,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: isMyMessage ? Colors.blue : KColors.kLightGray,
+              color: isMyMessage ? KColors.kMyMessages : KColors.kFriendMessages,
               borderRadius: isMyMessage
                   ? BorderRadius.only(
                       topRight: Radius.circular(20),
@@ -50,7 +50,7 @@ class ChatroomViewView extends GetView<ChatroomViewController> {
                     child: Text(
                       "${chatMessages.message}",
                       style: isMyMessage
-                          ? TextStyle(color: Colors.white,fontSize: 18)
+                          ? TextStyle(color: Colors.black,fontSize: 18)
                           : TextStyle(color: Colors.black,fontSize: 18),
                     ),
                   ),
@@ -63,7 +63,7 @@ class ChatroomViewView extends GetView<ChatroomViewController> {
                       Text("${chatMessages.getDate()}",
                           style: isMyMessage
                               ? TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontWeight: FontWeight.w500,
                               fontSize: 12
 
@@ -78,7 +78,7 @@ class ChatroomViewView extends GetView<ChatroomViewController> {
                       Icon(
                         chatMessages.isRead == true ? FontAwesomeIcons.checkDouble :FontAwesomeIcons.check ,
                         size: 12,
-                        color: Colors.white,
+                        color: Colors.lightBlueAccent,
                       )
                           :SizedBox()
                     ],
@@ -123,6 +123,7 @@ class ChatroomViewView extends GetView<ChatroomViewController> {
 
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Color(0xff89D2F1),
           title: GetX<ChatroomViewController>(
             builder: (controller) {
               return ListTile(
@@ -137,10 +138,28 @@ class ChatroomViewView extends GetView<ChatroomViewController> {
                 title: Text(
                   controller.teammate.value?.fullname() ?? "",
                   style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+                      color: Colors.black, fontWeight: FontWeight.bold),
                 ),
               );
             },
+          ),
+          leading: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Color(0xffF8F8F8),
+                  border: Border.all(
+                    color: Colors.transparent,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
+              child: IconButton(
+                onPressed: () {
+                  Get.offAllNamed(Routes.CHAT_PAGE);
+                },
+                icon: Icon(FontAwesomeIcons.angleLeft,color: Colors.black,),
+              ),
+            ),
           ),
         ),
         body: Column(
@@ -149,36 +168,56 @@ class ChatroomViewView extends GetView<ChatroomViewController> {
             GetX<ChatroomViewController>(
               builder: (_chatroomController){
                 return Container(
+                  color: KColors.kLightGray,
                     padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
                     child: _chatroomController.isBanned.value
                     ?Text("you_are_in_banlist".tr)
-                    :Form(
-                      key: controller.formKey,
-                      child: AdvancedInput(
-                        controller: controller.message,
-                        icon: IconButton(
-                          onPressed: () {
-                            controller.focusNode.unfocus();
-                            controller.showEmoji.value = true;
-                          },
-                          icon: Icon(FontAwesomeIcons.smile),
+                    : Row(
+                      children: [
+                        Expanded(
+                          child: Form(
+                          key: controller.formKey,
+                          child: AdvancedInput(
+                            controller: controller.message,
+                            icon: IconButton(
+                              onPressed: () {
+                                controller.focusNode.unfocus();
+                                controller.showEmoji.value = true;
+                              },
+                              icon: Icon(FontAwesomeIcons.smile,color: Color(
+                                  0xff848383),),
+                            ),
+                            hint: "Write a message",
+                            obscure: false,
+                            maxLines: 1,
+                            func: (val) {
+                              return ValidatorMixin()
+                                  .validateText(val, true, maxLength: 1000);
+                            },
+                            focusNode: controller.focusNode,
+                            underline: true,
+                          ),
+                        )
                         ),
-                        hint: "",
-                        obscure: false,
-                        maxLines: 2,
-                        func: (val) {
-                          return ValidatorMixin()
-                              .validateText(val, true, maxLength: 1000);
-                        },
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            controller.sendMessages();
-                          },
-                          icon: Icon(FontAwesomeIcons.paperPlane),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Color(0xff9ed9f3),
+                              border: Border.all(
+                                color: Colors.transparent,
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(50))
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              controller.sendMessages();
+                            },
+                            icon: Icon(FontAwesomeIcons.paperPlane,color: Colors.white,size: 20,),
+                          ),
                         ),
-                        focusNode: controller.focusNode,
-                      ),
-                    ));
+                      ],
+                    )
+
+                );
               },
             ),
 

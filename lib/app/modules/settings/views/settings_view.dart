@@ -109,35 +109,42 @@ class SettingsView extends GetView<SettingsController> {
             children: [
               Row(
                 children: [
-                  GestureDetector(
-                    onTap: () => Get.offAllNamed(Routes.PROFILE),
-                    child: CircleAvatar(
-                      radius: 30,
-                      backgroundImage: GlobalMixin.getImage(image),
-                    ),
+                  Expanded(child: IconButton(
+                    alignment: Alignment.topLeft,
+                      onPressed: (){Get.offAllNamed(Routes.HOME);},
+                      icon: Icon(FontAwesomeIcons.angleLeft,color: Colors.white,))
+
                   ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    name ?? "",
+                  Expanded(child: Text(
+                    "setting".tr,
+                    textAlign: TextAlign.right,
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
-                  )
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),),
+
                 ],
+              ),
+              SizedBox(height: 15,),
+              Center(
+                child: GestureDetector(
+                  onTap: () => Get.offAllNamed(Routes.PROFILE),
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundImage: GlobalMixin.getImage(image),
+                  ),
+                ),
               ),
               const SizedBox(
                 height: 15,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                   Text(
-                    'setting'.tr,
-                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
-                  ),
-                ],
-              )
+              Center(
+                child: Text(
+                  name ?? "",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
             ],
           ),
         ),
@@ -149,28 +156,49 @@ class SettingsView extends GetView<SettingsController> {
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: ListView(
           children: [
-            Card(
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xffF2F2F2),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              margin: EdgeInsets.all(5),
               child: ListTile(
+                tileColor: Colors.white60,
                 onTap: (){Get.toNamed(Routes.CHANGE_PROFILE);},
-                leading: Icon(FontAwesomeIcons.user),
+                leading: Icon(FontAwesomeIcons.user,color: Colors.black,),
                 title: Text("change_profile".tr),
               ),
             ),
-            Card(
+            Container(
+              decoration: BoxDecoration(
+                  color: Color(0xffF2F2F2),
+                  borderRadius: BorderRadius.circular(20),
+              ),
+              margin: EdgeInsets.all(5),
               child: ListTile(
                 onTap: (){Get.toNamed(Routes.WISHLISTS);},
-                leading: Icon(FontAwesomeIcons.heart),
+                leading: Icon(FontAwesomeIcons.heart,color: Colors.black,),
                 title: Text("liked_posts".tr),
               ),
             ),
-            Card(
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xffF2F2F2),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              margin: EdgeInsets.all(5),
               child: ListTile(
                 onTap: (){Get.toNamed(Routes.BANS);},
-                leading: Icon(FontAwesomeIcons.lock),
+                leading: Icon(FontAwesomeIcons.lock,color: Colors.black,),
                 title: Text("blacklists".tr),
               ),
             ),
-            Card(
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xffF2F2F2),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              margin: EdgeInsets.all(5),
               child: ListTile(
                 onTap: (){_authController.logout();},
                 leading: Icon(FontAwesomeIcons.powerOff),
@@ -178,7 +206,12 @@ class SettingsView extends GetView<SettingsController> {
               ),
             ),
             Divider(height: 5,),
-            Card(
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xffF2F2F2),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              margin: EdgeInsets.all(5),
               child: ListTile(
                 onTap: (){
                   Get.dialog(

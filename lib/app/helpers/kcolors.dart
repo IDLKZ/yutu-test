@@ -15,6 +15,7 @@ class KColors{
   static const Color kSuccess = Color(0xff23e26f);
   static const Color kError = Color(0xffef424b);
   static const Color kWarning = Color(0xfffcbd00);
-
+  static const Color kMyMessages = Color(0xffC6E9F8);
+  static const Color kFriendMessages = Color(0xffF2F2F2);
   static const Color kAdminBgColor = Color(0xFF1e1f27);
 }

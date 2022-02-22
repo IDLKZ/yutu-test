@@ -83,13 +83,16 @@ class ChatPageView extends GetView<ChatPageController> {
                color: Colors.white
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GetX<UserController>(
                     builder: (_userController){
                           return GestureDetector(
+                            onTap: (){
+                              Get.offAllNamed(Routes.PROFILE);
+                            },
                             child: ListTile(
                               leading: CircleAvatar(
                                 radius: 25,

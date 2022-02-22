@@ -24,7 +24,8 @@ class AdvancedInput extends StatelessWidget {
   FocusNode? focusNode;
   List<TextInputFormatter>? inputFormatter;
   bool phone;
-
+  bool underline;
+  Widget? prependIcon;
   var phoneInput = <TextInputFormatter>[new MaskTextInputFormatter(
   mask: '+###########',
   filter: {"#": RegExp(r"^\+?77([0124567][0-8]\d{7})$")},
@@ -43,11 +44,13 @@ class AdvancedInput extends StatelessWidget {
     this.isEnabled,
     this.initialVal,
     this.textStyle,
-    this.hintStyle = const TextStyle(fontSize: 20, color: Colors.black),
+    this.hintStyle = const TextStyle(fontSize: 16, color: Colors.black),
     this.suffixIcon = const SizedBox(),
     this.focusNode,
     this.inputFormatter,
-    this.phone = false
+    this.phone = false,
+    this.underline = false,
+    this.prependIcon = null
   });
 
   @override
@@ -69,11 +72,15 @@ class AdvancedInput extends StatelessWidget {
             border: InputBorder.none,
             hintStyle: hintStyle,
             hintText: hint,
-            focusedBorder: OutlineInputBorder(
+            focusedBorder:underline
+                ? UnderlineInputBorder()
+                :OutlineInputBorder(
                 borderSide:
                 const BorderSide(color: Colors.transparent, width: 3),
                 borderRadius: BorderRadius.circular(20)),
-            enabledBorder: OutlineInputBorder(
+            enabledBorder:underline
+            ? UnderlineInputBorder()
+            : OutlineInputBorder(
                 borderSide:
                 const BorderSide(color: Colors.transparent, width: 1),
                 borderRadius: BorderRadius.circular(20)),
@@ -99,7 +106,7 @@ class AdvancedInput extends StatelessWidget {
               child: suffixIcon,
             ),
           ),
-
+          icon: prependIcon
         ),
       ),
     );

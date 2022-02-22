@@ -104,7 +104,7 @@ class ChatroomViewController extends GetxController {
         Users? toFriend = await UsersProvider().getUsers(friendId);
         if(toFriend != null){
           if(toFriend.device_token != null){
-            String friendName = toFriend.fullname()??"";
+            String friendName = toFriend.fullname();
             String title = "Новое сообщение от $friendName";
             String body = GlobalMixin.truncateText(msg.trim(), 50);
             await FCMSender.sendNotification(toFriend.device_token.toString(), "Новое сообщение", {"title":title,"body":body});
