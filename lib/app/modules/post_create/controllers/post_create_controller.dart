@@ -92,7 +92,7 @@ class PostCreateController extends GetxController {
     data["category"] = categoryController.text.trim();
     data["title"] = titleController.text.trim();
     data["description"] = descriptionController.text.trim();
-    data["city"] = int.parse(cityController.text.trim());
+    data["city"] = cityController.text.trim();
     data["place"] = placeController.text.trim();
     data["persons"] = int.parse(personController.text.trim());
     data["date"] = GlobalMixin.convertToDateFormatController(dateController)?.millisecondsSinceEpoch;

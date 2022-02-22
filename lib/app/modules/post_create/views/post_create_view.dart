@@ -5,6 +5,7 @@ import 'package:findout/app/routes/app_pages.dart';
 import 'package:findout/app/widgets/advanced_input.dart';
 import 'package:findout/app/widgets/select_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
@@ -256,13 +257,50 @@ class PostCreateView extends GetView<PostCreateController> {
             //Place
             Padding(
               padding:EdgeInsets.all(10),
-              child: SelectPicker(
+              child: TypeAheadFormField(
+                textFieldConfiguration: TextFieldConfiguration(
                   controller: controller.cityController,
-                  func: (val){return ValidatorMixin().validateText(val, true);},
-                  icon: Icon(FontAwesomeIcons.globe),
-                  hintText: "action_location".tr,
-                  labelText:"select_city".tr,
-                  listItem:GlobalMixin.getListCities(),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintStyle: const TextStyle(fontSize: 20, color: Colors.black),
+                    hintText: 'city'.tr,
+                    focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        const BorderSide(color: Colors.transparent, width: 3),
+                        borderRadius: BorderRadius.circular(20)),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        const BorderSide(color: Colors.transparent, width: 1),
+                        borderRadius: BorderRadius.circular(20)),
+                    errorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.red, width: 1),
+                        borderRadius: BorderRadius.circular(20)),
+                    disabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.red, width: 1),
+                        borderRadius: BorderRadius.circular(20)),
+                    filled: true,
+                    fillColor: KColors.kLightGray,
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: IconTheme(
+                        data: const IconThemeData(color: KColors.kMiddleBlue),
+                        child: Icon(FontAwesomeIcons.globe),
+                      ),
+                    ),
+                  ),
+                ),
+                suggestionsCallback: (pattern) async {
+                  return await GlobalMixin.getSuggestions(pattern);
+                },
+                itemBuilder: (context, Map<String, String> suggestion) {
+                  return ListTile(
+                    title: Text(suggestion['name']!),
+                  );
+                },
+                onSuggestionSelected: (Map<String, String> suggestion) {
+                  controller.cityController.text = suggestion['name'] as String;
+                },
+
               ),
 
             ),
