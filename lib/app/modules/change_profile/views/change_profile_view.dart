@@ -1,6 +1,9 @@
+import 'dart:ffi';
+
 import 'package:findout/app/helpers/global_mixin.dart';
 import 'package:findout/app/helpers/kcolors.dart';
 import 'package:findout/app/helpers/validator_mixins.dart';
+import 'package:findout/app/widgets/cityselector_widget.dart';
 import 'package:findout/app/widgets/input_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -194,7 +197,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                   false,
                   TextInputType.text,
                   (val){return ValidatorMixin().validateText(val, true,maxLength: 255);},
-                  true
+                  false
               ),
             ),
             Padding(
@@ -206,7 +209,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                   false,
                   TextInputType.text,
                   (val){return ValidatorMixin().validateText(val, true,maxLength: 255);},
-                  true
+                  false
               ),
             ),
             Padding(
@@ -225,50 +228,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
             ),
             Padding(
                 padding: const EdgeInsets.only(bottom: 20,right: 25,left: 25),
-                child: TypeAheadFormField(
-                  textFieldConfiguration: TextFieldConfiguration(
-                    controller: controller.cityController,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: const TextStyle(fontSize: 18, color: Colors.black),
-                      hintText: 'select_city'.tr,
-                      focusedBorder: OutlineInputBorder(
-                          borderSide:
-                          const BorderSide(color: Colors.transparent, width: 3),
-                          borderRadius: BorderRadius.circular(20)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide:
-                          const BorderSide(color: Colors.transparent, width: 1),
-                          borderRadius: BorderRadius.circular(20)),
-                      errorBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.red, width: 1),
-                          borderRadius: BorderRadius.circular(20)),
-                      disabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.red, width: 1),
-                          borderRadius: BorderRadius.circular(20)),
-                      filled: true,
-                      fillColor: KColors.kLightGray,
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: IconTheme(
-                          data: const IconThemeData(color: KColors.kMiddleBlue),
-                          child: Icon(FontAwesomeIcons.globe),
-                        ),
-                      ),
-                    ),
-                  ),
-                suggestionsCallback: (pattern) async {
-                  return await GlobalMixin.getSuggestions(pattern);
-                },
-                itemBuilder: (context, Map<String, String> suggestion) {
-                  return ListTile(
-                    title: Text(suggestion['name']!),
-                  );
-                },
-                onSuggestionSelected: (Map<String, String> suggestion) {
-                  controller.cityController.text = suggestion['name'] as String;
-                },
-              ),
+                child: CitySelectorWidget(cityController: controller.cityController,cityIdController: controller.cityIdController,),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 20),
@@ -279,7 +239,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                   false,
                   TextInputType.emailAddress,
                   (val){return ValidatorMixin().validateText(val, true,email: true,maxLength: 255);},
-                  false
+                  true
               ),
             ),
             Padding(
@@ -290,8 +250,16 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                   controller.passwordController,
                   true,
                   TextInputType.visiblePassword,
-                  (val){return ValidatorMixin().validateText(val, false,minLenght: 6,maxLength: 255);},
-                  true
+                  (val){
+                    if(val != null){
+                      if(val.length > 0){
+                        if(val.length < 4){
+                          return "cat_less".tr + " 4";
+                        }
+                      }
+                    }
+                  },
+                  false
               ),
             ),
             const SizedBox(height: 20,),

@@ -9,6 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../helpers/global_mixin.dart';
+
 class UserController extends GetxController {
   //TODO: Implement UserController
   final Rx<Users?> _userModel = Rxn<Users?>();
@@ -31,7 +33,7 @@ class UserController extends GetxController {
 
   _setUser(User? _user)async{
       Users? userDoc = await UsersProvider().getUsers(_user?.uid);
-      user = userDoc;
+        user = userDoc;
   }
   _setUserModel(Users? _user)async{
       user = _user;
@@ -65,15 +67,11 @@ class UserController extends GetxController {
             middleText: 'Добро пожаловать на FindOut, пожалуйста, подтвердите свой адрес электронной почты!',
           textConfirm: 'Отправить снова',
           confirmTextColor: Colors.white,
-          onConfirm: () {
-              auth.currentUser!.sendEmailVerification();
-              Get.find<AuthController>().logout();
-          },
         );
-        Timer.periodic(new Duration(seconds: 3), (timer) {
-          Get.find<AuthController>().logout();
+        Timer.periodic(new Duration(seconds: 2), (timer) {
+          AuthController().logout();
         });
-        // Get.find<AuthController>().logout();
+
 
       }
 

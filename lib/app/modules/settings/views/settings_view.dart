@@ -55,7 +55,9 @@ class SettingsView extends GetView<SettingsController> {
                       func: (val){
                         return ValidatorMixin().validateText(val, true);
                       },
+                      hintStyle: TextStyle(fontSize: 12),
                       maxLength: 4,
+                      maxLines: 2,
                     ),
                     SizedBox(height: 15,),
                     Row(
@@ -112,7 +114,7 @@ class SettingsView extends GetView<SettingsController> {
                   Expanded(child: IconButton(
                     alignment: Alignment.topLeft,
                       onPressed: (){Get.offAllNamed(Routes.HOME);},
-                      icon: Icon(FontAwesomeIcons.angleLeft,color: Colors.white,))
+                      icon: Icon(FontAwesomeIcons.angleLeft,color: Colors.black,))
 
                   ),
                   Expanded(child: Text(
@@ -201,7 +203,7 @@ class SettingsView extends GetView<SettingsController> {
               margin: EdgeInsets.all(5),
               child: ListTile(
                 onTap: (){_authController.logout();},
-                leading: Icon(FontAwesomeIcons.powerOff),
+                leading: Icon(Icons.logout,color: Colors.black,),
                 title: Text("logout".tr),
               ),
             ),

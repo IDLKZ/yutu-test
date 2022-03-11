@@ -16,10 +16,11 @@ class HomeController extends GetxController {
   Rx<String?> activeCategory = Rxn<String?>("");
   Rx<int> currentTime = Rx<int>(DateTime.now().millisecondsSinceEpoch);
   Rx<List<Category>> categoriesList = Rx<List<Category>>([Category(id: "",titleRu:"Все",titleEn: "All")]);
-  Rx<Query> postsQuery = Rx<Query>(FirebaseFirestore.instance.collection("posts").where("city",isEqualTo: Get.find<UserController>().user?.city).where("date",isGreaterThanOrEqualTo: DateTime.now().millisecondsSinceEpoch).orderBy("date",descending: true));
+  Rx<Query> postsQuery = Rx<Query>(FirebaseFirestore.instance.collection("posts").where("cityId",isEqualTo: Get.find<UserController>().user?.cityId).where("date",isGreaterThanOrEqualTo: DateTime.now().millisecondsSinceEpoch).orderBy("date",descending: true));
   // Rx<Query> postsQuery = Rx<Query>(FirebaseFirestore.instance.collection("posts").where("date",isGreaterThanOrEqualTo: DateTime.now().millisecondsSinceEpoch).orderBy("date",descending: true));
   final TextEditingController title = TextEditingController();
   final TextEditingController cityController = TextEditingController();
+  final TextEditingController cityIdController = TextEditingController();
   final TextEditingController startTime = TextEditingController();
   final TextEditingController endTime = TextEditingController();
   @override
@@ -39,10 +40,10 @@ class HomeController extends GetxController {
   setActiveCategory(String? active){
 
     if(active.toString().isNotEmpty && active.toString() != "null"){
-      postsQuery.value = FirebaseFirestore.instance.collection("posts").where("city",isEqualTo: _userController.user?.city).where("category",isEqualTo: active).where("date",isGreaterThanOrEqualTo: currentTime.value).orderBy("date",descending: true);
+      postsQuery.value = FirebaseFirestore.instance.collection("posts").where("cityId",isEqualTo: _userController.user?.cityId).where("category",isEqualTo: active).where("date",isGreaterThanOrEqualTo: currentTime.value).orderBy("date",descending: true);
     }
     else{
-      postsQuery.value = FirebaseFirestore.instance.collection("posts").where("city",isEqualTo: _userController.user?.city).where("date",isGreaterThanOrEqualTo: currentTime.value).orderBy("date",descending: true);
+      postsQuery.value = FirebaseFirestore.instance.collection("posts").where("cityId",isEqualTo: _userController.user?.cityId).where("date",isGreaterThanOrEqualTo: currentTime.value).orderBy("date",descending: true);
     }
     getQuery();
     update();
@@ -53,12 +54,13 @@ class HomeController extends GetxController {
   searchPosts() async {
     int start = startTime.text.isNotEmpty ? await GlobalMixin.convertToDateFormatControllerToMilliseconds(startTime,format: "dd.MM.yyyy HH:mm") : DateTime(2022).millisecondsSinceEpoch;
     int end = endTime.text.isNotEmpty ? await GlobalMixin.convertToDateFormatControllerToMilliseconds(endTime,format: "dd.MM.yyyy HH:mm") : DateTime.now().add(Duration(days: 14)).millisecondsSinceEpoch;
-    String? city = cityController.text.isNotEmpty ? cityController.text.trim() : _userController.user?.city;
+    String? cityId = cityIdController.text.isNotEmpty ? cityIdController.text.trim() : _userController.user?.cityId;
+
     if(activeCategory.value.toString().isNotEmpty){
-      postsQuery.value = FirebaseFirestore.instance.collection("posts").where("category",isEqualTo: activeCategory.value).where("city",isEqualTo: city).where("date",isGreaterThanOrEqualTo: start).where("date",isLessThanOrEqualTo: end).orderBy("date",descending: true);
+      postsQuery.value = FirebaseFirestore.instance.collection("posts").where("category",isEqualTo: activeCategory.value).where("cityId",isEqualTo: cityId).where("date",isGreaterThanOrEqualTo: start).where("date",isLessThanOrEqualTo: end).orderBy("date",descending: true);
     }
     else{
-      postsQuery.value = FirebaseFirestore.instance.collection("posts").where("city",isEqualTo: city).where("date",isGreaterThanOrEqualTo: start).where("date",isLessThanOrEqualTo: end).orderBy("date",descending: true);
+      postsQuery.value = FirebaseFirestore.instance.collection("posts").where("cityId",isEqualTo: cityId).where("date",isGreaterThanOrEqualTo: start).where("date",isLessThanOrEqualTo: end).orderBy("date",descending: true);
     }
     update();
   }

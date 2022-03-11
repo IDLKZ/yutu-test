@@ -2,6 +2,7 @@ import 'package:findout/app/controllers/location_controller.dart';
 import 'package:findout/app/routes/app_pages.dart';
 import 'package:findout/app/widgets/advanced_input.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:findout/app/widgets/cityselector_widget.dart';
 import 'package:findout/app/widgets/post_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -53,6 +54,11 @@ class HomeView extends GetWidget<HomeController> {
                     ),
                     Text("search_post".tr,style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: KColors.kDarkViolet)),
                     SizedBox(height: 20,),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: CitySelectorWidget(cityController: controller.cityController,cityIdController: controller.cityIdController,),
+                    ),
+                    SizedBox(height: 15,),
                     DatePickerWidget(
                         controller:controller.startTime,
                         firstDate: DateTime(2022),
@@ -71,54 +77,6 @@ class HomeView extends GetWidget<HomeController> {
                       icon:Icon(FontAwesomeIcons.clock),
                       func: (val){},
                       format: DateFormat("dd.MM.yyyy HH:mm"),
-                    ),
-                    SizedBox(height: 15,),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: TypeAheadFormField(
-                        textFieldConfiguration: TextFieldConfiguration(
-                          controller: controller.cityController,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintStyle: const TextStyle(fontSize: 18, color: Colors.black),
-                            hintText: 'select_city'.tr,
-                            focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                const BorderSide(color: Colors.transparent, width: 3),
-                                borderRadius: BorderRadius.circular(20)),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                const BorderSide(color: Colors.transparent, width: 1),
-                                borderRadius: BorderRadius.circular(20)),
-                            errorBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.red, width: 1),
-                                borderRadius: BorderRadius.circular(20)),
-                            disabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.red, width: 1),
-                                borderRadius: BorderRadius.circular(20)),
-                            filled: true,
-                            fillColor: KColors.kLightGray,
-                            prefixIcon: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                              child: IconTheme(
-                                data: const IconThemeData(color: KColors.kMiddleBlue),
-                                child: Icon(FontAwesomeIcons.globe),
-                              ),
-                            ),
-                          ),
-                        ),
-                        suggestionsCallback: (pattern) async {
-                          return await GlobalMixin.getSuggestions(pattern);
-                        },
-                        itemBuilder: (context, Map<String, String> suggestion) {
-                          return ListTile(
-                            title: Text(suggestion['name']!),
-                          );
-                        },
-                        onSuggestionSelected: (Map<String, String> suggestion) {
-                          controller.cityController.text = suggestion['name'] as String;
-                        },
-                      ),
                     ),
                     SizedBox(height: 15,),
                     Row(

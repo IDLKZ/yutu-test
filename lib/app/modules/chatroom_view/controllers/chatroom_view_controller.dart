@@ -26,6 +26,7 @@ class ChatroomViewController extends GetxController {
   Rx<bool> isBanned = Rx<bool>(false);
   TextEditingController message = TextEditingController();
   final focusNode = FocusNode();
+  Rx<bool> presence = Rx<bool>(false);
 
   @override
   void onInit()async {
@@ -33,6 +34,7 @@ class ChatroomViewController extends GetxController {
       dynamic args = Get.arguments;
       chatId = args["chat_id"];
       friendId = args["friendId"];
+      teammate.bindStream(UsersProvider().teammate(friendId));
 
       if(await BanlistsProvider().isFriendBanned(friendId) || await BanlistsProvider().banned(friendId)){
         isBanned.value = true;
@@ -46,7 +48,6 @@ class ChatroomViewController extends GetxController {
          await _chatRef.doc(chatId).collection("chats").where("receiver",isEqualTo: currentUser?.uid).get().then((value){value.docs.forEach((element) {element.reference.update({"isRead":true});});});
          await _userRef.doc(currentUser?.uid).collection("chats").doc(chatId).update({"last_time":FieldValue.serverTimestamp(), "totalUnread":0}
         );
-        teammate.bindStream(UsersProvider().teammate(friendId));
        final early = await _userRef.doc(friendId).collection("chats").doc(chatId).get();
        if(early.exists){
          firstMessage.value = false;
@@ -63,14 +64,17 @@ class ChatroomViewController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    _chatRef.doc(chatId).collection("chats").snapshots().forEach((element) {
-      for(var item in element.docs){
-        if(item.data()["receiver"] == currentUser?.uid && item.data()["isRead"] == false){
-          item.reference.update({"isRead":true});
+    presence.value = true;
+    if(presence.value){
+      _chatRef.doc(chatId).collection("chats").snapshots().forEach((element) {
+        for(var item in element.docs){
+          if(item.data()["receiver"] == currentUser?.uid && item.data()["isRead"] == false){
+            item.reference.update({"isRead":true});
+          }
         }
-      }
+      });
+    }
 
-    });
   }
 
   sendMessages() async{
@@ -123,6 +127,7 @@ class ChatroomViewController extends GetxController {
 
   @override
   void onClose() {
+    presence.value = false;
       message.dispose();
   }
 

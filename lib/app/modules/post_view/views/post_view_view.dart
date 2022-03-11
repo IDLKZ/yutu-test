@@ -35,6 +35,7 @@ class PostViewView extends GetView<PostViewController> {
                 ),
               ),
             ),
+            SizedBox(width: 5,),
             GestureDetector(
               onTap: () {
                 Get.defaultDialog(

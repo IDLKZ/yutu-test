@@ -1,6 +1,8 @@
 import 'package:findout/app/helpers/kcolors.dart';
+import 'package:findout/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 
@@ -54,10 +56,17 @@ class WishlistsView extends GetView<WishlistsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('liked_posts'.tr),
+        title: Text('liked_posts'.tr,style: TextStyle(color: Colors.black,fontSize: 16),),
         centerTitle: true,
-        backgroundColor: KColors.kChatColor,
+        backgroundColor: KColors.kRGBABlue,
+        leading: IconButton(
+          icon: Icon(FontAwesomeIcons.angleLeft,color: Colors.black,),
+          onPressed: (){
+            Get.offAllNamed(Routes.SETTINGS);
+          },
+        ),
       ),
+
       body: Column(
         children: [
           _cardList(),

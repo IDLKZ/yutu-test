@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:findout/app/controllers/location_controller.dart';
 import 'package:findout/app/data/models/fcm_model.dart';
 import 'package:findout/app/helpers/api_constants.dart';
@@ -143,7 +144,7 @@ class GlobalMixin {
 
   static getImage(String? image){
     if(image.toString() != "null" && image.toString().isNotEmpty){
-      return NetworkImage(image.toString());
+      return CachedNetworkImageProvider(image.toString());
     }
     else{
       return AssetImage("assets/images/ava.png");

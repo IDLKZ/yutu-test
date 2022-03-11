@@ -324,6 +324,10 @@ class PostsView extends GetView<PostsController> {
               icon: Icon(Icons.filter)
           )
         ],
+        leading: IconButton(
+          icon: Icon(FontAwesomeIcons.solidArrowAltCircleLeft),
+          onPressed: (){Get.offAllNamed(Routes.DASHBOARD);},
+        ),
       ),
       extendBody: true,
       body: _column(),

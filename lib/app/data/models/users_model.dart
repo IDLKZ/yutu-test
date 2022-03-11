@@ -35,6 +35,7 @@ class Users {
   String? phone;
   String? imageUrl;
   String? device_token;
+  String? cityId;
   bool? isAdmin = false;
   int? status = 0;
 
@@ -56,6 +57,7 @@ class Users {
       this.phone,
       this.imageUrl,
       this.device_token,
+      this.cityId,
       this.isAdmin,
       this.status});
 
@@ -67,6 +69,7 @@ class Users {
     city = json['city'];
     email = json['email'];
     phone = json['phone'];
+    cityId = json["cityId"];
     imageUrl = json['imageUrl'];
     device_token = json['device_token'];
     isAdmin = json['isAdmin'];
@@ -80,6 +83,7 @@ class Users {
     data['surname'] = surname;
     data['age'] = age;
     data['city'] = city;
+    data["cityId"] = cityId;
     data['email'] = email;
     data['phone'] = phone;
     data['imageUrl'] = imageUrl;

@@ -1,4 +1,5 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:findout/app/widgets/cityselector_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -259,52 +260,8 @@ class PostEditView extends GetView<PostEditController> {
 
             //Place
             Padding(
-              padding:EdgeInsets.all(10),
-              child: TypeAheadFormField(
-                textFieldConfiguration: TextFieldConfiguration(
-                  controller: controller.cityController,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintStyle: const TextStyle(fontSize: 20, color: Colors.black),
-                    hintText: 'city'.tr,
-                    focusedBorder: OutlineInputBorder(
-                        borderSide:
-                        const BorderSide(color: Colors.transparent, width: 3),
-                        borderRadius: BorderRadius.circular(20)),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide:
-                        const BorderSide(color: Colors.transparent, width: 1),
-                        borderRadius: BorderRadius.circular(20)),
-                    errorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.red, width: 1),
-                        borderRadius: BorderRadius.circular(20)),
-                    disabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.red, width: 1),
-                        borderRadius: BorderRadius.circular(20)),
-                    filled: true,
-                    fillColor: KColors.kLightGray,
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: IconTheme(
-                        data: const IconThemeData(color: KColors.kMiddleBlue),
-                        child: Icon(FontAwesomeIcons.globe),
-                      ),
-                    ),
-                  ),
-                ),
-                suggestionsCallback: (pattern) async {
-                  return await GlobalMixin.getSuggestions(pattern);
-                },
-                itemBuilder: (context, Map<String, String> suggestion) {
-                  return ListTile(
-                    title: Text(suggestion['name']!),
-                  );
-                },
-                onSuggestionSelected: (Map<String, String> suggestion) {
-                  controller.cityController.text = suggestion['name'] as String;
-                },
-
-              ),
+              padding:EdgeInsets.all(20),
+              child: CitySelectorWidget(cityController: controller.cityController,cityIdController: controller.cityIdController,),
 
             ),
             //Place

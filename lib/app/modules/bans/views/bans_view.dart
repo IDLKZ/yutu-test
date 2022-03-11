@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 
+import '../../../routes/app_pages.dart';
 import '../controllers/bans_controller.dart';
 
 class BansView extends GetView<BansController> {
@@ -80,8 +81,14 @@ class BansView extends GetView<BansController> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: KColors.kMiddleBlue,
-        title: Text('blacklists'.tr),
+        title: Text('blacklists'.tr,style: TextStyle(color: Colors.black,fontSize: 16),),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(FontAwesomeIcons.angleLeft,color: Colors.black,),
+          onPressed: (){
+            Get.offAllNamed(Routes.SETTINGS);
+          },
+        ),
       ),
       body: Container(
         child:_bannedList(),

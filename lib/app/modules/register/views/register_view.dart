@@ -4,6 +4,7 @@ import 'package:findout/app/helpers/kcolors.dart';
 import 'package:findout/app/helpers/validator_mixins.dart';
 import 'package:findout/app/routes/app_pages.dart';
 import 'package:findout/app/widgets/advanced_input.dart';
+import 'package:findout/app/widgets/cityselector_widget.dart';
 import 'package:findout/app/widgets/datepicker_widget.dart';
 import 'package:findout/app/widgets/select_picker.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:get/get.dart';
 
+import '../../../data/providers/geocities_provider.dart';
 import '../controllers/register_controller.dart';
 
 class RegisterView extends GetView<RegisterController> {
@@ -40,7 +42,37 @@ class RegisterView extends GetView<RegisterController> {
               'registration'.tr,
               style: TextStyle(fontSize: 44, fontWeight: FontWeight.bold, color: KColors.kDarkViolet),
             ),
-          )
+          ),
+          Positioned(
+            right: 20,
+            top: 50,
+            bottom: MediaQuery.of(context).size.height*0.07,
+            child: GestureDetector(
+                onTap: (){},
+                child: DropdownButton<String>(
+                  value: Get.locale!.languageCode,
+                  icon: const Icon(Icons.language, color: Colors.black,),
+                  iconSize: 24,
+                  style: const TextStyle(color: Colors.black),
+                  dropdownColor: KColors.kMiddleBlue,
+                  underline: Container(
+                    height: 0,
+                    color: Colors.transparent,
+                  ),
+                  onChanged: (String? newValue) async {
+                    String newLang = newValue ?? "ru";
+
+                    await GlobalMixin.setShared("langLocale", newLang);
+                  },
+                  items: RegisterController.languagesApp.map((value) {
+                    return DropdownMenuItem<String>(
+                      value: value["code"],
+                      child: Text(value["title"] ?? "Рус"),
+                    );
+                  }).toList(),
+                )
+            ),
+          ),
         ],
       );
     }
@@ -137,51 +169,7 @@ class RegisterView extends GetView<RegisterController> {
             ),
             Padding(
                 padding: const EdgeInsets.only(bottom: 20, left: 15, right: 15),
-                child: TypeAheadFormField(
-                  textFieldConfiguration: TextFieldConfiguration(
-                    controller: controller.cityController,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: const TextStyle(fontSize: 20, color: Colors.black),
-                      hintText: 'city'.tr,
-                      focusedBorder: OutlineInputBorder(
-                          borderSide:
-                          const BorderSide(color: Colors.transparent, width: 3),
-                          borderRadius: BorderRadius.circular(20)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide:
-                          const BorderSide(color: Colors.transparent, width: 1),
-                          borderRadius: BorderRadius.circular(20)),
-                      errorBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.red, width: 1),
-                          borderRadius: BorderRadius.circular(20)),
-                      disabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.red, width: 1),
-                          borderRadius: BorderRadius.circular(20)),
-                      filled: true,
-                      fillColor: KColors.kLightGray,
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: IconTheme(
-                          data: const IconThemeData(color: KColors.kMiddleBlue),
-                          child: Icon(FontAwesomeIcons.globe),
-                        ),
-                      ),
-                    ),
-                  ),
-                  suggestionsCallback: (pattern) async {
-                    return await GlobalMixin.getSuggestions(pattern);
-                  },
-                  itemBuilder: (context, Map<String, String> suggestion) {
-                    return ListTile(
-                      title: Text(suggestion['name']!),
-                    );
-                  },
-                  onSuggestionSelected: (Map<String, String> suggestion) {
-                    controller.cityController.text = suggestion['name'] as String;
-                  },
-
-                ),
+              child: CitySelectorWidget(cityController: controller.cityController,cityIdController: controller.cityIdController,),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -204,7 +192,8 @@ class RegisterView extends GetView<RegisterController> {
             controller.nameController.text.trim(),
             controller.surnameController.text.trim(),
             controller.ageController.text.trim(),
-            controller.cityController.text.trim()
+            controller.cityController.text.trim(),
+            controller.cityIdController.text.trim(),
         );
       }
     }

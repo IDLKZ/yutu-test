@@ -19,6 +19,7 @@ class PostEditController extends GetxController {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
+  final TextEditingController cityIdController = TextEditingController();
   final TextEditingController placeController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController personController = TextEditingController();
@@ -38,6 +39,8 @@ class PostEditController extends GetxController {
     _imageController.selectedImageUrl.value = post.value?.image??"";
     categoryController.text = post.value?.category??"";
     titleController.text = post.value?.title??"";
+    cityController.text = post.value?.city??"";
+    cityIdController.text = post.value?.cityId??"";
     descriptionController.text = post.value?.description??"";
     placeController.text = post.value?.place??"";
     personController.text = post.value?.persons.toString()??"";
@@ -90,6 +93,7 @@ class PostEditController extends GetxController {
     data["title"] = titleController.text.trim();
     data["description"] = descriptionController.text.trim();
     data["city"] = cityController.text.trim();
+    data["cityId"] = cityIdController.text.trim();
     data["place"] = placeController.text.trim();
     data["persons"] = int.parse(personController.text.trim());
     data["date"] = GlobalMixin.convertToDateFormatController(dateController)?.millisecondsSinceEpoch;
@@ -107,6 +111,7 @@ class PostEditController extends GetxController {
     categoryController.dispose();
     descriptionController.dispose();
     cityController.dispose();
+    cityIdController.dispose();
     placeController.dispose();
     dateController.dispose();
     personController.dispose();

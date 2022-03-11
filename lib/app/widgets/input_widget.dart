@@ -19,7 +19,7 @@ class InputWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: TextFormField(
-        enabled: readOnly,
+        readOnly: readOnly,
         validator: func,
         controller: controller,
         obscureText: obscure,

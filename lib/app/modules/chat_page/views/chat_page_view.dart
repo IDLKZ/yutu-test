@@ -83,7 +83,7 @@ class ChatPageView extends GetView<ChatPageController> {
                color: Colors.white
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -151,7 +151,7 @@ class ChatPageView extends GetView<ChatPageController> {
                       backgroundImage: GlobalMixin.getImage(snapshot.data?.imageUrl),
                       // child: Image(image: AssetImage('assets/images/ava.png'),),
                     ),
-                    title: Text("${(snapshot.data != null ? snapshot.data?.fullname() : "deleted_account".tr) }",style: TextStyle(color: KColors.kDarkViolet,fontSize: 20,fontWeight: FontWeight.bold),),
+                    title: Text("${(snapshot.data != null ? snapshot.data?.fullname() : "") }",style: TextStyle(color: KColors.kDarkViolet,fontSize: 20,fontWeight: FontWeight.bold),),
                     subtitle: StreamBuilder<ChatMessages?>(
                       stream: ChatProvider().getLastMessage(userChat.chat_id),
                       builder: (context, snapshot) {

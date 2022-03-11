@@ -175,7 +175,13 @@ class Locales {
     "choose_time":"Выберите время",
     "write":"Написать",
     "start_time":"Дата начала",
-    "end_time":"Дата окончания"
+    "end_time":"Дата окончания",
+    "choose_action":"Выберите действие",
+    "verify_email":"Подтвердите почту",
+    "home":"Вернуться домой",
+    "dashboard":"Панель управления",
+    "check_connection":"Проверьте интернет соединение",
+    "connection_restored":"Соединение восстановлено"
   };
   static const en = {
     'registration': 'Registration',
@@ -255,6 +261,12 @@ class Locales {
   "choose_time":"Select time",
     "write":"Message",
     "start_time":"Start date",
-    "end_time":"End date"
+    "end_time":"End date",
+    "choose_action":"Choose Action",
+    "verify_email":"Verify your email",
+    "home":"Return back",
+    "dashboard":"My Dashboard",
+    "check_connection":"Check connection",
+    "connection_restored":"Connection Restored"
   };
 }

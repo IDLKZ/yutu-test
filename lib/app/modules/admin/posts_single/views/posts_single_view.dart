@@ -96,7 +96,7 @@ class PostsSingleView extends GetView<PostsSingleController> {
                       left: 30,
                       child: GestureDetector(
                         onTap: () {
-                          Get.offAllNamed(Routes.POSTS);
+                          Get.toNamed(Routes.POSTS);
                         },
                         child: Container(
                           padding: const EdgeInsets.all(5),
@@ -143,7 +143,7 @@ class PostsSingleView extends GetView<PostsSingleController> {
                                           height: 5,
                                         ),
                                         Text(
-                                          '${snapshot.data?.city ?? ""}  ${snapshot.data?.age ?? ""} лет',
+                                          '${snapshot.data?.city ?? ""}  ${snapshot.data?.getAge() ?? ""}',
                                           style: TextStyle(
                                               color: KColors.kSpaceGray),
                                         )
@@ -255,7 +255,7 @@ class PostsSingleView extends GetView<PostsSingleController> {
                                           height: 5,
                                         ),
                                         Text(
-                                          "${controller.post.value?.place ?? ""}",
+                                          "${controller.post.value?.city}/${controller.post.value?.place ?? ""}",
                                           style: const TextStyle(
                                               fontSize: 14,
                                               color: Colors.black,

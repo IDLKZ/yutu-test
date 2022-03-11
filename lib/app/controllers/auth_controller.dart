@@ -23,10 +23,10 @@ class AuthController extends GetxController {
           title: 'Проверьте почту',
           middleText: 'На вашу почту отправлено письмо с подтверждением'
         );
-        Timer.periodic(new Duration(seconds: 3), (timer) {
-          Get.back();
-          Get.toNamed(Routes.LOGIN);
-        });
+        // Timer.periodic(new Duration(seconds: 3), (timer) {
+        //   // Get.back();
+        //   // Get.toNamed(Routes.LOGIN);
+        // });
       } catch(e) {
         print(e);
       }
@@ -44,13 +44,15 @@ class AuthController extends GetxController {
           email: email,
           password: password
       );
-      // if(userCredential.user!.emailVerified){
-      //   GlobalMixin.successSnackBar('FindOut!', 'return_back'.tr);
-      // } else {
-      //   Get.defaultDialog(
-      //     title: 'Подтвердите почту',
-      //     middleText: 'Добро пожаловать на FindOut, пожалуйста, подтвердите свой адрес электронной почты!'
-      //   );
+      if(userCredential.user!.emailVerified){
+        GlobalMixin.successSnackBar('Hangout', 'return_back'.tr);
+      }
+      else{
+        GlobalMixin.warningSnackBar('Hangout', 'verify_email'.tr);
+         AuthController().logout();
+      }
+      //else {
+
       // }
 
     } on FirebaseAuthException catch (e) {
@@ -64,7 +66,7 @@ class AuthController extends GetxController {
     }
   }
 
-  void register(String email, String password, String name, String surname, String age, String city) async {
+  void register(String email, String password, String name, String surname, String age, String city,String cityId) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
@@ -78,12 +80,14 @@ class AuthController extends GetxController {
         "phone":"",
         "age": age,
         "city": city,
+        "cityId": cityId,
         "isAdmin":false,
         "status":0,
       });
-      GlobalMixin.successSnackBar('FindOut!', 'return_back'.tr);
+      GlobalMixin.successSnackBar('Hangout', 'verify_email'.tr);
       // Get.offAllNamed(AppPages.INITIAL);
       await userCredential.user!.sendEmailVerification();
+      AuthController().logout();
       // Get.defaultDialog(
       //     title: 'Подтвердите почту',
       //     middleText: 'На вашу почту отправлена ссылка. Перейдите чтобы завершить регистрацию!',

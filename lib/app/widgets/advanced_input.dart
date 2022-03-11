@@ -25,6 +25,7 @@ class AdvancedInput extends StatelessWidget {
   List<TextInputFormatter>? inputFormatter;
   bool phone;
   bool underline;
+  bool readOnly;
   Widget? prependIcon;
   var phoneInput = <TextInputFormatter>[new MaskTextInputFormatter(
   mask: '+###########',
@@ -50,6 +51,7 @@ class AdvancedInput extends StatelessWidget {
     this.inputFormatter,
     this.phone = false,
     this.underline = false,
+    this.readOnly = false,
     this.prependIcon = null
   });
 
@@ -67,6 +69,7 @@ class AdvancedInput extends StatelessWidget {
         style: textStyle,
         autocorrect: false,
         focusNode: focusNode,
+        readOnly: readOnly,
         inputFormatters: phone ? phoneInput : null,
         decoration: InputDecoration(
             border: InputBorder.none,

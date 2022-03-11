@@ -147,7 +147,7 @@ class ChatroomViewView extends GetView<ChatroomViewController> {
             padding: const EdgeInsets.all(8.0),
             child: Container(
               decoration: BoxDecoration(
-                  color: Color(0xffF8F8F8),
+                  // color: Color(0xffF8F8F8),
                   border: Border.all(
                     color: Colors.transparent,
                   ),

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findout/app/data/providers/wishlists_provider.dart';
+import 'package:findout/app/helpers/global_mixin.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 
@@ -14,7 +15,12 @@ class WishlistsController extends GetxController {
 
     data.value = await WishlistsProvider().getListPost();
     if(data.value.length > 0){
-      postsQuery.value = _postRef.where(FieldPath.documentId, whereIn: data.value);
+      try{
+        postsQuery.value = _postRef.where(FieldPath.documentId, whereIn: data.value);
+      }
+      catch(e){
+        print(e);
+      }
     }
   }
 

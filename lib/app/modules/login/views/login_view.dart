@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:get/get.dart';
 
+import '../../../helpers/global_mixin.dart';
 import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -40,7 +41,36 @@ class LoginView extends GetView<LoginController> {
                   fontWeight: FontWeight.bold,
                   color: KColors.kDarkViolet),
             ),
-          )
+          ),
+          Positioned(
+            right: 30,
+            bottom: MediaQuery.of(context).size.height*0.07,
+            child: GestureDetector(
+                onTap: (){},
+                child: DropdownButton<String>(
+                  value: Get.locale!.languageCode,
+                  icon: const Icon(Icons.language, color: Colors.white,),
+                  iconSize: 24,
+                  style: const TextStyle(color: Colors.white),
+                  dropdownColor: KColors.kMiddleBlue,
+                  underline: Container(
+                    height: 0,
+                    color: Colors.transparent,
+                  ),
+                  onChanged: (String? newValue) async {
+                    String newLang = newValue ?? "ru";
+
+                    await GlobalMixin.setShared("langLocale", newLang);
+                  },
+                  items: LoginController.languagesApp.map((value) {
+                    return DropdownMenuItem<String>(
+                      value: value["code"],
+                      child: Text(value["title"] ?? "Рус"),
+                    );
+                  }).toList(),
+                )
+            ),
+          ),
         ],
       );
     }

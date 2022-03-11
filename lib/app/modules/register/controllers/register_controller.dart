@@ -9,10 +9,16 @@ class RegisterController extends GetxController {
   final TextEditingController surnameController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
+  final TextEditingController cityIdController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  static const List<Map> languagesApp = [
+    {"title":"Рус.","code":"ru"},
+    // {"title":"Kaz.","code":"kz"},
+    {"title":"Eng.","code":"en"},
+  ];
   //Custom function
 
   @override
@@ -21,6 +27,7 @@ class RegisterController extends GetxController {
     surnameController.dispose();
     ageController.dispose();
     cityController.dispose();
+    cityIdController.dispose();
     emailController.dispose();
     phoneController.dispose();
     passwordController.dispose();

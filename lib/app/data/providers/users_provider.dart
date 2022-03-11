@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/user_controller.dart';
 import '../models/users_model.dart';
 
 class UsersProvider extends GetConnect {
@@ -47,6 +48,13 @@ class UsersProvider extends GetConnect {
 
   Future updateUser(Map<String,dynamic> data)async{
     await _userRef.doc(fAuth?.uid).update(data);
+    try{
+      Get.find<UserController>().user = await this.getUsers(fAuth?.uid);
+    }
+    catch(e){
+
+    }
+
   }
 
   Future<bool> deleteUser(String? id) async {

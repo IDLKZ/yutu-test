@@ -9,6 +9,10 @@ import 'package:get/get_core/src/get_main.dart';
 import '../helpers/kcolors.dart';
 
 class BottomNavigator extends StatelessWidget {
+  double height = 60;
+
+
+
   Color? backColor;
   Color? activeColor;
   Color? activeText;
@@ -25,7 +29,8 @@ class BottomNavigator extends StatelessWidget {
     this.activeColor = KColors.kLightBlue,
     this.activeText = Colors.white,
     this.nonActiveText = Colors.black,
-    this.nonActiveColor = Colors.transparent
+    this.nonActiveColor = Colors.transparent,
+    this.height = 70
 });
 
   List<Widget> listItem(String? localPath){
@@ -50,19 +55,16 @@ class BottomNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(20),
-      child: Container(
-        height: 60,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(45),
-            color:this.backColor
-        ),
-        child: Row(
-            mainAxisAlignment:MainAxisAlignment.spaceAround,
-          children: listItem(ModalRoute.of(context)?.settings.name),
-        ),
+    return Container(
+      height: this.height,
+      padding: EdgeInsets.only(bottom: 10,top: 5),
+      decoration: BoxDecoration(
+          color:this.backColor,
 
+      ),
+      child: Row(
+          mainAxisAlignment:MainAxisAlignment.spaceAround,
+        children: listItem(ModalRoute.of(context)?.settings.name),
       ),
 
     );

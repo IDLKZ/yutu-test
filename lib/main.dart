@@ -32,7 +32,7 @@ class myApp extends StatelessWidget {
       fallbackLocale: Locale(locale),
       debugShowCheckedModeBanner: false,
       initialBinding: InitialBinding(),
-      title: "Application",
+      title: "Hangout",
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
     );

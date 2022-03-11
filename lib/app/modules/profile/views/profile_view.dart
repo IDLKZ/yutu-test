@@ -111,6 +111,7 @@ class ProfileView extends GetView<ProfileController> {
               .collection("posts")
               .where("author",
                   isEqualTo: user?.id)
+              .where("date",isGreaterThanOrEqualTo: controller.currentTime.value)
               .orderBy("date", descending: true),
           pageSize: 2,
           builder: (BuildContext context,

@@ -11,7 +11,11 @@ class LoginController extends GetxController {
 
 
   //Custom function
-
+  static const List<Map> languagesApp = [
+    {"title":"Рус.","code":"ru"},
+    // {"title":"Kaz.","code":"kz"},
+    {"title":"Eng.","code":"en"},
+  ];
   authenticateUser(){
 
   }

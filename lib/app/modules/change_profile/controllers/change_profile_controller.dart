@@ -16,6 +16,7 @@ class ChangeProfileController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
+  final TextEditingController cityIdController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
 
   @override
@@ -26,6 +27,7 @@ class ChangeProfileController extends GetxController {
    surnameController.text = user.user?.surname??"";
    ageController.text = user.user?.age.toString()??'';
    cityController.text = user.user?.city.toString()??"";
+   cityIdController.text = user.user?.cityId.toString()??"";
    emailController.text = user.user?.email??"";
   }
 
@@ -40,7 +42,11 @@ class ChangeProfileController extends GetxController {
     if(formKey.currentState!.validate()){
       if(cityController.text.isNotEmpty){
         UsersProvider().updateUser(prepareData());
-        FirebaseAuth.instance.currentUser?.updatePassword(passwordController.text);
+        if(passwordController.text.toString().length > 4){
+          FirebaseAuth.instance.currentUser?.updatePassword(passwordController.text);
+          GlobalMixin.successSnackBar("Отлично", "Пароль обновлен!");
+
+        }
         GlobalMixin.successSnackBar("Отлично", "Успешно обновлено!");
         Get.offAllNamed(Routes.PROFILE);
       } else {
@@ -56,11 +62,13 @@ class ChangeProfileController extends GetxController {
       "name":nameController.text.trim(),
       "surname":surnameController.text.trim(),
       "city":cityController.text.trim(),
+      "cityId":cityIdController.text.trim(),
       "age":ageController.text.trim(),
     };
     if(_imageController.selectedImageUrl.value.isNotEmpty){
       data.assign("imageUrl", _imageController.selectedImageUrl.value);
     }
+    print(data);
     return data;
   }
 
