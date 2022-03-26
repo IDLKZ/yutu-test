@@ -25,8 +25,10 @@ class WishlistsView extends GetView<WishlistsController> {
                 if (snapshot.isFetching) {
                   return Center(child: const CircularProgressIndicator());
                 }
-                if (snapshot.hasError) {
-                  return Center(child: CircularProgressIndicator(),);
+                if(!snapshot.hasData){
+                  if (snapshot.hasError) {
+                    return Center(child: CircularProgressIndicator(color: Colors.red,),);
+                  }
                 }
                 return ListView.builder(
                   itemCount: snapshot.docs.length,

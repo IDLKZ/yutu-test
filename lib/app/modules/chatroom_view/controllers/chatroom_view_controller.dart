@@ -13,6 +13,7 @@ import '../../../data/models/users_model.dart';
 
 class ChatroomViewController extends GetxController {
   //TODO: Implement ChatroomViewController
+  UserController _userController = Get.find<UserController>();
   final formKey = GlobalKey<FormState>();
   String? chatId;
   String? friendId;
@@ -27,7 +28,6 @@ class ChatroomViewController extends GetxController {
   TextEditingController message = TextEditingController();
   final focusNode = FocusNode();
   Rx<bool> presence = Rx<bool>(false);
-
   @override
   void onInit()async {
     super.onInit();
@@ -108,8 +108,8 @@ class ChatroomViewController extends GetxController {
         Users? toFriend = await UsersProvider().getUsers(friendId);
         if(toFriend != null){
           if(toFriend.device_token != null){
-            String friendName = toFriend.fullname();
-            String title = "Новое сообщение от $friendName";
+            String myName = _userController.user?.fullname() ?? "";
+            String title = "Новое сообщение " + myName;
             String body = GlobalMixin.truncateText(msg.trim(), 50);
             await FCMSender.sendNotification(toFriend.device_token.toString(), "Новое сообщение", {"title":title,"body":body});
           }

@@ -155,7 +155,7 @@ class PostViewView extends GetView<PostViewController> {
                           image: DecorationImage(
                               image: NetworkImage(
                                 controller.post.value?.image ??
-                                    "http://via.placeholder.com/350x150",
+                                    "https://i.stack.imgur.com/PLbzc.gif",
                               ),
                               fit: BoxFit.cover)),
                     ),
