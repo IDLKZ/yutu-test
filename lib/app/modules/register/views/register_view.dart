@@ -167,9 +167,38 @@ class RegisterView extends GetView<RegisterController> {
                 keyboard:TextInputType.emailAddress
               )
             ),
+
+
             Padding(
                 padding: const EdgeInsets.only(bottom: 20, left: 15, right: 15),
               child: CitySelectorWidget(cityController: controller.cityController,cityIdController: controller.cityIdController,),
+            ),
+            GetX<RegisterController>(
+                builder: (controller){
+                  return  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal:20, vertical: 20),
+                      child: Row(
+                        children: [
+                          Expanded(child: GestureDetector(
+                            child: Text("i_accept_pt".tr,style: TextStyle(color: KColors.kMiddleBlue),),
+                            onTap: (){
+
+                            },
+                          )),
+                          Checkbox(
+                            onChanged: (bool? value) {
+                              print(value);
+                              print("checked");
+                              controller.agreed.value = value != null ? value : false;
+                            },
+                            value: controller.agreed.value,
+                            checkColor: KColors.kLightBlue,
+                          ),
+                        ],
+                      )
+                  );
+                }
+
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),

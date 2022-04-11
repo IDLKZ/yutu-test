@@ -13,6 +13,7 @@ class RegisterController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  Rx<bool> agreed = Rx<bool>(false);
 
   static const List<Map> languagesApp = [
     {"title":"Рус.","code":"ru"},
