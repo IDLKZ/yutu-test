@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Findout</string>
+	<string>Hangout</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -17,28 +17,30 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>This is called Privacy - Camera Usage Description in the visual editor.</string>
+	<string>Hangout запрашивает доступ к камере для загрузки фото профиля или в постах</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app needs access to location when in the background.</string>
+	<string>Hangout запрашивает доступ к локации для лучшего поиска</string>
 	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
 	<dict>
 		<key>YourPurposeKey</key>
-		<string>The example App requires temporary access to the device's precise location.</string>
+		<string>Hangout запрашивает вашу геолокацию для поиска наиболее подходящих постов</string>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open.</string>
+	<string>Hangout need your location to find a place or event to appropriate to you</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>This is called Privacy - Microphone Usage Description in the visual editor.</string>
+	<string>Hangout запрашивает дотсуп к этому устройству для лучшего взаимодействия</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Hangout запрашивает доступ к галереи для загрузки фото в профиле или постах</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This is called Privacy - Photo Library Usage Description in the visual editor.</string>
+	<string>Hangout запрашивает доступ к камере для публикаций фото в профиле или постах</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

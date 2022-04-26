@@ -202,6 +202,18 @@ class SettingsView extends GetView<SettingsController> {
               ),
               margin: EdgeInsets.all(5),
               child: ListTile(
+                onTap: (){Get.toNamed(Routes.PRIVACY_TERM);},
+                leading: Icon(FontAwesomeIcons.shieldAlt,color: Colors.black,),
+                title: Text("privacy_term".tr),
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xffF2F2F2),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              margin: EdgeInsets.all(5),
+              child: ListTile(
                 onTap: (){_authController.logout();},
                 leading: Icon(Icons.logout,color: Colors.black,),
                 title: Text("logout".tr),

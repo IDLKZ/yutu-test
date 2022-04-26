@@ -24,6 +24,7 @@ abstract class Routes {
   static const WISHLISTS = _Paths.WISHLISTS;
   static const DELETE = _Paths.DELETE;
   static const RESET_PASSWORD = _Paths.RESET_PASSWORD;
+  static const PRIVACY_TERM = _Paths.PRIVACY_TERM;
 }
 
 abstract class _Paths {
@@ -49,4 +50,5 @@ abstract class _Paths {
   static const WISHLISTS = '/wishlists';
   static const DELETE = '/delete';
   static const RESET_PASSWORD = '/reset-password';
+  static const PRIVACY_TERM = '/privacy-term';
 }

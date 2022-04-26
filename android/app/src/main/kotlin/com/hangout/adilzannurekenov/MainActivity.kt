@@ -1,4 +1,4 @@
-package com.findout.findout
+package com.hangout.adilzannurekenov
 
 import io.flutter.embedding.android.FlutterActivity
 

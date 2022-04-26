@@ -33,6 +33,8 @@ import '../modules/post_edit/bindings/post_edit_binding.dart';
 import '../modules/post_edit/views/post_edit_view.dart';
 import '../modules/post_view/bindings/post_view_binding.dart';
 import '../modules/post_view/views/post_view_view.dart';
+import '../modules/privacy_term/bindings/privacy_term_binding.dart';
+import '../modules/privacy_term/views/privacy_term_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/register/bindings/register_binding.dart';
@@ -173,6 +175,11 @@ class AppPages {
       name: _Paths.RESET_PASSWORD,
       page: () => ResetPasswordView(),
       binding: ResetPasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRIVACY_TERM,
+      page: () => PrivacyTermView(),
+      binding: PrivacyTermBinding(),
     ),
   ];
 }

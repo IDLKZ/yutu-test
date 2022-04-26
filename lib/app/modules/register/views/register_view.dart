@@ -182,13 +182,11 @@ class RegisterView extends GetView<RegisterController> {
                           Expanded(child: GestureDetector(
                             child: Text("i_accept_pt".tr,style: TextStyle(color: KColors.kMiddleBlue),),
                             onTap: (){
-
+                                Get.toNamed(Routes.PRIVACY_TERM);
                             },
                           )),
                           Checkbox(
                             onChanged: (bool? value) {
-                              print(value);
-                              print("checked");
                               controller.agreed.value = value != null ? value : false;
                             },
                             value: controller.agreed.value,
@@ -215,7 +213,8 @@ class RegisterView extends GetView<RegisterController> {
 
     _buttonAction() {
       if(registerFormKey.currentState!.validate()){
-        return controller.authController.register(
+        if(controller.agreed.value == true){
+          return controller.authController.register(
             controller.emailController.text.trim(),
             controller.passwordController.text.trim(),
             controller.nameController.text.trim(),
@@ -223,7 +222,13 @@ class RegisterView extends GetView<RegisterController> {
             controller.ageController.text.trim(),
             controller.cityController.text.trim(),
             controller.cityIdController.text.trim(),
-        );
+          );
+        }
+        else{
+          GlobalMixin.warningSnackBar('Hangout', 'privacy_agree'.tr);
+
+        }
+
       }
     }
     return Scaffold(
